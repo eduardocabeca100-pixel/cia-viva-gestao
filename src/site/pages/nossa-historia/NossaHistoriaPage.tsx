@@ -1,26 +1,74 @@
 import "../site-public.css";
 
+const timeline = [
+  ["2012", "Início das atividades com oficinas de dança e teatro."],
+  ["2016", "Primeiros espetáculos e apresentações comunitárias."],
+  ["2019", "Criação do programa de formação artística."],
+  ["2023", "Ampliação de projetos e novas parcerias culturais."],
+  ["2026", "Novos horizontes para inspirar e transformar."],
+];
+
+const pillars = [
+  ["Arte", "Como expressão e transformação."],
+  ["Educação", "Como caminho para o futuro."],
+  ["Inclusão", "Para uma sociedade mais justa."],
+  ["Comunidade", "Juntos, somos mais fortes."],
+];
+
 export function NossaHistoriaPage() {
   return (
-    <main className="public-page">
-      <section className="public-section dark-band">
-        <div className="public-container">
-          <p className="public-eyebrow">Onde tudo começou</p>
-          <h1 className="public-title">Um pouco sobre nós.</h1>
-          <p className="public-subtitle">
-            A Cia de Artes Viva nasceu do desejo de transformar vidas por meio da arte, criando espaços de formação, acolhimento e expressão criativa.
+    <main className="viva-page">
+      <section className="viva-hero viva-hero-history">
+        <div className="viva-hero-image viva-hero-image-red-dance" />
+        <div className="viva-hero-content">
+          <h1>Nossa história</h1>
+          <h2>Onde tudo começou</h2>
+          <p>
+            Nascemos do sonho de levar a arte mais longe. Desde então, seguimos
+            transformando vidas e comunidades através do movimento, da música e
+            do teatro.
+          </p>
+          <p>
+            Nossa missão é inspirar e formar novas gerações para um mundo mais
+            criativo e humano.
           </p>
         </div>
       </section>
 
-      <section className="public-section light-section">
-        <div className="public-container">
-          <div className="feature-grid">
-            <div className="feature-card"><h3>Missão</h3><p>Espalhar mensagens de amor, paz e transformação através da cultura e das artes.</p></div>
-            <div className="feature-card"><h3>Valores</h3><p>Amor ao próximo, excelência criativa, respeito, educação e impacto social.</p></div>
-            <div className="feature-card"><h3>Propósito</h3><p>Fazer da arte um caminho de recomeço, descoberta, expressão e esperança.</p></div>
-          </div>
+      <section className="viva-section">
+        <div className="viva-section-header center">
+          <p className="viva-eyebrow">Linha do tempo</p>
+          <h2>Uma história construída em movimento</h2>
         </div>
+
+        <div className="viva-timeline">
+          {timeline.map(([year, text]) => (
+            <article key={year}>
+              <span>{year}</span>
+              <p>{text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="viva-section viva-section-compact">
+        <div className="viva-section-header center">
+          <p className="viva-eyebrow">Nossos pilares</p>
+        </div>
+
+        <div className="viva-icon-grid viva-icon-grid-4">
+          {pillars.map(([title, text]) => (
+            <article key={title}>
+              <span>✦</span>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="viva-banner viva-banner-history">
+        <h2>Mais que espetáculos, transformamos vidas.</h2>
       </section>
     </main>
   );

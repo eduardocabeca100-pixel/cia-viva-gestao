@@ -1,4 +1,393 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap");
+from pathlib import Path
+
+files = {
+"src/site/pages/home/HomePage.tsx": r'''import { Link } from "react-router-dom";
+import "../site-public.css";
+
+const actionCards = [
+  {
+    title: "Projetos Culturais",
+    text: "Espetáculos, oficinas e apresentações para todos.",
+    link: "/projetos",
+    cta: "Saiba mais",
+  },
+  {
+    title: "Voluntariado 2026",
+    text: "Faça parte do nosso time e transforme vidas.",
+    link: "/voluntariado-2026",
+    cta: "Quero ser voluntário",
+  },
+  {
+    title: "Apoie via incentivo",
+    text: "Sua contribuição mantém a arte viva e acessível.",
+    link: "/apoie",
+    cta: "Apoiar agora",
+  },
+];
+
+export function HomePage() {
+  return (
+    <main className="viva-page viva-home">
+      <section className="viva-hero viva-hero-home">
+        <div className="viva-hero-image viva-hero-image-ballerina" />
+        <div className="viva-red-ribbon" />
+
+        <div className="viva-hero-content viva-hero-content-right">
+          <p className="viva-eyebrow">Companhia de Artes Viva</p>
+          <h1>
+            Acredite nos
+            <span> seus sonhos</span>
+          </h1>
+          <p>
+            Transformamos vidas por meio da arte, cultura e educação. Nosso
+            palco é o futuro.
+          </p>
+
+          <div className="viva-actions">
+            <Link className="viva-button viva-button-red" to="/nossa-historia">
+              Conheça nossa história
+            </Link>
+            <Link className="viva-button viva-button-dark" to="/projetos">
+              Veja os projetos
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="viva-black-band">
+        <p>Arte que transforma. Cultura que aproxima. Pessoas que florescem.</p>
+
+        <div className="viva-icon-grid viva-icon-grid-3">
+          <article>
+            <span>✣</span>
+            <h3>Inspirar</h3>
+            <p>Estimulamos talentos e valores por meio da arte.</p>
+          </article>
+          <article>
+            <span>▱</span>
+            <h3>Educar</h3>
+            <p>Formação artística acessível e de qualidade.</p>
+          </article>
+          <article>
+            <span>⌘</span>
+            <h3>Conectar</h3>
+            <p>Criamos pontes entre pessoas e comunidades.</p>
+          </article>
+        </div>
+      </section>
+
+      <section className="viva-section">
+        <div className="viva-section-header center">
+          <p className="viva-eyebrow">Caminhos da Viva</p>
+          <h2>Escolha como você quer caminhar com a Cia Viva</h2>
+        </div>
+
+        <div className="viva-card-grid viva-card-grid-3">
+          {actionCards.map((card) => (
+            <article className="viva-card" key={card.title}>
+              <h3>{card.title}</h3>
+              <p>{card.text}</p>
+              <Link to={card.link}>{card.cta}</Link>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="viva-quote">
+        <p>“O palco também é um lugar de recomeço.”</p>
+        <span>
+          Cada apresentação é um convite para sonhar, emocionar e imaginar novos
+          futuros.
+        </span>
+      </section>
+    </main>
+  );
+}
+''',
+
+"src/site/pages/nossa-historia/NossaHistoriaPage.tsx": r'''import "../site-public.css";
+
+const timeline = [
+  ["2012", "Início das atividades com oficinas de dança e teatro."],
+  ["2016", "Primeiros espetáculos e apresentações comunitárias."],
+  ["2019", "Criação do programa de formação artística."],
+  ["2023", "Ampliação de projetos e novas parcerias culturais."],
+  ["2026", "Novos horizontes para inspirar e transformar."],
+];
+
+const pillars = [
+  ["Arte", "Como expressão e transformação."],
+  ["Educação", "Como caminho para o futuro."],
+  ["Inclusão", "Para uma sociedade mais justa."],
+  ["Comunidade", "Juntos, somos mais fortes."],
+];
+
+export function NossaHistoriaPage() {
+  return (
+    <main className="viva-page">
+      <section className="viva-hero viva-hero-history">
+        <div className="viva-hero-image viva-hero-image-red-dance" />
+        <div className="viva-hero-content">
+          <h1>Nossa história</h1>
+          <h2>Onde tudo começou</h2>
+          <p>
+            Nascemos do sonho de levar a arte mais longe. Desde então, seguimos
+            transformando vidas e comunidades através do movimento, da música e
+            do teatro.
+          </p>
+          <p>
+            Nossa missão é inspirar e formar novas gerações para um mundo mais
+            criativo e humano.
+          </p>
+        </div>
+      </section>
+
+      <section className="viva-section">
+        <div className="viva-section-header center">
+          <p className="viva-eyebrow">Linha do tempo</p>
+          <h2>Uma história construída em movimento</h2>
+        </div>
+
+        <div className="viva-timeline">
+          {timeline.map(([year, text]) => (
+            <article key={year}>
+              <span>{year}</span>
+              <p>{text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="viva-section viva-section-compact">
+        <div className="viva-section-header center">
+          <p className="viva-eyebrow">Nossos pilares</p>
+        </div>
+
+        <div className="viva-icon-grid viva-icon-grid-4">
+          {pillars.map(([title, text]) => (
+            <article key={title}>
+              <span>✦</span>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="viva-banner viva-banner-history">
+        <h2>Mais que espetáculos, transformamos vidas.</h2>
+      </section>
+    </main>
+  );
+}
+''',
+
+"src/site/pages/apoie/ApoiePage.tsx": r'''import { Link } from "react-router-dom";
+import "../site-public.css";
+
+const supportWays = [
+  ["Doação direta", "Contribua com qualquer valor e faça a diferença."],
+  ["Lei de incentivo", "Apoie via leis fiscais e incentive a cultura."],
+  ["Patrocínio", "Empresas que acreditam no poder da arte."],
+  ["Doe valor", "Sua doação vira arte, educação e transformação."],
+];
+
+export function ApoiePage() {
+  return (
+    <main className="viva-page">
+      <section className="viva-hero viva-hero-support">
+        <div className="viva-hero-image viva-hero-image-hands" />
+        <div className="viva-hero-content">
+          <h1>Apoie a cultura.</h1>
+          <h2>Transforme vidas.</h2>
+          <p>
+            Sua contribuição fortalece nossos programas e garante que a arte
+            continue acessível para todos que precisam e merecem.
+          </p>
+        </div>
+      </section>
+
+      <section className="viva-paper-section">
+        <div className="viva-section-header center">
+          <h2>Como você pode apoiar</h2>
+        </div>
+
+        <div className="viva-card-grid viva-card-grid-4">
+          {supportWays.map(([title, text]) => (
+            <article className="viva-card viva-card-light" key={title}>
+              <span>⌘</span>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="viva-cta">
+        <h2>Faça parte dessa história</h2>
+        <p>
+          Cada gesto mantém nossos projetos vivos e impacta o futuro de milhares
+          de pessoas.
+        </p>
+        <Link className="viva-button viva-button-red" to="/contato">
+          Quero apoiar
+        </Link>
+      </section>
+    </main>
+  );
+}
+''',
+
+"src/site/pages/voluntariado/VoluntariadoPage.tsx": r'''import { Link } from "react-router-dom";
+import "../site-public.css";
+
+const benefits = [
+  ["Trabalho em equipe", "Colaboração que faz acontecer."],
+  ["Vivência artística", "Aprenda, crie e compartilhe."],
+  ["Impacto social", "Transforme vidas com sua ação."],
+  ["Desenvolvimento pessoal", "Cresça enquanto faz o bem."],
+];
+
+const activities = [
+  "Produção de eventos",
+  "Apoio em ensaios e oficinas",
+  "Ações sociais e culturais",
+  "Comunicação e divulgação",
+  "Apoio administrativo",
+];
+
+export function VoluntariadoPage() {
+  return (
+    <main className="viva-page">
+      <section className="viva-hero viva-hero-volunteer">
+        <div className="viva-hero-image viva-hero-image-volunteers" />
+        <div className="viva-hero-content">
+          <h1>Seja um voluntário.</h1>
+          <h2>Faça parte do movimento.</h2>
+          <p>
+            Juntos, levamos oportunidades, arte e esperança para ainda mais
+            pessoas e comunidades.
+          </p>
+        </div>
+      </section>
+
+      <section className="viva-paper-section">
+        <div className="viva-section-header center">
+          <h2>Inscrições abertas</h2>
+          <p>Até 25 de janeiro</p>
+        </div>
+
+        <div className="viva-icon-grid viva-icon-grid-4 viva-icon-grid-dark-text">
+          {benefits.map(([title, text]) => (
+            <article key={title}>
+              <span>✣</span>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </article>
+          ))}
+        </div>
+
+        <div className="viva-center-action">
+          <Link className="viva-button viva-button-red" to="/contato">
+            Quero me inscrever
+          </Link>
+        </div>
+      </section>
+
+      <section className="viva-red-section">
+        <div>
+          <p className="viva-eyebrow">Atividades dos voluntários</p>
+          <ul>
+            {activities.map((activity) => (
+              <li key={activity}>{activity}</li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    </main>
+  );
+}
+''',
+
+"src/site/pages/projetos/ProjetosPage.tsx": r'''import "../site-public.css";
+
+const projects = [
+  ["Espetáculos", "Criações cênicas com impacto visual, poesia e presença."],
+  ["Oficinas", "Formação artística para crianças, jovens e adultos."],
+  ["Turnês e circulações", "Levamos arte para novos públicos e territórios."],
+  ["Ações sociais", "Projetos culturais conectados à comunidade."],
+];
+
+export function ProjetosPage() {
+  return (
+    <main className="viva-page">
+      <section className="viva-hero viva-hero-projects">
+        <div className="viva-hero-image viva-hero-image-stage" />
+        <div className="viva-hero-content">
+          <h1>Nossos projetos</h1>
+          <h2>Levam arte onde ela é necessária.</h2>
+        </div>
+      </section>
+
+      <section className="viva-section">
+        <div className="viva-card-grid viva-card-grid-2">
+          {projects.map(([title, text], index) => (
+            <article className={`viva-project-card viva-project-card-${index + 1}`} key={title}>
+              <div>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="viva-cta">
+        <h2>Novos projetos em breve!</h2>
+        <p>Estamos preparando novas experiências para a Cia de Artes Viva.</p>
+      </section>
+    </main>
+  );
+}
+''',
+
+"src/site/pages/contato/ContatoPage.tsx": r'''import "../site-public.css";
+
+export function ContatoPage() {
+  return (
+    <main className="viva-page viva-contact-page">
+      <section className="viva-contact-layout">
+        <div className="viva-contact-info">
+          <p className="viva-eyebrow">Contato</p>
+          <h1>Fale conosco</h1>
+          <h2>Vamos conversar?</h2>
+
+          <div className="viva-contact-list">
+            <p><strong>E-mail</strong> contato@ciaviva.com</p>
+            <p><strong>Telefone</strong> (11) 99999-9999</p>
+            <p><strong>Endereço</strong> São Paulo - SP</p>
+          </div>
+        </div>
+
+        <form className="viva-contact-form">
+          <input placeholder="Nome" />
+          <input placeholder="E-mail" />
+          <input placeholder="Telefone" />
+          <input placeholder="Assunto" />
+          <textarea placeholder="Mensagem" rows={6} />
+          <button type="button">Enviar mensagem</button>
+        </form>
+      </section>
+
+      <section className="viva-map">
+        <div className="viva-map-pin">⌖</div>
+      </section>
+    </main>
+  );
+}
+''',
+
+"src/site/pages/site-public.css": r'''@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap");
 
 :root {
   --viva-black: #030303;
@@ -704,3 +1093,16 @@ header a:hover {
     opacity: 0.48;
   }
 }
+'''
+}
+
+for path, content in files.items():
+    file = Path(path)
+    file.parent.mkdir(parents=True, exist_ok=True)
+    file.write_text(content)
+
+home_css = Path("src/site/pages/home/home.css")
+if home_css.exists():
+    home_css.write_text("")
+
+print("OK: site publico aplicado conforme o layout de referencia.")
