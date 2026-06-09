@@ -1,0 +1,164 @@
+
+/* AJUSTE GERAL PREMIUM DO SITE PÚBLICO */
+
+.viva-page,
+.homev2-page,
+.vol-page {
+  background:
+    radial-gradient(circle at 12% 8%, rgba(229, 9, 20, 0.16), transparent 26rem),
+    radial-gradient(circle at 90% 18%, rgba(255, 255, 255, 0.05), transparent 22rem),
+    linear-gradient(180deg, #050505 0%, #14110f 52%, #050505 100%) !important;
+}
+
+.viva-hero,
+.homev2-hero,
+.vol-hero {
+  border-bottom: 0 !important;
+}
+
+.viva-card,
+.viva-icon-grid article,
+.viva-project-card,
+.homev2-pillar,
+.homev2-spotlight-card,
+.vol-learning-card,
+.vol-form,
+.viva-contact-form {
+  border-radius: 28px !important;
+}
+
+.viva-card,
+.viva-icon-grid article,
+.homev2-pillar {
+  border: 1px solid rgba(255, 255, 255, 0.09) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018)),
+    rgba(0, 0, 0, 0.46) !important;
+  box-shadow: 0 28px 72px rgba(0, 0, 0, 0.28) !important;
+}
+
+.viva-button,
+.homev2-button,
+.vol-form button,
+.viva-contact-form button,
+.viva-site-header__button {
+  border-radius: 999px !important;
+}
+
+.viva-paper-section {
+  position: relative;
+  margin: 0 !important;
+  padding-top: clamp(4.5rem, 8vw, 7rem) !important;
+  padding-bottom: clamp(4.5rem, 8vw, 7rem) !important;
+  background: #f4f0e8 !important;
+  color: #090909 !important;
+  overflow: visible;
+}
+
+.viva-paper-section::before,
+.viva-paper-section::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 54px !important;
+  background: #f4f0e8 !important;
+  z-index: 2 !important;
+  filter: drop-shadow(0 18px 16px rgba(0, 0, 0, 0.14));
+}
+
+.viva-paper-section::before {
+  top: -52px !important;
+  clip-path: polygon(
+    0 55%, 4% 42%, 8% 58%, 12% 36%, 16% 52%, 21% 40%, 26% 62%,
+    31% 45%, 36% 57%, 42% 34%, 48% 52%, 54% 38%, 60% 59%, 66% 41%,
+    72% 55%, 78% 33%, 84% 52%, 90% 39%, 96% 58%, 100% 44%,
+    100% 100%, 0 100%
+  ) !important;
+}
+
+.viva-paper-section::after {
+  bottom: -52px !important;
+  clip-path: polygon(
+    0 0, 100% 0,
+    100% 50%, 96% 64%, 91% 45%, 86% 66%, 80% 48%, 75% 62%, 69% 43%,
+    63% 59%, 57% 38%, 51% 55%, 45% 42%, 39% 64%, 33% 47%, 27% 59%,
+    20% 39%, 14% 57%, 8% 44%, 3% 63%, 0 52%
+  ) !important;
+}
+
+.homev2-ripped::before,
+.homev2-ripped::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 44px !important;
+  background: #070707 !important;
+  z-index: 4 !important;
+}
+
+.homev2-ripped::before {
+  top: -42px !important;
+  clip-path: polygon(
+    0 64%, 5% 46%, 11% 66%, 17% 44%, 24% 62%, 31% 48%, 38% 69%,
+    46% 40%, 54% 62%, 61% 48%, 69% 68%, 77% 43%, 85% 60%, 93% 49%,
+    100% 64%, 100% 100%, 0 100%
+  ) !important;
+}
+
+.homev2-ripped::after {
+  bottom: -42px !important;
+  clip-path: polygon(
+    0 0, 100% 0,
+    100% 44%, 94% 62%, 87% 43%, 79% 66%, 71% 46%, 63% 64%,
+    55% 42%, 47% 66%, 39% 48%, 31% 64%, 23% 44%, 15% 62%, 8% 46%, 0 64%
+  ) !important;
+}
+
+.viva-section,
+.viva-projects,
+.viva-cta,
+.homev2-spotlight,
+.vol-learning,
+.vol-register {
+  position: relative;
+}
+
+.viva-site-footer {
+  margin-top: 0 !important;
+}
+
+.viva-site-footer__inner {
+  padding-top: clamp(3rem, 6vw, 5rem) !important;
+}
+
+.viva-site-logo strong,
+.homev2-brand strong {
+  letter-spacing: -0.07em !important;
+}
+
+.viva-contact-layout {
+  overflow: hidden;
+}
+
+.viva-contact-info h1 {
+  word-break: normal;
+}
+
+@media (max-width: 760px) {
+  .viva-paper-section::before,
+  .viva-paper-section::after,
+  .homev2-ripped::before,
+  .homev2-ripped::after {
+    height: 34px !important;
+  }
+
+  .viva-paper-section::before {
+    top: -33px !important;
+  }
+
+  .viva-paper-section::after {
+    bottom: -33px !important;
+  }
+}

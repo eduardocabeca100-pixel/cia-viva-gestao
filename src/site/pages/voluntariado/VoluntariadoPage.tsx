@@ -39,10 +39,7 @@ export function VoluntariadoPage() {
   return (
     <main className="vol-page">
       <section className="vol-hero">
-        <div className="vol-paper vol-paper-top" />
-        <div className="vol-paper vol-paper-bottom" />
-
-        <div className="vol-hero__content">
+        <div className="vol-hero__paper">
           <span>Inscrições abertas</span>
           <h1>
             Voluntariado
@@ -75,7 +72,7 @@ export function VoluntariadoPage() {
       </section>
 
       <section className="vol-team">
-        <div className="vol-paper vol-paper-large" />
+        <div className="vol-team__paper" />
 
         <div className="vol-team__grid">
           <div className="vol-team__people">
@@ -169,9 +166,7 @@ export function VoluntariadoPage() {
           <div className="vol-form__terms">
             <label>
               <input type="checkbox" />
-              <span>
-                Li e concordo com os termos do Voluntariado 2026.
-              </span>
+              <span>Li e concordo com os termos do Voluntariado 2026.</span>
             </label>
           </div>
 
