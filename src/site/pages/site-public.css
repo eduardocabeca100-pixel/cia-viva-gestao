@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bebas+Neue&family=Cinzel:wght@400;600;700;800;900&family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@500;600;700;800;900&family=Oswald:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&family=Raleway:wght@400;500;600;700;800;900&display=swap");
 
 :root {
   --viva-black: #030303;
@@ -896,5 +896,227 @@ a {
   .commercial-hero__visual img {
     width: 100%;
     height: 380px;
+  }
+}
+
+
+/* CONTROLES VISUAIS EDITÁVEIS */
+body {
+  font-family: var(--viva-body-font, "Poppins", system-ui, sans-serif) !important;
+}
+
+.viva-site-logo strong,
+.commercial-hero h1,
+.commercial-contact h1,
+.commercial-section__header h2,
+.commercial-split h2,
+.commercial-origin h2,
+.commercial-cta h2,
+.commercial-register h2,
+.commercial-feature-card h3,
+.commercial-value-card h3,
+.commercial-learning-card h3,
+.commercial-project-card h3,
+.commercial-image-card h3,
+.commercial-person strong {
+  font-family: var(--viva-heading-font, "Montserrat", system-ui, sans-serif) !important;
+}
+
+.viva-site-logo__media {
+  width: 112px;
+  max-height: 54px;
+  object-fit: contain;
+  display: block;
+}
+
+.commercial-hero {
+  min-height: calc(78vh - 82px) !important;
+  padding: clamp(44px, 6vw, 86px) 0 !important;
+}
+
+.commercial-hero h1,
+.commercial-contact h1 {
+  font-size: calc(clamp(3.1rem, 5.7vw, 6.35rem) * var(--viva-font-scale, 0.88)) !important;
+  line-height: 0.88 !important;
+}
+
+.commercial-section__header h2,
+.commercial-split h2,
+.commercial-origin h2,
+.commercial-cta h2,
+.commercial-register h2 {
+  font-size: calc(clamp(2rem, 4.2vw, 4.45rem) * var(--viva-font-scale, 0.88)) !important;
+}
+
+.commercial-hero p,
+.commercial-section__header p,
+.commercial-split p,
+.commercial-contact__info p,
+.commercial-register p {
+  font-size: calc(0.98rem * var(--viva-font-scale, 0.92)) !important;
+}
+
+.commercial-hero__visual video,
+.commercial-hero__visual img {
+  height: min(58vh, 560px) !important;
+}
+
+.commercial-hero--home {
+  min-height: calc(90vh - 82px) !important;
+}
+
+.commercial-hero--media-top {
+  grid-template-columns: 1fr !important;
+  justify-items: center;
+  text-align: center;
+  gap: 22px !important;
+}
+
+.commercial-hero--media-top .commercial-hero__visual {
+  order: 1;
+  min-height: auto;
+  width: min(860px, 100%);
+}
+
+.commercial-hero--media-top .commercial-hero__content {
+  order: 2;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.commercial-hero--media-top .commercial-hero__visual img,
+.commercial-hero--media-top .commercial-hero__visual video {
+  width: min(100%, 880px) !important;
+  height: min(52vh, 520px) !important;
+  border-radius: 36px;
+}
+
+.commercial-hero--media-top .commercial-orbit {
+  width: min(52vw, 520px);
+  height: min(52vw, 520px);
+}
+
+.commercial-hero--media-left .commercial-hero__visual {
+  order: -1;
+}
+
+.commercial-hero--media-background {
+  position: relative;
+  grid-template-columns: 1fr !important;
+  min-height: calc(86vh - 82px) !important;
+}
+
+.commercial-hero--media-background .commercial-hero__visual {
+  position: absolute;
+  inset: 0;
+  min-height: 100%;
+  opacity: 0.46;
+}
+
+.commercial-hero--media-background .commercial-hero__visual img,
+.commercial-hero--media-background .commercial-hero__visual video {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 0;
+}
+
+.commercial-hero--media-background .commercial-orbit {
+  display: none;
+}
+
+.commercial-hero--media-background .commercial-hero__content {
+  position: relative;
+  z-index: 2;
+  max-width: 860px;
+}
+
+.commercial-hero--text-center .commercial-hero__content {
+  text-align: center;
+}
+
+.commercial-hero--text-center .commercial-actions {
+  justify-content: center;
+}
+
+.commercial-animated-title span {
+  display: inline-block;
+  margin-right: 0.18em;
+}
+
+.commercial-hero--anim-letters .commercial-animated-title span {
+  opacity: 0;
+  transform: translateY(22px);
+  animation: vivaWordIn 680ms cubic-bezier(.2,.9,.2,1) forwards;
+}
+
+.commercial-hero--anim-fade-up .commercial-hero__content,
+.commercial-hero--anim-fade-up .commercial-hero__visual {
+  opacity: 0;
+  transform: translateY(26px);
+  animation: vivaFadeUp 760ms ease forwards;
+}
+
+.commercial-hero--anim-zoom-in .commercial-hero__visual {
+  opacity: 0;
+  transform: scale(0.94);
+  animation: vivaZoomIn 900ms ease forwards;
+}
+
+.commercial-hero--anim-slide-left .commercial-hero__content {
+  opacity: 0;
+  transform: translateX(-34px);
+  animation: vivaSlideLeft 760ms ease forwards;
+}
+
+.commercial-feature-card,
+.commercial-image-card,
+.commercial-value-card,
+.commercial-person,
+.commercial-learning-card,
+.commercial-project-card,
+.commercial-form-card,
+.commercial-lead-form {
+  animation: vivaFadeUp 720ms ease both;
+}
+
+@keyframes vivaWordIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes vivaFadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes vivaZoomIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes vivaSlideLeft {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 720px) {
+  .commercial-hero h1,
+  .commercial-contact h1 {
+    font-size: calc(clamp(2.65rem, 13vw, 4.4rem) * var(--viva-font-scale, 0.92)) !important;
+  }
+
+  .commercial-hero--media-top .commercial-hero__visual img,
+  .commercial-hero--media-top .commercial-hero__visual video,
+  .commercial-hero__visual video,
+  .commercial-hero__visual img {
+    height: 360px !important;
   }
 }

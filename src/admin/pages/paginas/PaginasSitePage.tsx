@@ -18,6 +18,61 @@ import "./paginas-site.css";
 type PathPart = string | number;
 type PageKey = keyof SiteEditableContent;
 
+
+const linkOptions = [
+  { label: "Página Inicial", value: "/" },
+  { label: "Nossa História", value: "/nossa-historia" },
+  { label: "Apoie", value: "/apoie" },
+  { label: "Voluntariado 2026", value: "/voluntariado-2026" },
+  { label: "Projetos", value: "/projetos" },
+  { label: "Contato", value: "/contato" },
+  { label: "Inscrição Voluntariado", value: "/voluntariado-2026#inscricao" },
+  { label: "Formação Voluntariado", value: "/voluntariado-2026#formacao" },
+  { label: "Site oficial", value: "https://www.ciaviva.com/" },
+  { label: "Receita Federal", value: "https://www.gov.br/receitafederal" },
+];
+
+const iconOptions = [
+  "✦", "✣", "✧", "✺", "●", "◉", "◎", "◇", "◆", "▱", "▰", "⌘", "★", "☆",
+  "🎭", "🎬", "🎤", "🎧", "🎼", "🎹", "🎨", "🩰", "💃", "🕺", "📖", "📚",
+  "👥", "🤝", "♥", "❤️", "🔥", "✨", "🌟", "💡", "🏛️", "🎟️", "📍", "📩",
+  "01", "02", "03", "04", "05"
+];
+
+const fontOptions = [
+  "Montserrat",
+  "Poppins",
+  "Inter",
+  "Bebas Neue",
+  "Oswald",
+  "Anton",
+  "Archivo Black",
+  "Raleway",
+  "Cinzel",
+  "Playfair Display",
+  "Cormorant Garamond"
+];
+
+const mediaPositionOptions = [
+  { label: "Imagem à direita", value: "right" },
+  { label: "Imagem à esquerda", value: "left" },
+  { label: "Imagem em cima", value: "top" },
+  { label: "Imagem no fundo", value: "background" },
+];
+
+const animationOptions = [
+  { label: "Sem animação", value: "none" },
+  { label: "Subir suave", value: "fade-up" },
+  { label: "Zoom elegante", value: "zoom-in" },
+  { label: "Entrar pela esquerda", value: "slide-left" },
+  { label: "Letras animadas", value: "letters" },
+];
+
+const textAlignOptions = [
+  { label: "Alinhado à esquerda", value: "left" },
+  { label: "Centralizado", value: "center" },
+];
+
 const pageOptions: Array<{ id: PageKey; label: string }> = [
   { id: "global", label: "Configurações gerais" },
   { id: "home", label: "Página Inicial" },
@@ -309,6 +364,150 @@ export function PaginasSitePage() {
   }
 
   function renderPrimitive(value: unknown, path: PathPart[], keyName: string) {
+    const stringValue = String(value ?? "");
+
+    if (keyName === "icon") {
+      return (
+        <div className="site-editor-special-field">
+          <label>
+            {labelFor(keyName)}
+            <input
+              value={stringValue}
+              onChange={(event) => updateValue(path, event.target.value)}
+              placeholder="Escolha ou digite um ícone"
+            />
+          </label>
+
+          <div className="site-editor-icon-palette">
+            {iconOptions.map((icon) => (
+              <button
+                type="button"
+                key={icon}
+                onClick={() => updateValue(path, icon)}
+              >
+                {icon}
+              </button>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    if (keyName === "href" || keyName.toLowerCase().includes("link")) {
+      return (
+        <div className="site-editor-special-field">
+          <label>
+            {labelFor(keyName)}
+            <input
+              value={stringValue}
+              onChange={(event) => updateValue(path, event.target.value)}
+              placeholder="Escolha um link pronto ou digite outro"
+            />
+          </label>
+
+          <div className="site-editor-link-list">
+            {linkOptions.map((link) => (
+              <button
+                type="button"
+                key={link.value}
+                onClick={() => updateValue(path, link.value)}
+              >
+                {link.label}
+                <span>{link.value}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    if (keyName === "headingFont" || keyName === "bodyFont") {
+      return (
+        <label>
+          {labelFor(keyName)}
+          <select
+            value={stringValue}
+            onChange={(event) => updateValue(path, event.target.value)}
+          >
+            {fontOptions.map((font) => (
+              <option key={font} value={font}>
+                {font}
+              </option>
+            ))}
+          </select>
+
+          <div className="site-editor-font-preview" style={{ fontFamily: `"${stringValue}", system-ui, sans-serif` }}>
+            Arte que inspira forma e transforma
+          </div>
+        </label>
+      );
+    }
+
+    if (keyName === "fontScale") {
+      return (
+        <label>
+          Tamanho geral das fontes
+          <input
+            type="range"
+            min="0.72"
+            max="1.08"
+            step="0.02"
+            value={stringValue || "0.88"}
+            onChange={(event) => updateValue(path, event.target.value)}
+          />
+          <span className="site-editor-range-value">{stringValue || "0.88"}</span>
+        </label>
+      );
+    }
+
+    if (keyName === "mediaPosition") {
+      return (
+        <label>
+          Posição da imagem / vídeo
+          <select
+            value={stringValue || "right"}
+            onChange={(event) => updateValue(path, event.target.value)}
+          >
+            {mediaPositionOptions.map((option) => (
+              <option key={option.value} value={option.value}>{option.label}</option>
+            ))}
+          </select>
+        </label>
+      );
+    }
+
+    if (keyName === "animation") {
+      return (
+        <label>
+          Animação
+          <select
+            value={stringValue || "fade-up"}
+            onChange={(event) => updateValue(path, event.target.value)}
+          >
+            {animationOptions.map((option) => (
+              <option key={option.value} value={option.value}>{option.label}</option>
+            ))}
+          </select>
+        </label>
+      );
+    }
+
+    if (keyName === "textAlign") {
+      return (
+        <label>
+          Alinhamento do texto
+          <select
+            value={stringValue || "left"}
+            onChange={(event) => updateValue(path, event.target.value)}
+          >
+            {textAlignOptions.map((option) => (
+              <option key={option.value} value={option.value}>{option.label}</option>
+            ))}
+          </select>
+        </label>
+      );
+    }
+
     if (typeof value === "boolean") {
       return (
         <label className="site-editor-checkbox">
@@ -335,7 +534,6 @@ export function PaginasSitePage() {
       );
     }
 
-    const stringValue = String(value ?? "");
     const lowerKey = keyName.toLowerCase();
     const useTextarea =
       stringValue.length > 80 ||

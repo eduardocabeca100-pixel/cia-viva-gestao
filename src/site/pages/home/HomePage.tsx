@@ -3,18 +3,40 @@ import { SiteMedia } from "../../components/SiteMedia";
 import { useSiteContent } from "../../content/useSiteContent";
 import "../site-public.css";
 
+function animatedWords(text: string) {
+  return text.split(" ").map((word, index) => (
+    <span key={`${word}-${index}`} style={{ animationDelay: `${index * 90}ms` }}>
+      {word}
+    </span>
+  ));
+}
+
 export function HomePage() {
   const { home } = useSiteContent();
+  const mediaPosition = home.hero.mediaPosition || "top";
+  const animation = home.hero.animation || "letters";
+  const textAlign = home.hero.textAlign || "center";
 
   return (
     <main className="commercial-page">
-      <section className="commercial-hero commercial-hero--home">
+      <section
+        className={`commercial-hero commercial-hero--home commercial-hero--media-${mediaPosition} commercial-hero--anim-${animation} commercial-hero--text-${textAlign}`}
+      >
+        <div className="commercial-hero__visual">
+          <SiteMedia media={home.hero.media} />
+          <div className="commercial-orbit" />
+        </div>
+
         <div className="commercial-hero__content">
           <span className="commercial-kicker">{home.hero.eyebrow}</span>
-          <h1>
-            {home.hero.title}
-            <strong>{home.hero.accent}</strong>
+
+          <h1 className="commercial-animated-title">
+            {animation === "letters" ? animatedWords(home.hero.title) : home.hero.title}
+            <strong>
+              {animation === "letters" ? animatedWords(home.hero.accent) : home.hero.accent}
+            </strong>
           </h1>
+
           <p>{home.hero.description}</p>
 
           <div className="commercial-actions">
@@ -25,11 +47,6 @@ export function HomePage() {
               {home.hero.secondaryButton.label}
             </Link>
           </div>
-        </div>
-
-        <div className="commercial-hero__visual">
-          <SiteMedia media={home.hero.media} />
-          <div className="commercial-orbit" />
         </div>
       </section>
 

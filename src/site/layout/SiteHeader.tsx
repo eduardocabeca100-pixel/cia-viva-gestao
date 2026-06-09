@@ -1,4 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
+import { SiteMedia } from "../components/SiteMedia";
+import { useSiteContent } from "../content/useSiteContent";
 
 const navItems = [
   { label: "Página Inicial", to: "/" },
@@ -10,12 +12,20 @@ const navItems = [
 ];
 
 export function SiteHeader() {
+  const { global } = useSiteContent();
+
   return (
     <header className="viva-site-header">
       <div className="viva-site-header__inner">
         <Link className="viva-site-logo" to="/" aria-label="Cia de Artes Viva">
-          <strong>VIVA</strong>
-          <span>CIA DE ARTES</span>
+          {global.logoMedia?.src ? (
+            <SiteMedia media={global.logoMedia} className="viva-site-logo__media" />
+          ) : (
+            <>
+              <strong>{global.logoTitle}</strong>
+              <span>{global.logoSubtitle}</span>
+            </>
+          )}
         </Link>
 
         <nav className="viva-site-nav" aria-label="Menu principal">
@@ -33,8 +43,8 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <Link className="viva-site-header__button" to="/apoie">
-          Apoiar
+        <Link className="viva-site-header__button" to={global.ctaHref}>
+          {global.ctaLabel}
         </Link>
       </div>
     </header>

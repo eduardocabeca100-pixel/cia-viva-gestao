@@ -1,4 +1,7 @@
 export type MediaType = "image" | "gif" | "video";
+export type MediaPosition = "right" | "left" | "top" | "background";
+export type AnimationStyle = "none" | "fade-up" | "zoom-in" | "slide-left" | "letters";
+export type TextAlignOption = "left" | "center";
 
 export type MediaValue = {
   type: MediaType;
@@ -19,6 +22,9 @@ export type EditableHero = {
   primaryButton: EditableButton;
   secondaryButton: EditableButton;
   media: MediaValue;
+  mediaPosition?: MediaPosition;
+  animation?: AnimationStyle;
+  textAlign?: TextAlignOption;
 };
 
 export type EditableCard = {
@@ -47,6 +53,11 @@ export type SiteEditableContent = {
   global: {
     logoTitle: string;
     logoSubtitle: string;
+    logoMedia?: MediaValue;
+    favicon?: MediaValue;
+    headingFont?: string;
+    bodyFont?: string;
+    fontScale?: string;
     ctaLabel: string;
     ctaHref: string;
     footerDescription: string;
@@ -182,6 +193,11 @@ export const defaultSiteContent: SiteEditableContent = {
   global: {
     logoTitle: "VIVA",
     logoSubtitle: "CIA DE ARTES",
+    logoMedia: emptyMedia,
+    favicon: emptyMedia,
+    headingFont: "Montserrat",
+    bodyFont: "Poppins",
+    fontScale: "0.88",
     ctaLabel: "Apoiar",
     ctaHref: "/apoie",
     footerDescription:
@@ -207,6 +223,9 @@ export const defaultSiteContent: SiteEditableContent = {
         href: "/apoie",
       },
       media: defaultDanceMedia,
+      mediaPosition: "top",
+      animation: "letters",
+      textAlign: "center",
     },
     pillars: [
       {
@@ -279,6 +298,9 @@ export const defaultSiteContent: SiteEditableContent = {
       primaryButton: { label: "Conheça os projetos", href: "/projetos" },
       secondaryButton: { label: "Fale conosco", href: "/contato" },
       media: defaultStageMedia,
+      mediaPosition: "right",
+      animation: "fade-up",
+      textAlign: "left",
     },
     founder: {
       name: "Eduardo Cabeça",
@@ -362,6 +384,9 @@ export const defaultSiteContent: SiteEditableContent = {
       primaryButton: { label: "Quero apoiar", href: "/contato" },
       secondaryButton: { label: "Ver projetos", href: "/projetos" },
       media: defaultStageMedia,
+      mediaPosition: "right",
+      animation: "fade-up",
+      textAlign: "left",
     },
     formTitle: "Receba informações para apoiar",
     project: {
@@ -438,6 +463,9 @@ export const defaultSiteContent: SiteEditableContent = {
       primaryButton: { label: "Inscreva-se", href: "#inscricao" },
       secondaryButton: { label: "Conheça o programa", href: "#formacao" },
       media: defaultGroupMedia,
+      mediaPosition: "right",
+      animation: "fade-up",
+      textAlign: "left",
     },
     intro: {
       eyebrow: "Crescimento coletivo",
@@ -523,6 +551,9 @@ export const defaultSiteContent: SiteEditableContent = {
       primaryButton: { label: "Fale conosco", href: "/contato" },
       secondaryButton: { label: "Apoie", href: "/apoie" },
       media: defaultStageMedia,
+      mediaPosition: "right",
+      animation: "fade-up",
+      textAlign: "left",
     },
     items: [
       {
@@ -575,6 +606,9 @@ export const defaultSiteContent: SiteEditableContent = {
       primaryButton: { label: "Enviar mensagem", href: "#formulario" },
       secondaryButton: { label: "Apoie", href: "/apoie" },
       media: defaultStageMedia,
+      mediaPosition: "right",
+      animation: "fade-up",
+      textAlign: "left",
     },
     info: {
       email: "contato@ciaviva.com",
