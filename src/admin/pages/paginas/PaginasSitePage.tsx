@@ -1,293 +1,378 @@
+import { useMemo, useState } from "react";
 import {
-  Copy,
-  Eye,
-  GripVertical,
-  ImagePlus,
-  Pencil,
-  Plus,
-  Save,
-  Trash2,
-  Upload,
-} from "lucide-react";
-import "./paginas.css";
+  defaultSiteContent,
+  getSiteContent,
+  resetSiteContent,
+  saveSiteContent,
+  type SiteEditableContent,
+} from "../../../site/content/siteContent";
+import "./paginas-site.css";
 
-const pages = [
+const imageSuggestions = [
   {
-    title: "Página Inicial",
-    slug: "/",
-    status: "Publicado",
-    tag: "Página inicial",
+    label: "Bailarina com luz circular",
+    url: "https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=1200&q=80",
   },
   {
-    title: "Nossa História",
-    slug: "/nossa-historia",
-    status: "Publicado",
-    tag: "Institucional",
+    label: "Palco teatral",
+    url: "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=1200&q=80",
   },
   {
-    title: "Apoie",
-    slug: "/apoie",
-    status: "Publicado",
-    tag: "Captação",
+    label: "Cortina vermelha",
+    url: "https://images.unsplash.com/photo-1503095396549-807759245b35?auto=format&fit=crop&w=1200&q=80",
   },
   {
-    title: "Voluntariado 2026",
-    slug: "/voluntariado-2026",
-    status: "Publicado",
-    tag: "Formulário",
-  },
-  {
-    title: "Projetos",
-    slug: "/projetos",
-    status: "Publicado",
-    tag: "Portfólio",
-  },
-  {
-    title: "Contato",
-    slug: "/contato",
-    status: "Publicado",
-    tag: "Contato",
-  },
-  {
-    title: "Política de Privacidade",
-    slug: "/politica-de-privacidade",
-    status: "Rascunho",
-    tag: "Legal",
+    label: "Voluntariado",
+    url: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=80",
   },
 ];
 
+type EditorSection = "hero" | "pilares" | "cards";
+
 export function PaginasSitePage() {
+  const [content, setContent] = useState<SiteEditableContent>(() => getSiteContent());
+  const [section, setSection] = useState<EditorSection>("hero");
+  const [savedMessage, setSavedMessage] = useState("");
+
+  const hero = content.home.hero;
+
+  const activeTitle = useMemo(() => {
+    if (section === "hero") return "Banner principal";
+    if (section === "pilares") return "Pilares da Home";
+    return "Cards de chamada";
+  }, [section]);
+
+  function updateHero(field: keyof SiteEditableContent["home"]["hero"], value: string) {
+    setContent((current) => ({
+      ...current,
+      home: {
+        ...current.home,
+        hero: {
+          ...current.home.hero,
+          [field]: value,
+        },
+      },
+    }));
+  }
+
+  function updatePillar(index: number, field: "title" | "text" | "icon", value: string) {
+    setContent((current) => ({
+      ...current,
+      home: {
+        ...current.home,
+        pillars: current.home.pillars.map((pillar, pillarIndex) =>
+          pillarIndex === index ? { ...pillar, [field]: value } : pillar
+        ),
+      },
+    }));
+  }
+
+  function updateCard(
+    index: number,
+    field: "eyebrow" | "title" | "button" | "image",
+    value: string
+  ) {
+    setContent((current) => ({
+      ...current,
+      home: {
+        ...current.home,
+        spotlightCards: current.home.spotlightCards.map((card, cardIndex) =>
+          cardIndex === index ? { ...card, [field]: value } : card
+        ),
+      },
+    }));
+  }
+
+  function handleSave() {
+    saveSiteContent(content);
+    setSavedMessage("Alterações salvas localmente. Abra a página inicial para visualizar.");
+  }
+
+  function handleReset() {
+    resetSiteContent();
+    setContent(defaultSiteContent);
+    setSavedMessage("Conteúdo restaurado para o padrão.");
+  }
+
   return (
-    <main className="pages-admin">
-      <div className="pages-admin-header">
+    <main className="site-editor-page">
+      <header className="site-editor-header">
         <div>
-          <p>ABAS DO SITE</p>
+          <span>Viva Gestão</span>
           <h1>Páginas do site</h1>
-          <span>
-            Gerencie as páginas, menus, imagens e conteúdos exibidos no site público da Cia Viva.
-          </span>
+          <p>Edite o site público por partes: textos, imagens, botões, cards e seções.</p>
         </div>
 
-        <div className="pages-admin-actions">
-          <button className="admin-action dark">
-            <Eye size={17} />
-            Visualizar
-          </button>
-
-          <button className="admin-action dark">
-            <Copy size={17} />
-            Duplicar aba
-          </button>
-
-          <button className="admin-action danger">
-            <Trash2 size={17} />
-            Apagar aba
-          </button>
-
-          <button className="admin-action primary">
-            <Plus size={17} />
-            Adicionar aba
+        <div className="site-editor-actions">
+          <a href="/" target="_blank" rel="noreferrer">
+            Visualizar site
+          </a>
+          <button type="button" onClick={handleSave}>
+            Salvar alterações
           </button>
         </div>
-      </div>
+      </header>
 
-      <section className="pages-admin-grid">
-        <article className="pages-list-panel">
-          <div className="panel-title">
-            <div>
-              <h2>Lista de páginas</h2>
-              <p>Arraste para reorganizar o menu do site.</p>
-            </div>
-            <button className="icon-button">
-              <Plus size={18} />
+      {savedMessage && <div className="site-editor-message">{savedMessage}</div>}
+
+      <section className="site-editor-layout">
+        <aside className="site-editor-sidebar">
+          <h2>Páginas</h2>
+
+          <button className="active" type="button">
+            Página Inicial
+          </button>
+          <button type="button" disabled>
+            Nossa História
+          </button>
+          <button type="button" disabled>
+            Apoie
+          </button>
+          <button type="button" disabled>
+            Voluntariado 2026
+          </button>
+          <button type="button" disabled>
+            Projetos
+          </button>
+          <button type="button" disabled>
+            Contato
+          </button>
+
+          <small>
+            Agora começamos pela Home. Depois conectamos as outras abas no mesmo editor.
+          </small>
+        </aside>
+
+        <section className="site-editor-panel">
+          <div className="site-editor-tabs">
+            <button
+              type="button"
+              className={section === "hero" ? "active" : ""}
+              onClick={() => setSection("hero")}
+            >
+              Banner principal
+            </button>
+            <button
+              type="button"
+              className={section === "pilares" ? "active" : ""}
+              onClick={() => setSection("pilares")}
+            >
+              Pilares
+            </button>
+            <button
+              type="button"
+              className={section === "cards" ? "active" : ""}
+              onClick={() => setSection("cards")}
+            >
+              Cards
             </button>
           </div>
 
-          <div className="pages-list">
-            {pages.map((page, index) => (
-              <div
-                className={index === 0 ? "page-row active" : "page-row"}
-                key={page.slug}
-              >
-                <GripVertical className="drag-icon" size={18} />
-
-                <div className="page-info">
-                  <strong>{page.title}</strong>
-                  <span>{page.slug}</span>
-                </div>
-
-                <span className={page.status === "Publicado" ? "status published" : "status draft"}>
-                  {page.status}
-                </span>
-
-                <span className="page-tag">{page.tag}</span>
-
-                <div className="page-row-actions">
-                  <button title="Editar">
-                    <Pencil size={16} />
-                  </button>
-                  <button title="Visualizar">
-                    <Eye size={16} />
-                  </button>
-                  <button title="Duplicar">
-                    <Copy size={16} />
-                  </button>
-                  <button title="Excluir" className="trash">
-                    <Trash2 size={16} />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <button className="add-page-full">
-            <Plus size={18} />
-            Adicionar nova página
-          </button>
-        </article>
-
-        <article className="page-editor-panel">
-          <div className="panel-title">
+          <div className="site-editor-panel-header">
             <div>
-              <h2>Editar página</h2>
-              <p>Personalize informações básicas da página selecionada.</p>
+              <span>Seção</span>
+              <h2>{activeTitle}</h2>
             </div>
 
-            <span className="status published">Publicado</span>
+            <button type="button" className="site-editor-reset" onClick={handleReset}>
+              Restaurar padrão
+            </button>
           </div>
 
-          <div className="editor-layout">
-            <form className="page-form">
-              <label>
-                Título da página
-                <input defaultValue="Página Inicial" />
-              </label>
-
-              <label>
-                Descrição da página
-                <textarea defaultValue="Página principal da Cia Viva com apresentação institucional, chamadas para apoio, voluntariado e projetos culturais." />
-              </label>
-
-              <label>
-                Slug / URL
-                <input defaultValue="/" />
-                <small>A URL será exibida no formato: ciaviva.com/</small>
-              </label>
-
-              <div className="form-row">
+          {section === "hero" && (
+            <div className="site-editor-grid">
+              <div className="site-editor-form">
                 <label>
-                  Aparece no menu?
-                  <select defaultValue="sim">
-                    <option value="sim">Sim</option>
-                    <option value="nao">Não</option>
-                  </select>
+                  Texto pequeno acima do título
+                  <input
+                    value={hero.eyebrow}
+                    onChange={(event) => updateHero("eyebrow", event.target.value)}
+                  />
                 </label>
 
                 <label>
-                  Tipo de página
-                  <select defaultValue="home">
-                    <option value="home">Página inicial</option>
-                    <option value="institucional">Institucional</option>
-                    <option value="formulario">Formulário</option>
-                    <option value="projetos">Projetos</option>
-                    <option value="contato">Contato</option>
-                  </select>
+                  Primeira linha do título
+                  <input
+                    value={hero.titleTop}
+                    onChange={(event) => updateHero("titleTop", event.target.value)}
+                  />
                 </label>
+
+                <label>
+                  Palavra em vermelho
+                  <input
+                    value={hero.titleAccent}
+                    onChange={(event) => updateHero("titleAccent", event.target.value)}
+                  />
+                </label>
+
+                <label>
+                  Final do título
+                  <input
+                    value={hero.titleBottom}
+                    onChange={(event) => updateHero("titleBottom", event.target.value)}
+                  />
+                </label>
+
+                <label>
+                  Descrição
+                  <textarea
+                    rows={5}
+                    value={hero.description}
+                    onChange={(event) => updateHero("description", event.target.value)}
+                  />
+                </label>
+
+                <div className="site-editor-two-columns">
+                  <label>
+                    Botão principal
+                    <input
+                      value={hero.primaryButtonText}
+                      onChange={(event) =>
+                        updateHero("primaryButtonText", event.target.value)
+                      }
+                    />
+                  </label>
+
+                  <label>
+                    Botão secundário
+                    <input
+                      value={hero.secondaryButtonText}
+                      onChange={(event) =>
+                        updateHero("secondaryButtonText", event.target.value)
+                      }
+                    />
+                  </label>
+                </div>
               </div>
 
-              <div className="editor-buttons">
-                <button type="button" className="admin-action dark">
-                  <Eye size={16} />
-                  Pré-visualizar
-                </button>
+              <div className="site-editor-media">
+                <h3>Imagens do banner</h3>
 
-                <button type="button" className="admin-action primary">
-                  <Save size={16} />
-                  Salvar alterações
-                </button>
-              </div>
-            </form>
+                <label>
+                  Imagem esquerda
+                  <input
+                    value={hero.imageLeft}
+                    onChange={(event) => updateHero("imageLeft", event.target.value)}
+                  />
+                </label>
 
-            <div className="featured-image-box">
-              <h3>Imagem de destaque</h3>
+                <label>
+                  Bailarina / imagem central
+                  <input
+                    value={hero.imageCenter}
+                    onChange={(event) => updateHero("imageCenter", event.target.value)}
+                  />
+                </label>
 
-              <div className="image-preview">
-                <ImagePlus size={42} />
-                <p>Imagem da página inicial</p>
-              </div>
+                <label>
+                  Imagem direita
+                  <input
+                    value={hero.imageRight}
+                    onChange={(event) => updateHero("imageRight", event.target.value)}
+                  />
+                </label>
 
-              <div className="image-actions">
-                <button>
-                  <Upload size={16} />
-                  Alterar imagem
-                </button>
+                <div className="site-editor-preview-row">
+                  {[hero.imageLeft, hero.imageCenter, hero.imageRight].map((image) => (
+                    <img key={image} src={image} alt="" />
+                  ))}
+                </div>
 
-                <button className="remove">
-                  <Trash2 size={16} />
-                  Remover
-                </button>
-              </div>
+                <h3>Imagens sugeridas</h3>
 
-              <div className="image-sizes">
-                <strong>Tamanhos recomendados</strong>
-                <p>Hero desktop: 1920 x 1080 px</p>
-                <p>Banner interno: 1600 x 900 px</p>
-                <p>Card: 1080 x 1350 px</p>
-                <p>Formatos: PNG, JPG ou WEBP</p>
+                <div className="site-editor-suggestions">
+                  {imageSuggestions.map((image) => (
+                    <button
+                      type="button"
+                      key={image.url}
+                      onClick={() => updateHero("imageCenter", image.url)}
+                    >
+                      <img src={image.url} alt="" />
+                      <span>{image.label}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        </article>
-      </section>
+          )}
 
-      <section className="footer-editor-panel">
-        <div className="panel-title">
-          <div>
-            <h2>Editor do rodapé</h2>
-            <p>Controle as informações exibidas no rodapé do site.</p>
-          </div>
+          {section === "pilares" && (
+            <div className="site-editor-card-list">
+              {content.home.pillars.map((pillar, index) => (
+                <article key={index} className="site-editor-edit-card">
+                  <label>
+                    Ícone
+                    <input
+                      value={pillar.icon}
+                      onChange={(event) => updatePillar(index, "icon", event.target.value)}
+                    />
+                  </label>
 
-          <button className="admin-action primary">
-            <Save size={16} />
-            Salvar rodapé
-          </button>
-        </div>
+                  <label>
+                    Título
+                    <input
+                      value={pillar.title}
+                      onChange={(event) => updatePillar(index, "title", event.target.value)}
+                    />
+                  </label>
 
-        <div className="footer-editor-grid">
-          <label>
-            Texto do rodapé
-            <textarea defaultValue="© 2026 Companhia de Artes Viva. Todos os direitos reservados." />
-          </label>
-
-          <div className="social-links-box">
-            <h3>Links sociais</h3>
-
-            <label>
-              Instagram
-              <input defaultValue="https://instagram.com/ciaviva" />
-            </label>
-
-            <label>
-              YouTube
-              <input defaultValue="https://youtube.com/@ciaviva" />
-            </label>
-
-            <label>
-              Facebook
-              <input defaultValue="https://facebook.com/ciaviva" />
-            </label>
-          </div>
-
-          <div className="footer-image-upload">
-            <h3>Imagem do rodapé</h3>
-            <div className="dropzone">
-              <Upload size={28} />
-              <strong>Arraste uma imagem aqui</strong>
-              <span>ou clique para selecionar</span>
-              <small>PNG, JPG ou WEBP até 2MB</small>
+                  <label>
+                    Texto
+                    <textarea
+                      rows={4}
+                      value={pillar.text}
+                      onChange={(event) => updatePillar(index, "text", event.target.value)}
+                    />
+                  </label>
+                </article>
+              ))}
             </div>
-          </div>
-        </div>
+          )}
+
+          {section === "cards" && (
+            <div className="site-editor-card-list">
+              {content.home.spotlightCards.map((card, index) => (
+                <article key={index} className="site-editor-edit-card">
+                  <label>
+                    Texto vermelho pequeno
+                    <input
+                      value={card.eyebrow}
+                      onChange={(event) => updateCard(index, "eyebrow", event.target.value)}
+                    />
+                  </label>
+
+                  <label>
+                    Título
+                    <textarea
+                      rows={3}
+                      value={card.title}
+                      onChange={(event) => updateCard(index, "title", event.target.value)}
+                    />
+                  </label>
+
+                  <label>
+                    Botão
+                    <input
+                      value={card.button}
+                      onChange={(event) => updateCard(index, "button", event.target.value)}
+                    />
+                  </label>
+
+                  <label>
+                    Imagem
+                    <input
+                      value={card.image}
+                      onChange={(event) => updateCard(index, "image", event.target.value)}
+                    />
+                  </label>
+
+                  <img className="site-editor-card-image" src={card.image} alt="" />
+                </article>
+              ))}
+            </div>
+          )}
+        </section>
       </section>
     </main>
   );
