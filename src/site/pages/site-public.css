@@ -704,3 +704,290 @@ header a:hover {
     opacity: 0.48;
   }
 }
+
+/* VIVA HEADER FOOTER START */
+
+.viva-site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.96), rgba(0, 0, 0, 0.82)),
+    rgba(0, 0, 0, 0.92);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(22px);
+}
+
+.viva-site-header__inner {
+  width: min(1440px, calc(100% - 48px));
+  min-height: 78px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 170px 1fr auto;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.viva-site-logo {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-decoration: none;
+  color: #fff;
+  line-height: 0.9;
+}
+
+.viva-site-logo strong {
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-size: 1.42rem;
+  font-weight: 950;
+  letter-spacing: -0.08em;
+}
+
+.viva-site-logo span {
+  margin-top: 0.18rem;
+  font-size: 0.55rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.viva-site-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.75rem, 1.6vw, 1.6rem);
+}
+
+.viva-site-nav__link {
+  position: relative;
+  padding: 0.7rem 0;
+  color: rgba(255, 255, 255, 0.76);
+  text-decoration: none;
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  transition: color 180ms ease;
+}
+
+.viva-site-nav__link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.2rem;
+  height: 2px;
+  background: #e50914;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 180ms ease;
+}
+
+.viva-site-nav__link:hover,
+.viva-site-nav__link.active {
+  color: #ffffff;
+}
+
+.viva-site-nav__link.active::after,
+.viva-site-nav__link:hover::after {
+  transform: scaleX(1);
+}
+
+.viva-site-header__button {
+  min-height: 2.65rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1.1rem;
+  border-radius: 3px;
+  background: #e50914;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.68rem;
+  font-weight: 950;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  box-shadow: 0 14px 34px rgba(229, 9, 20, 0.28);
+}
+
+.viva-site-footer {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 12% 10%, rgba(229, 9, 20, 0.22), transparent 22rem),
+    radial-gradient(circle at 92% 100%, rgba(255, 255, 255, 0.06), transparent 18rem),
+    #020202;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.viva-site-footer__glow {
+  position: absolute;
+  left: -10%;
+  bottom: -45%;
+  width: 55%;
+  height: 70%;
+  background: radial-gradient(circle, rgba(229, 9, 20, 0.42), transparent 62%);
+  filter: blur(30px);
+  opacity: 0.72;
+  pointer-events: none;
+}
+
+.viva-site-footer__inner {
+  position: relative;
+  z-index: 2;
+  width: min(1440px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: clamp(3.5rem, 7vw, 6rem) 0 3rem;
+  display: grid;
+  grid-template-columns: minmax(260px, 1.2fr) repeat(3, minmax(160px, 0.7fr));
+  gap: clamp(2rem, 4vw, 4.5rem);
+}
+
+.viva-site-logo--footer strong {
+  font-size: 2.4rem;
+}
+
+.viva-site-footer__brand p {
+  max-width: 420px;
+  margin: 1.25rem 0 0;
+  color: rgba(255, 255, 255, 0.64);
+  line-height: 1.7;
+}
+
+.viva-site-footer__social {
+  display: flex;
+  gap: 0.7rem;
+  margin-top: 1.5rem;
+}
+
+.viva-site-footer__social a {
+  width: 2.25rem;
+  height: 2.25rem;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 900;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.viva-site-footer__column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.65rem;
+}
+
+.viva-site-footer__column h3 {
+  margin: 0 0 0.55rem;
+  color: #ffffff;
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-size: 0.82rem;
+  font-weight: 950;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.viva-site-footer__column a,
+.viva-site-footer__column span {
+  color: rgba(255, 255, 255, 0.62);
+  text-decoration: none;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.viva-site-footer__column a:hover {
+  color: #ff2b2b;
+}
+
+.viva-site-footer__contact {
+  margin-top: 0.6rem;
+  color: #ff2b2b !important;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.08em;
+}
+
+.viva-site-footer__bottom {
+  position: relative;
+  z-index: 2;
+  width: min(1440px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 1.2rem 0 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: rgba(255, 255, 255, 0.46);
+  font-size: 0.8rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.viva-page {
+  margin-top: 0;
+}
+
+.viva-hero {
+  min-height: calc(82vh - 78px);
+}
+
+@media (max-width: 1080px) {
+  .viva-site-header__inner {
+    grid-template-columns: 1fr auto;
+    min-height: auto;
+    padding: 1rem 0;
+  }
+
+  .viva-site-nav {
+    grid-column: 1 / -1;
+    order: 3;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 0.15rem;
+  }
+
+  .viva-site-header__button {
+    justify-self: end;
+  }
+
+  .viva-site-footer__inner {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .viva-site-header__inner,
+  .viva-site-footer__inner,
+  .viva-site-footer__bottom {
+    width: min(100% - 28px, 1440px);
+  }
+
+  .viva-site-header__button {
+    display: none;
+  }
+
+  .viva-site-nav {
+    gap: 1rem;
+  }
+
+  .viva-site-nav__link {
+    white-space: nowrap;
+    font-size: 0.62rem;
+  }
+
+  .viva-site-footer__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .viva-site-footer__bottom {
+    flex-direction: column;
+  }
+}
+
+/* VIVA HEADER FOOTER END */
