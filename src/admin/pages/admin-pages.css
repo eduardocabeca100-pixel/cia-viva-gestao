@@ -1,0 +1,443 @@
+.admin-dashboard-page,
+.volunteer-admin-page,
+.visual-admin-page,
+.security-admin-page {
+  display: grid;
+  gap: 24px;
+}
+
+.admin-section-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.admin-section-header p {
+  margin: 0 0 8px;
+  color: #ff5360;
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.24em;
+}
+
+.admin-section-header h1 {
+  margin: 0;
+  font-size: clamp(2.2rem, 4vw, 3.8rem);
+  line-height: 0.95;
+  letter-spacing: -0.07em;
+}
+
+.admin-section-header span {
+  display: block;
+  max-width: 720px;
+  margin-top: 12px;
+  color: #9b9ba1;
+  line-height: 1.6;
+}
+
+.admin-header-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.admin-page-button {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  color: white;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.admin-page-button.primary {
+  background: linear-gradient(135deg, #ff3845, #b70e19);
+}
+
+.admin-page-button.dark {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.admin-page-button.danger {
+  color: #ff5360;
+  background: rgba(255,56,69,0.08);
+  border: 1px solid rgba(255,56,69,0.18);
+}
+
+.admin-panel-card {
+  padding: 24px;
+  border-radius: 30px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.075), rgba(255,255,255,0.035));
+  border: 1px solid rgba(255,255,255,0.09);
+  box-shadow: 0 22px 80px rgba(0,0,0,0.24);
+}
+
+.admin-card-title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.admin-card-title h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  letter-spacing: -0.035em;
+}
+
+.admin-card-title p {
+  margin: 6px 0 0;
+  color: #8f8f96;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.metric-card {
+  min-height: 150px;
+  padding: 24px;
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,56,69,0.16), transparent 34%),
+    rgba(255,255,255,0.055);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.metric-card strong {
+  display: block;
+  font-size: 2.6rem;
+  letter-spacing: -0.08em;
+}
+
+.metric-card span {
+  display: block;
+  margin-top: 8px;
+  color: #9b9ba1;
+}
+
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.quick-card {
+  min-height: 160px;
+  padding: 22px;
+  border-radius: 24px;
+  background: rgba(0,0,0,0.24);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.quick-card h3 {
+  margin: 16px 0 8px;
+}
+
+.quick-card p {
+  margin: 0;
+  color: #8f8f96;
+  line-height: 1.55;
+}
+
+.form-grid-2,
+.visual-grid,
+.security-layout,
+.volunteer-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+
+.admin-field {
+  display: grid;
+  gap: 8px;
+  color: #d9d9dd;
+  font-size: 0.86rem;
+  font-weight: 850;
+}
+
+.admin-field input,
+.admin-field textarea,
+.admin-field select {
+  width: 100%;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 17px;
+  background: rgba(0,0,0,0.22);
+  color: #f7f2ee;
+  outline: none;
+  font-size: 0.95rem;
+}
+
+.admin-field input,
+.admin-field select {
+  height: 48px;
+  padding: 0 14px;
+}
+
+.admin-field textarea {
+  min-height: 120px;
+  padding: 14px;
+  resize: vertical;
+}
+
+.admin-field input:focus,
+.admin-field textarea:focus,
+.admin-field select:focus {
+  border-color: #ff3845;
+  box-shadow: 0 0 0 4px rgba(255,56,69,0.1);
+}
+
+.status-pill {
+  width: fit-content;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 950;
+}
+
+.status-pill.open {
+  color: #8ff0aa;
+  background: rgba(38,174,96,0.16);
+}
+
+.status-pill.closed {
+  color: #ff9aa2;
+  background: rgba(255,56,69,0.14);
+}
+
+.status-pill.draft {
+  color: #d8d8d8;
+  background: rgba(255,255,255,0.1);
+}
+
+.visual-grid {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.color-card {
+  padding: 20px;
+  border-radius: 24px;
+  background: rgba(0,0,0,0.22);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.color-preview {
+  height: 92px;
+  border-radius: 18px;
+  margin-bottom: 14px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.color-preview.black { background: #030303; }
+.color-preview.offwhite { background: #f7f2ee; }
+.color-preview.red { background: linear-gradient(135deg, #ff3845, #b70e19); }
+.color-preview.graphite { background: #151515; }
+
+.color-card strong,
+.color-card span {
+  display: block;
+}
+
+.color-card span {
+  margin-top: 6px;
+  color: #8f8f96;
+}
+
+.theme-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.theme-card {
+  min-height: 180px;
+  padding: 22px;
+  border-radius: 24px;
+  background: rgba(0,0,0,0.22);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.theme-card.active {
+  border-color: rgba(255,56,69,0.55);
+  background: linear-gradient(145deg, rgba(255,56,69,0.18), rgba(255,255,255,0.04));
+}
+
+.theme-card h3 {
+  margin: 0 0 10px;
+}
+
+.theme-card p {
+  margin: 0;
+  color: #8f8f96;
+  line-height: 1.55;
+}
+
+.upload-card {
+  padding: 22px;
+  border-radius: 24px;
+  background: rgba(0,0,0,0.22);
+  border: 1px dashed rgba(255,255,255,0.18);
+  min-height: 210px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+.upload-card strong,
+.upload-card span,
+.upload-card small {
+  display: block;
+}
+
+.upload-card span {
+  margin-top: 8px;
+  color: #9b9ba1;
+}
+
+.upload-card small {
+  margin-top: 8px;
+  color: #ff5360;
+  font-weight: 900;
+}
+
+.security-user-card {
+  min-height: 150px;
+  padding: 22px;
+  border-radius: 24px;
+  display: grid;
+  grid-template-columns: 58px 1fr auto;
+  align-items: center;
+  gap: 16px;
+  background: rgba(0,0,0,0.22);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.user-avatar {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #ff3845, #9d0b14);
+  font-weight: 950;
+}
+
+.security-user-card span {
+  display: block;
+  margin-top: 5px;
+  color: #8f8f96;
+}
+
+.volunteer-status-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.volunteer-status-button {
+  min-height: 72px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #d8d8d8;
+  background: rgba(255,255,255,0.05);
+  font-weight: 950;
+  cursor: pointer;
+}
+
+.volunteer-status-button.active {
+  color: white;
+  background: linear-gradient(135deg, rgba(255,56,69,0.85), rgba(183,14,25,0.75));
+  border-color: rgba(255,56,69,0.55);
+}
+
+.volunteer-preview-card {
+  min-height: 620px;
+  border-radius: 30px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 35% 40%, rgba(255,56,69,0.28), transparent 32%),
+    linear-gradient(135deg, rgba(255,255,255,0.08), rgba(0,0,0,0.36));
+  border: 1px solid rgba(255,255,255,0.08);
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 36px;
+}
+
+.volunteer-preview-card p {
+  color: #ff5360;
+  margin: 0;
+  font-size: clamp(2.2rem, 4vw, 4.5rem);
+  line-height: 0.9;
+  font-weight: 950;
+  letter-spacing: -0.07em;
+}
+
+.volunteer-preview-card h2 {
+  color: white;
+  margin: 10px 0;
+  font-size: clamp(3rem, 6vw, 6.8rem);
+  line-height: 0.82;
+  letter-spacing: -0.08em;
+}
+
+.volunteer-preview-card span {
+  display: block;
+  max-width: 420px;
+  margin: 22px auto 0;
+  color: #cfcfcf;
+  line-height: 1.6;
+}
+
+.applicant-list {
+  display: grid;
+  gap: 10px;
+}
+
+.applicant-row {
+  min-height: 62px;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  border-radius: 18px;
+  background: rgba(0,0,0,0.22);
+  border: 1px solid rgba(255,255,255,0.07);
+}
+
+.applicant-row span {
+  display: block;
+  margin-top: 4px;
+  color: #8f8f96;
+  font-size: 0.82rem;
+}
+
+@media (max-width: 1180px) {
+  .admin-section-header,
+  .metric-grid,
+  .quick-grid,
+  .form-grid-2,
+  .visual-grid,
+  .theme-options,
+  .security-layout,
+  .volunteer-layout,
+  .volunteer-status-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}

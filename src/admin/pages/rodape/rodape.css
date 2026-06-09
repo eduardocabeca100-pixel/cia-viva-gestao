@@ -1,0 +1,247 @@
+.footer-admin-page {
+  display: grid;
+  gap: 24px;
+}
+
+.footer-admin-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.footer-admin-header p {
+  margin: 0 0 8px;
+  color: #ff5360;
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.24em;
+}
+
+.footer-admin-header h1 {
+  margin: 0;
+  font-size: clamp(2.2rem, 4vw, 3.8rem);
+  line-height: 0.95;
+  letter-spacing: -0.07em;
+}
+
+.footer-admin-header span {
+  display: block;
+  max-width: 680px;
+  margin-top: 12px;
+  color: #9b9ba1;
+  line-height: 1.6;
+}
+
+.footer-admin-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 22px;
+}
+
+.footer-admin-card {
+  padding: 24px;
+  border-radius: 30px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.075), rgba(255,255,255,0.035));
+  border: 1px solid rgba(255,255,255,0.09);
+  box-shadow: 0 22px 80px rgba(0,0,0,0.24);
+}
+
+.footer-card-title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.footer-card-title h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  letter-spacing: -0.035em;
+}
+
+.footer-card-title p {
+  margin: 6px 0 0;
+  color: #8f8f96;
+}
+
+.footer-admin-button {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  color: white;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.footer-admin-button.primary {
+  background: linear-gradient(135deg, #ff3845, #b70e19);
+}
+
+.footer-admin-button.dark {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.footer-admin-button input {
+  display: none;
+}
+
+.footer-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.footer-form-grid label,
+.footer-textarea-field {
+  display: grid;
+  gap: 8px;
+  color: #d9d9dd;
+  font-size: 0.86rem;
+  font-weight: 850;
+}
+
+.footer-form-grid input,
+.footer-textarea-field textarea {
+  width: 100%;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 17px;
+  background: rgba(0,0,0,0.22);
+  color: #f7f2ee;
+  outline: none;
+  font-size: 0.95rem;
+}
+
+.footer-form-grid input {
+  height: 48px;
+  padding: 0 14px;
+}
+
+.footer-textarea-field {
+  margin-top: 18px;
+}
+
+.footer-textarea-field textarea {
+  min-height: 120px;
+  padding: 14px;
+  resize: vertical;
+}
+
+.footer-form-grid input:focus,
+.footer-textarea-field textarea:focus {
+  border-color: #ff3845;
+  box-shadow: 0 0 0 4px rgba(255,56,69,0.1);
+}
+
+.footer-upload-area {
+  margin-top: 20px;
+  padding: 18px;
+  border-radius: 22px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 18px;
+  align-items: center;
+  background: rgba(0,0,0,0.22);
+  border: 1px dashed rgba(255,255,255,0.18);
+}
+
+.footer-upload-area h3 {
+  margin: 0 0 8px;
+}
+
+.footer-upload-area p {
+  margin: 0 0 12px;
+  color: #8f8f96;
+}
+
+.footer-upload-area strong,
+.footer-upload-area span,
+.footer-upload-area small {
+  display: block;
+}
+
+.footer-upload-area span {
+  margin-top: 5px;
+  color: #ff5360;
+  font-weight: 900;
+}
+
+.footer-upload-area small {
+  margin-top: 6px;
+  color: #8f8f96;
+}
+
+.footer-public-preview {
+  min-height: 420px;
+  padding: 34px;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,56,69,0.16), transparent 34%),
+    #000;
+  border: 1px solid rgba(255,255,255,0.08);
+  display: grid;
+  align-content: center;
+  gap: 18px;
+  text-align: center;
+}
+
+.footer-logo-preview strong {
+  display: block;
+  font-size: 2.1rem;
+  letter-spacing: -0.07em;
+}
+
+.footer-logo-preview span {
+  display: block;
+  margin-top: 4px;
+  color: #d0d0d0;
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+}
+
+.footer-public-preview p {
+  margin: 0;
+  color: #9b9ba1;
+}
+
+.footer-public-preview nav,
+.footer-preview-links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: #f7f2ee;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.footer-preview-links {
+  color: #9b9ba1;
+  font-weight: 600;
+}
+
+.footer-public-preview .copyright {
+  color: #777;
+  font-size: 0.82rem;
+}
+
+@media (max-width: 1180px) {
+  .footer-admin-header,
+  .footer-admin-layout,
+  .footer-form-grid,
+  .footer-upload-area {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-admin-header {
+    display: grid;
+  }
+}

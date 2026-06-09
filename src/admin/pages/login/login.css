@@ -1,0 +1,361 @@
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  background:
+    radial-gradient(circle at 18% 42%, rgba(255, 56, 69, 0.18), transparent 30%),
+    radial-gradient(circle at 82% 12%, rgba(255, 255, 255, 0.08), transparent 24%),
+    #030303;
+  color: #f8f3ef;
+  overflow: hidden;
+}
+
+.login-visual {
+  position: relative;
+  min-height: 100vh;
+  padding: 72px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.login-visual::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(circle at 45% 45%, black, transparent 76%);
+  opacity: 0.55;
+}
+
+.login-orbit {
+  position: absolute;
+  width: 560px;
+  height: 560px;
+  left: 50%;
+  top: 42%;
+  transform: translate(-50%, -50%) rotate(-18deg);
+  border: 2px solid rgba(255,255,255,0.24);
+  border-radius: 50%;
+  box-shadow:
+    0 0 90px rgba(255,56,69,0.18),
+    inset 0 0 80px rgba(255,56,69,0.12);
+}
+
+.login-orbit::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  border-left: 5px solid #ff3845;
+  border-top: 3px solid rgba(255,255,255,0.8);
+  filter: blur(0.2px);
+  animation: vivaOrbit 3.8s ease-in-out infinite alternate;
+}
+
+.login-stage {
+  position: relative;
+  z-index: 2;
+  width: 580px;
+  height: 410px;
+  margin-bottom: 40px;
+}
+
+.login-stage::before {
+  content: "";
+  position: absolute;
+  left: 88px;
+  bottom: 30px;
+  width: 360px;
+  height: 70px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,56,69,0.28), transparent 70%);
+  filter: blur(10px);
+}
+
+.login-dancer {
+  position: absolute;
+  left: 96px;
+  top: 72px;
+  width: 175px;
+  height: 270px;
+  transform: rotate(-10deg);
+}
+
+.login-dancer::before {
+  content: "";
+  position: absolute;
+  left: 72px;
+  top: 25px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f8f3ef;
+  box-shadow: 0 0 24px rgba(255,255,255,0.55);
+}
+
+.login-dancer::after {
+  content: "";
+  position: absolute;
+  left: 70px;
+  top: 64px;
+  width: 58px;
+  height: 168px;
+  background: linear-gradient(#f8f3ef, rgba(255,255,255,0.72));
+  clip-path: polygon(28% 0, 74% 0, 100% 100%, 0 100%);
+  border-radius: 34px 34px 8px 8px;
+}
+
+.login-actor {
+  position: absolute;
+  left: 290px;
+  top: 96px;
+  width: 150px;
+  height: 240px;
+}
+
+.login-actor::before {
+  content: "";
+  position: absolute;
+  left: 55px;
+  top: 12px;
+  width: 42px;
+  height: 48px;
+  border-radius: 50%;
+  background: #f8f3ef;
+  opacity: 0.88;
+}
+
+.login-actor::after {
+  content: "";
+  position: absolute;
+  left: 38px;
+  top: 66px;
+  width: 84px;
+  height: 150px;
+  border-radius: 42px 42px 12px 12px;
+  background: linear-gradient(180deg, #151515, #030303);
+  border: 1px solid rgba(255,255,255,0.18);
+  box-shadow: 0 0 40px rgba(255,56,69,0.25);
+}
+
+.login-mask {
+  position: absolute;
+  left: 412px;
+  top: 92px;
+  width: 58px;
+  height: 72px;
+  border-radius: 45% 45% 50% 50%;
+  background: #f8f3ef;
+  box-shadow: 0 0 34px rgba(255,255,255,0.35);
+}
+
+.login-mask::before,
+.login-mask::after {
+  content: "";
+  position: absolute;
+  top: 28px;
+  width: 9px;
+  height: 7px;
+  border-radius: 50%;
+  background: #050505;
+}
+
+.login-mask::before {
+  left: 16px;
+}
+
+.login-mask::after {
+  right: 16px;
+}
+
+.login-brand-copy {
+  position: relative;
+  z-index: 3;
+}
+
+.login-brand-copy p {
+  margin: 0 0 12px;
+  color: #ff3845;
+  font-size: 0.74rem;
+  font-weight: 950;
+  letter-spacing: 0.24em;
+}
+
+.login-brand-copy h1 {
+  margin: 0;
+  font-size: clamp(3.4rem, 8vw, 7.8rem);
+  line-height: 0.88;
+  letter-spacing: -0.08em;
+}
+
+.login-brand-copy h1::first-letter {
+  color: #ff3845;
+}
+
+.login-brand-copy span {
+  display: block;
+  max-width: 580px;
+  margin-top: 22px;
+  color: #c8c8c8;
+  font-size: 1.06rem;
+  line-height: 1.7;
+}
+
+.login-dots {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  gap: 10px;
+  margin-top: 38px;
+}
+
+.login-dots i {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.22);
+}
+
+.login-dots i:nth-child(3) {
+  background: #ff3845;
+  box-shadow: 0 0 18px rgba(255,56,69,0.8);
+}
+
+.login-card {
+  align-self: center;
+  justify-self: center;
+  width: min(86%, 520px);
+  padding: 42px;
+  border-radius: 34px;
+  background: rgba(255,255,255,0.94);
+  color: #080808;
+  box-shadow: 0 30px 100px rgba(0,0,0,0.42);
+}
+
+.login-eyebrow {
+  margin: 0 0 12px;
+  color: #ff3845;
+  font-size: 0.72rem;
+  font-weight: 950;
+  letter-spacing: 0.22em;
+}
+
+.login-card h2 {
+  margin: 0;
+  font-size: 2.3rem;
+  letter-spacing: -0.06em;
+}
+
+.login-card-text {
+  margin: 12px 0 26px;
+  color: #5d5d5d;
+  line-height: 1.55;
+}
+
+.login-card form {
+  display: grid;
+  gap: 18px;
+}
+
+.login-card label {
+  display: grid;
+  gap: 8px;
+  color: #303030;
+  font-size: 0.82rem;
+  font-weight: 850;
+}
+
+.login-card input {
+  width: 100%;
+  height: 54px;
+  padding: 0 18px;
+  border-radius: 18px;
+  border: 1px solid #d7d7d7;
+  background: #f7f7f7;
+  color: #080808;
+  font-size: 1rem;
+  outline: none;
+}
+
+.login-card input:focus {
+  border-color: #ff3845;
+  box-shadow: 0 0 0 4px rgba(255,56,69,0.12);
+}
+
+.login-error {
+  padding: 12px 14px;
+  border-radius: 16px;
+  color: #8a1018;
+  background: rgba(255,56,69,0.12);
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.login-card button {
+  height: 56px;
+  margin-top: 6px;
+  border: 0;
+  border-radius: 18px;
+  color: white;
+  background: linear-gradient(135deg, #ff3845, #b70e19);
+  font-weight: 950;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.login-card button:disabled {
+  opacity: 0.58;
+  cursor: not-allowed;
+}
+
+.login-card small {
+  display: block;
+  margin-top: 22px;
+  color: #777;
+  line-height: 1.5;
+}
+
+@keyframes vivaOrbit {
+  from {
+    transform: rotate(0deg);
+    opacity: 0.62;
+  }
+
+  to {
+    transform: rotate(13deg);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 940px) {
+  .login-page {
+    grid-template-columns: 1fr;
+  }
+
+  .login-visual {
+    min-height: 52vh;
+    padding: 42px 24px;
+  }
+
+  .login-stage {
+    width: 100%;
+    max-width: 420px;
+    height: 270px;
+  }
+
+  .login-orbit {
+    width: 380px;
+    height: 380px;
+  }
+
+  .login-card {
+    width: calc(100% - 32px);
+    margin-bottom: 32px;
+    padding: 28px;
+  }
+}
