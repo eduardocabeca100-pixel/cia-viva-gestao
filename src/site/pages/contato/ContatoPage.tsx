@@ -2,32 +2,46 @@ import "../site-public.css";
 
 export function ContatoPage() {
   return (
-    <main className="viva-page viva-contact-page">
-      <section className="viva-contact-layout">
-        <div className="viva-contact-info">
-          <p className="viva-eyebrow">Contato</p>
-          <h1>Fale conosco</h1>
-          <h2>Vamos conversar?</h2>
+    <main className="commercial-page">
+      <section className="commercial-contact">
+        <div className="commercial-contact__info">
+          <span className="commercial-kicker">Contato</span>
+          <h1>
+            Fale
+            <strong> conosco.</strong>
+          </h1>
+          <p>Vamos conversar sobre projetos, voluntariado, apoio cultural e parcerias.</p>
 
-          <div className="viva-contact-list">
+          <div className="commercial-contact-list">
             <p><strong>E-mail</strong> contato@ciaviva.com</p>
             <p><strong>Telefone</strong> (11) 99999-9999</p>
-            <p><strong>Endereço</strong> São Paulo - SP</p>
+            <p><strong>Localização</strong> Jaraguá do Sul - SC</p>
           </div>
         </div>
 
-        <form className="viva-contact-form">
-          <input placeholder="Nome" />
-          <input placeholder="E-mail" />
-          <input placeholder="Telefone" />
-          <input placeholder="Assunto" />
-          <textarea placeholder="Mensagem" rows={6} />
+        <form className="commercial-form-card">
+          <label>
+            Nome
+            <input placeholder="Seu nome" />
+          </label>
+          <label>
+            E-mail
+            <input placeholder="seuemail@email.com" />
+          </label>
+          <label>
+            Telefone
+            <input placeholder="(00) 00000-0000" />
+          </label>
+          <label>
+            Assunto
+            <input placeholder="Sobre o que deseja falar?" />
+          </label>
+          <label>
+            Mensagem
+            <textarea rows={6} placeholder="Escreva sua mensagem" />
+          </label>
           <button type="button">Enviar mensagem</button>
         </form>
-      </section>
-
-      <section className="viva-map">
-        <div className="viva-map-pin">⌖</div>
       </section>
     </main>
   );

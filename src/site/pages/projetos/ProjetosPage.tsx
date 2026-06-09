@@ -9,31 +9,36 @@ const projects = [
 
 export function ProjetosPage() {
   return (
-    <main className="viva-page">
-      <section className="viva-hero viva-hero-projects">
-        <div className="viva-hero-image viva-hero-image-stage" />
-        <div className="viva-hero-content">
-          <h1>Nossos projetos</h1>
-          <h2>Levam arte onde ela é necessária.</h2>
+    <main className="commercial-page">
+      <section className="commercial-hero commercial-hero--projects">
+        <div className="commercial-hero__content">
+          <span className="commercial-kicker">Projetos</span>
+          <h1>
+            Arte onde
+            <strong> ela é necessária.</strong>
+          </h1>
+          <p>
+            Espetáculos, oficinas, ações sociais e experiências que aproximam a
+            comunidade da cultura.
+          </p>
         </div>
       </section>
 
-      <section className="viva-section">
-        <div className="viva-card-grid viva-card-grid-2">
-          {projects.map(([title, text], index) => (
-            <article className={`viva-project-card viva-project-card-${index + 1}`} key={title}>
-              <div>
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </div>
+      <section className="commercial-section">
+        <div className="commercial-project-grid">
+          {projects.map(([title, text]) => (
+            <article className="commercial-project-card" key={title}>
+              <span>Projeto</span>
+              <h3>{title}</h3>
+              <p>{text}</p>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="viva-cta">
-        <h2>Novos projetos em breve!</h2>
-        <p>Estamos preparando novas experiências para a Cia de Artes Viva.</p>
+      <section className="commercial-cta">
+        <span className="commercial-kicker">Em breve</span>
+        <h2>Novos projetos estão sendo preparados.</h2>
       </section>
     </main>
   );
