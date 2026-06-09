@@ -1,0 +1,323 @@
+:root {
+  --viva-radius-sm: 14px;
+  --viva-radius-md: 20px;
+  --viva-radius-lg: 28px;
+  --viva-radius-xl: 36px;
+  --viva-shadow-red: 0 24px 70px rgba(229, 9, 20, 0.22);
+  --viva-shadow-soft: 0 20px 60px rgba(0, 0, 0, 0.28);
+}
+
+/* ===== CABEÇALHO ===== */
+
+.viva-site-header {
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.94), rgba(0, 0, 0, 0.82)),
+    rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.viva-site-header__inner {
+  width: min(1440px, calc(100% - 42px));
+}
+
+.viva-site-logo strong {
+  font-size: 1.55rem;
+  letter-spacing: -0.08em;
+}
+
+.viva-site-logo span {
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+}
+
+.viva-site-nav__link {
+  font-size: 0.7rem;
+  letter-spacing: 0.11em;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.viva-site-nav__link.active,
+.viva-site-nav__link:hover {
+  color: #fff;
+}
+
+.viva-site-nav__link::after {
+  height: 2px;
+  border-radius: 999px;
+}
+
+.viva-site-header__button {
+  border-radius: 999px;
+  padding: 0 1.25rem;
+  box-shadow: var(--viva-shadow-red);
+}
+
+/* ===== HERO ===== */
+
+.viva-page {
+  background:
+    radial-gradient(circle at 18% 10%, rgba(229, 9, 20, 0.16), transparent 28rem),
+    radial-gradient(circle at 82% 16%, rgba(255, 255, 255, 0.05), transparent 22rem),
+    linear-gradient(180deg, #020202 0%, #070707 55%, #020202 100%);
+}
+
+.viva-hero {
+  min-height: calc(82vh - 78px);
+  padding-top: clamp(4rem, 8vw, 6rem);
+  padding-bottom: clamp(4rem, 8vw, 6rem);
+}
+
+.viva-hero-content {
+  max-width: 720px;
+}
+
+.viva-hero h1,
+.viva-contact-info h1 {
+  font-size: clamp(3.2rem, 6vw, 6.8rem);
+  line-height: 0.9;
+  letter-spacing: -0.08em;
+}
+
+.viva-hero h2,
+.viva-contact-info h2 {
+  margin-top: 0.6rem;
+}
+
+.viva-hero p,
+.viva-contact-info p {
+  font-size: 1rem;
+}
+
+.viva-button {
+  border-radius: 999px;
+  min-height: 3.2rem;
+  padding: 0 1.5rem;
+}
+
+.viva-button-red {
+  box-shadow: var(--viva-shadow-red);
+}
+
+.viva-button-dark {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+}
+
+/* ===== BLOCOS / CARDS ===== */
+
+.viva-black-band,
+.viva-section,
+.viva-cta,
+.viva-red-section,
+.viva-paper-section {
+  position: relative;
+}
+
+.viva-icon-grid article,
+.viva-card,
+.viva-project-card,
+.viva-contact-form {
+  border-radius: var(--viva-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--viva-shadow-soft);
+}
+
+.viva-icon-grid article,
+.viva-card {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.018)),
+    rgba(0, 0, 0, 0.52);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.viva-card a {
+  margin-top: 1.4rem;
+  font-size: 0.76rem;
+}
+
+.viva-project-card {
+  border-radius: 30px;
+}
+
+.viva-project-card::before {
+  border-radius: inherit;
+}
+
+/* ===== PAPEL RASGADO / SEÇÕES CLARAS ===== */
+
+.viva-paper-section {
+  background: #f4f0e8;
+  border-radius: 0;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.viva-paper-section::before,
+.viva-paper-section::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 34px;
+  z-index: 2;
+  background:
+    radial-gradient(circle at 18px 28px, transparent 17px, #f4f0e8 18px) repeat-x;
+  background-size: 36px 34px;
+}
+
+.viva-paper-section::before {
+  top: -33px;
+}
+
+.viva-paper-section::after {
+  bottom: -33px;
+  transform: rotate(180deg);
+}
+
+.viva-paper-section .viva-section-header h2 {
+  font-size: clamp(2.3rem, 5vw, 5rem);
+}
+
+.viva-card-light {
+  border-radius: 24px;
+  background: #050505;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* ===== QUOTE / CTA ===== */
+
+.viva-quote {
+  padding-top: clamp(4rem, 7vw, 6rem);
+  padding-bottom: clamp(4rem, 7vw, 6rem);
+}
+
+.viva-quote p {
+  font-size: clamp(2rem, 4.2vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.06em;
+}
+
+.viva-cta {
+  padding-top: clamp(4rem, 7vw, 6rem);
+  padding-bottom: clamp(4rem, 7vw, 6rem);
+}
+
+/* ===== CONTATO ===== */
+
+.viva-contact-layout {
+  grid-template-columns: minmax(0, 0.9fr) minmax(360px, 0.82fr);
+  align-items: start;
+}
+
+.viva-contact-form {
+  padding: 1.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.01)),
+    rgba(0, 0, 0, 0.58);
+  backdrop-filter: blur(14px);
+}
+
+.viva-contact-form input,
+.viva-contact-form textarea {
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1rem 1.1rem;
+  background: rgba(0, 0, 0, 0.52);
+}
+
+.viva-contact-form button {
+  border-radius: 999px;
+  min-height: 3.3rem;
+  box-shadow: var(--viva-shadow-red);
+}
+
+.viva-map {
+  border-radius: var(--viva-radius-xl);
+  overflow: hidden;
+}
+
+/* ===== RODAPÉ ===== */
+
+.viva-site-footer {
+  background:
+    radial-gradient(circle at 10% 10%, rgba(229, 9, 20, 0.18), transparent 22rem),
+    radial-gradient(circle at 90% 100%, rgba(255, 255, 255, 0.04), transparent 18rem),
+    #020202;
+}
+
+.viva-site-footer__inner {
+  width: min(1440px, calc(100% - 42px));
+}
+
+.viva-site-logo--footer strong {
+  font-size: 2.8rem;
+}
+
+.viva-site-footer__brand p {
+  max-width: 420px;
+}
+
+.viva-site-footer__social a {
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.viva-site-footer__bottom {
+  width: min(1440px, calc(100% - 42px));
+}
+
+/* ===== BAILARINA / FOTOS MAIS ELEGANTES ===== */
+
+.viva-hero-image-ballerina {
+  background-image:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.48), rgba(0, 0, 0, 0.78)),
+    url("https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=1800&q=80");
+  background-position: 24% center;
+}
+
+.viva-hero-image-red-dance {
+  background-image:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.38)),
+    url("https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=1800&q=80");
+  background-position: 72% center;
+}
+
+.viva-banner-history {
+  border-radius: var(--viva-radius-xl);
+  margin: 0 clamp(1.2rem, 5vw, 5rem) clamp(4rem, 8vw, 6rem);
+  overflow: hidden;
+}
+
+/* ===== RESPONSIVO ===== */
+
+@media (max-width: 1080px) {
+  .viva-contact-layout,
+  .viva-site-footer__inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .viva-site-header__inner,
+  .viva-site-footer__inner,
+  .viva-site-footer__bottom {
+    width: min(100% - 26px, 1440px);
+  }
+
+  .viva-icon-grid article,
+  .viva-card,
+  .viva-project-card,
+  .viva-contact-form,
+  .viva-map,
+  .viva-banner-history {
+    border-radius: 22px;
+  }
+
+  .viva-button,
+  .viva-contact-form button {
+    width: 100%;
+  }
+}
