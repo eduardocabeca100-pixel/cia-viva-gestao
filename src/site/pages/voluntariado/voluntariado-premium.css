@@ -1,0 +1,461 @@
+.vol-page {
+  --vol-bg: #302c2a;
+  --vol-red: #ff4a4f;
+  --vol-paper: #f4f0e8;
+  --vol-muted: rgba(255, 255, 255, 0.72);
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 18% 8%, rgba(255, 74, 79, 0.16), transparent 26rem),
+    radial-gradient(circle at 86% 50%, rgba(255, 255, 255, 0.05), transparent 24rem),
+    var(--vol-bg);
+  color: #fff;
+  overflow: hidden;
+}
+
+.vol-hero {
+  position: relative;
+  min-height: 58vh;
+  display: grid;
+  place-items: center;
+  padding: clamp(5rem, 9vw, 8rem) 1.5rem;
+  background:
+    linear-gradient(180deg, rgba(48, 44, 42, 0.52), rgba(48, 44, 42, 0.92)),
+    radial-gradient(circle at 50% 42%, rgba(255,255,255,0.14), transparent 18rem),
+    #2f2b29;
+  isolation: isolate;
+}
+
+.vol-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(110deg, transparent 0 54%, rgba(255,255,255,0.05) 54% 56%, transparent 56%),
+    radial-gradient(circle at 20% 72%, rgba(255,74,79,0.18), transparent 18rem);
+  opacity: 0.85;
+  z-index: -2;
+}
+
+.vol-paper {
+  position: absolute;
+  left: -4vw;
+  right: -4vw;
+  height: 145px;
+  background: var(--vol-paper);
+  filter: drop-shadow(0 20px 18px rgba(0, 0, 0, 0.22));
+  z-index: 2;
+}
+
+.vol-paper::before,
+.vol-paper::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 48px;
+  background:
+    radial-gradient(circle at 24px 34px, transparent 22px, var(--vol-paper) 23px) repeat-x;
+  background-size: 52px 48px;
+}
+
+.vol-paper::before {
+  top: -43px;
+}
+
+.vol-paper::after {
+  bottom: -43px;
+  transform: rotate(180deg);
+}
+
+.vol-paper-top {
+  top: 10%;
+  transform: rotate(-3deg);
+}
+
+.vol-paper-bottom {
+  bottom: 12%;
+  transform: rotate(2.5deg);
+}
+
+.vol-hero__content {
+  position: relative;
+  z-index: 4;
+  text-align: center;
+  color: #555;
+  text-transform: uppercase;
+  transform: rotate(-1deg);
+}
+
+.vol-hero__content span {
+  display: block;
+  margin-bottom: -0.3rem;
+  font-size: clamp(1.2rem, 2.5vw, 2.8rem);
+  letter-spacing: 0.38em;
+  font-weight: 500;
+}
+
+.vol-hero__content h1 {
+  margin: 0;
+  font-family: "Montserrat", system-ui, sans-serif;
+  color: #565656;
+  font-size: clamp(4.2rem, 10vw, 9.5rem);
+  line-height: 0.76;
+  letter-spacing: -0.08em;
+}
+
+.vol-hero__content h1 strong {
+  display: block;
+  font-size: 0.9em;
+  font-weight: 950;
+}
+
+.vol-intro {
+  padding: clamp(4rem, 8vw, 7rem) 1.5rem clamp(3rem, 7vw, 6rem);
+}
+
+.vol-intro__copy {
+  width: min(840px, 100%);
+  margin: 0 auto;
+  text-align: left;
+}
+
+.vol-kicker {
+  margin: 0 0 1.4rem !important;
+  color: #ddd !important;
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-size: clamp(1.45rem, 3vw, 2.4rem);
+  line-height: 1.05 !important;
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
+}
+
+.vol-intro p {
+  margin: 0 0 1.3rem;
+  color: rgba(255,255,255,0.78);
+  font-size: 1rem;
+  line-height: 1.75;
+  font-weight: 600;
+}
+
+.vol-intro h2 {
+  margin: 2rem 0 0;
+  color: var(--vol-red);
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+}
+
+.vol-team {
+  position: relative;
+  padding: clamp(5rem, 9vw, 8rem) 1.5rem;
+}
+
+.vol-paper-large {
+  top: -12px;
+  height: 170px;
+  transform: rotate(-4deg);
+  opacity: 0.96;
+}
+
+.vol-team__grid {
+  position: relative;
+  z-index: 4;
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(320px, 0.9fr) minmax(360px, 1fr);
+  align-items: center;
+  gap: clamp(2rem, 6vw, 6rem);
+}
+
+.vol-team__people {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(72px, 1fr));
+  gap: 1rem;
+  align-items: end;
+}
+
+.vol-person {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  gap: 0.35rem;
+}
+
+.vol-person__avatar {
+  width: 74px;
+  height: 74px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 35% 20%, rgba(255,255,255,0.4), transparent 22px),
+    linear-gradient(135deg, #ff6b6f, #ff353b);
+  color: #111;
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-weight: 950;
+  border: 4px solid #ff565b;
+  box-shadow: 0 22px 44px rgba(0,0,0,0.2);
+}
+
+.vol-person--highlight {
+  grid-column: 1 / -1;
+}
+
+.vol-person--highlight .vol-person__avatar {
+  width: 118px;
+  height: 118px;
+  font-size: 1.8rem;
+}
+
+.vol-person strong {
+  color: #fff;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+}
+
+.vol-person span {
+  color: rgba(255,255,255,0.62);
+  font-size: 0.66rem;
+  text-transform: uppercase;
+}
+
+.vol-team__headline {
+  font-family: "Montserrat", system-ui, sans-serif;
+  text-transform: uppercase;
+  text-align: left;
+}
+
+.vol-team__headline p,
+.vol-team__headline strong {
+  display: block;
+  margin: 0;
+  color: #d9d9df;
+  font-size: clamp(2.6rem, 5.8vw, 6rem);
+  line-height: 0.82;
+  letter-spacing: -0.08em;
+  font-weight: 950;
+}
+
+.vol-team__headline em {
+  display: block;
+  margin: 0.4rem 0;
+  color: var(--vol-red);
+  font-family: "Brush Script MT", cursive;
+  font-size: clamp(2.6rem, 5vw, 5.5rem);
+  line-height: 0.75;
+  text-transform: none;
+  font-weight: 400;
+}
+
+.vol-learning {
+  padding: clamp(4rem, 8vw, 7rem) 1.5rem;
+}
+
+.vol-section-title {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.vol-section-title span {
+  color: var(--vol-red);
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-size: clamp(2rem, 4vw, 3.6rem);
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: -0.06em;
+}
+
+.vol-learning__grid {
+  width: min(1240px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.vol-learning-card {
+  min-height: 330px;
+  padding: clamp(1.2rem, 2vw, 1.8rem);
+  border-radius: 28px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06)),
+    #5b5b5b;
+  color: #fff;
+  box-shadow: 0 24px 58px rgba(0,0,0,0.22);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.vol-learning-card div {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.88;
+}
+
+.vol-learning-card h3 {
+  margin: 0 0 1rem;
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-size: 1.2rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.vol-learning-card p {
+  margin: 0;
+  color: rgba(255,255,255,0.82);
+  font-size: 0.84rem;
+  line-height: 1.55;
+  font-weight: 600;
+}
+
+.vol-register {
+  width: min(1240px, calc(100% - 3rem));
+  margin: 0 auto;
+  padding: clamp(4rem, 8vw, 7rem) 0;
+  display: grid;
+  grid-template-columns: minmax(300px, 0.85fr) minmax(360px, 0.9fr);
+  gap: clamp(2rem, 6vw, 6rem);
+  align-items: center;
+}
+
+.vol-register__call p {
+  margin: 0 0 0.5rem;
+  color: var(--vol-red);
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-size: clamp(2rem, 4vw, 3.7rem);
+  line-height: 0.9;
+  text-transform: uppercase;
+  font-weight: 950;
+}
+
+.vol-register__call h2 {
+  margin: 0;
+  color: var(--vol-red);
+  font-family: "Montserrat", system-ui, sans-serif;
+  font-size: clamp(4rem, 8vw, 8rem);
+  line-height: 0.8;
+  letter-spacing: -0.08em;
+  text-transform: uppercase;
+}
+
+.vol-register__call h2 span {
+  display: block;
+}
+
+.vol-register__seal {
+  margin-top: 2rem;
+  display: inline-flex;
+  flex-direction: column;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.vol-register__seal strong {
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+}
+
+.vol-register__seal span {
+  color: var(--vol-red);
+  font-weight: 900;
+}
+
+.vol-form {
+  padding: clamp(1.4rem, 2.5vw, 2rem);
+  border-radius: 26px;
+  background: #f8f5ef;
+  color: #111;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.32);
+  display: grid;
+  gap: 0.85rem;
+}
+
+.vol-form label {
+  display: grid;
+  gap: 0.35rem;
+  color: #222;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.vol-form input,
+.vol-form textarea {
+  border: 1px solid #d8d2ca;
+  border-radius: 14px;
+  background: #fff;
+  color: #111;
+  padding: 0.85rem 0.95rem;
+  font-family: inherit;
+  outline: none;
+}
+
+.vol-form__terms label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  text-transform: none;
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.vol-form__terms input {
+  width: auto;
+  margin-top: 0.2rem;
+}
+
+.vol-form button {
+  min-height: 3rem;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ff4a4f, #e50914);
+  color: #fff;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 18px 40px rgba(229,9,20,0.24);
+}
+
+@media (max-width: 1050px) {
+  .vol-team__grid,
+  .vol-register {
+    grid-template-columns: 1fr;
+  }
+
+  .vol-learning__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .vol-team__headline {
+    text-align: center;
+  }
+}
+
+@media (max-width: 680px) {
+  .vol-hero {
+    min-height: 50vh;
+  }
+
+  .vol-hero__content h1 {
+    font-size: clamp(4rem, 20vw, 6.5rem);
+  }
+
+  .vol-team__people {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .vol-learning__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vol-register {
+    width: min(100% - 1.5rem, 1240px);
+  }
+}
