@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { ChangeEvent } from "react";
-import { Calendar, Download, Eye, FileText, Lock, Save, Unlock, Upload, UserCheck, Users } from "lucide-react";
+import { Calendar, Download, Eye, FileText, Lock, Save, Unlock, Upload, UserCheck } from "lucide-react";
 import "../admin-pages.css";
 
 type VolunteerStatus = "aberto" | "fechado" | "agendado";

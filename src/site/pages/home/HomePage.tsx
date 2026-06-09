@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import "../site-public.css";
+import "./home.css";
 
 export function HomePage() {
   return (
