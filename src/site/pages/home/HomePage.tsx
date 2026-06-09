@@ -1,101 +1,150 @@
 import { Link } from "react-router-dom";
 import "../site-public.css";
+import "./home-premium.css";
 
-const actionCards = [
+const pillars = [
   {
-    title: "Projetos Culturais",
-    text: "Espetáculos, oficinas e apresentações para todos.",
-    link: "/projetos",
-    cta: "Saiba mais",
+    title: "Inspirar",
+    text: "Despertar sonhos, talentos e novas possibilidades através da arte.",
+    icon: "🎭",
   },
   {
-    title: "Voluntariado 2026",
-    text: "Faça parte do nosso time e transforme vidas.",
-    link: "/voluntariado-2026",
-    cta: "Quero ser voluntário",
+    title: "Educar",
+    text: "Formar pessoas por meio da prática artística, da disciplina e da criação.",
+    icon: "📖",
   },
   {
-    title: "Apoie via incentivo",
-    text: "Sua contribuição mantém a arte viva e acessível.",
-    link: "/apoie",
-    cta: "Apoiar agora",
+    title: "Conectar",
+    text: "Aproximar comunidade, cultura, fé, propósito e transformação social.",
+    icon: "👥",
+  },
+];
+
+const spotlightCards = [
+  {
+    eyebrow: "Projetos Culturais",
+    title: "Conheça nossas obras, espetáculos e iniciativas.",
+    button: "Ver projetos",
+    to: "/projetos",
+    className: "homev2-spotlight-card homev2-spotlight-card--left",
+  },
+  {
+    eyebrow: "Voluntariado 2026",
+    title: "Faça parte de um time movido por cultura, fé e propósito.",
+    button: "Saiba mais",
+    to: "/voluntariado-2026",
+    className: "homev2-spotlight-card homev2-spotlight-card--center",
+  },
+  {
+    eyebrow: "Apoie via incentivo",
+    title: "Apoie projetos culturais por meio da Lei de Incentivo à Cultura.",
+    button: "Apoiar agora",
+    to: "/apoie",
+    className: "homev2-spotlight-card homev2-spotlight-card--right",
   },
 ];
 
 export function HomePage() {
   return (
-    <main className="viva-page viva-home">
-      <section className="viva-hero viva-hero-home">
-        <div className="viva-hero-image viva-hero-image-ballerina" />
-        <div className="viva-red-ribbon" />
+    <main className="homev2-page">
+      <section className="homev2-hero">
+        <div className="homev2-hero__bg homev2-hero__bg--left" />
+        <div className="homev2-hero__bg homev2-hero__bg--center" />
+        <div className="homev2-hero__bg homev2-hero__bg--right" />
+        <div className="homev2-hero__smoke homev2-hero__smoke--left" />
+        <div className="homev2-hero__smoke homev2-hero__smoke--right" />
 
-        <div className="viva-hero-content viva-hero-content-right">
-          <p className="viva-eyebrow">Companhia de Artes Viva</p>
-          <h1>
-            Acredite nos
-            <span> seus sonhos</span>
+        <div className="homev2-hero__content">
+          <p className="homev2-eyebrow">Companhia de Artes Viva</p>
+
+          <h1 className="homev2-title">
+            <span className="homev2-title__hash">#</span>ACREDITE
+            <br />
+            <span className="homev2-title__accent">NOS</span>SEUSSONHOS
           </h1>
-          <p>
-            Transformamos vidas por meio da arte, cultura e educação. Nosso
-            palco é o futuro.
+
+          <p className="homev2-description">
+            A Companhia de Artes Viva é uma instituição sem fins lucrativos
+            dedicada à promoção da cultura e das artes em todas as suas formas.
+            Nossa missão é inspirar, educar e conectar pessoas por meio da
+            expressão criativa.
           </p>
 
-          <div className="viva-actions">
-            <Link className="viva-button viva-button-red" to="/nossa-historia">
+          <div className="homev2-actions">
+            <Link className="homev2-button homev2-button--primary" to="/nossa-historia">
               Conheça nossa história
             </Link>
-            <Link className="viva-button viva-button-dark" to="/projetos">
-              Veja os projetos
+
+            <Link className="homev2-button homev2-button--ghost" to="/apoie">
+              Apoie o projeto
             </Link>
           </div>
+
+          <div className="homev2-scroll">Role para explorar</div>
         </div>
       </section>
 
-      <section className="viva-black-band">
-        <p>Arte que transforma. Cultura que aproxima. Pessoas que florescem.</p>
-
-        <div className="viva-icon-grid viva-icon-grid-3">
-          <article>
-            <span>✣</span>
-            <h3>Inspirar</h3>
-            <p>Estimulamos talentos e valores por meio da arte.</p>
-          </article>
-          <article>
-            <span>▱</span>
-            <h3>Educar</h3>
-            <p>Formação artística acessível e de qualidade.</p>
-          </article>
-          <article>
-            <span>⌘</span>
-            <h3>Conectar</h3>
-            <p>Criamos pontes entre pessoas e comunidades.</p>
-          </article>
-        </div>
-      </section>
-
-      <section className="viva-section">
-        <div className="viva-section-header center">
-          <p className="viva-eyebrow">Caminhos da Viva</p>
-          <h2>Escolha como você quer caminhar com a Cia Viva</h2>
-        </div>
-
-        <div className="viva-card-grid viva-card-grid-3">
-          {actionCards.map((card) => (
-            <article className="viva-card" key={card.title}>
-              <h3>{card.title}</h3>
-              <p>{card.text}</p>
-              <Link to={card.link}>{card.cta}</Link>
+      <section className="homev2-ripped homev2-ripped--dark">
+        <div className="homev2-pillars">
+          {pillars.map((pillar) => (
+            <article key={pillar.title} className="homev2-pillar">
+              <div className="homev2-pillar__icon">{pillar.icon}</div>
+              <h3>{pillar.title}</h3>
+              <p>{pillar.text}</p>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="viva-quote">
-        <p>“O palco também é um lugar de recomeço.”</p>
-        <span>
-          Cada apresentação é um convite para sonhar, emocionar e imaginar novos
-          futuros.
-        </span>
+      <section className="homev2-spotlight">
+        <div className="homev2-spotlight__grid">
+          {spotlightCards.map((card) => (
+            <article key={card.title} className={card.className}>
+              <div className="homev2-spotlight__overlay" />
+              <div className="homev2-spotlight__content">
+                <p>{card.eyebrow}</p>
+                <h3>{card.title}</h3>
+                <Link to={card.to}>{card.button}</Link>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="homev2-mini-footer">
+        <div className="homev2-mini-footer__brand">
+          <div className="homev2-brand">
+            <strong>VIVA</strong>
+            <span>CIA DE ARTES</span>
+          </div>
+
+          <p>
+            Transformamos vidas através da arte. Acreditamos no poder da cultura,
+            da educação e da expressão criativa.
+          </p>
+        </div>
+
+        <div className="homev2-mini-footer__cols">
+          <div>
+            <h4>Menu</h4>
+            <Link to="/">Página Inicial</Link>
+            <Link to="/nossa-historia">Nossa História</Link>
+            <Link to="/apoie">Apoie</Link>
+            <Link to="/projetos">Projetos</Link>
+            <Link to="/contato">Contato</Link>
+          </div>
+
+          <div>
+            <h4>Institucional</h4>
+            <a href="/">Política de Cookies</a>
+            <a href="/">Política de Privacidade</a>
+          </div>
+
+          <div>
+            <h4>Siga-nos</h4>
+            <a href="/">Instagram</a>
+          </div>
+        </div>
       </section>
     </main>
   );
