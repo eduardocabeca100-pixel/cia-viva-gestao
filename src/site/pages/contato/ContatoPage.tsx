@@ -1,45 +1,38 @@
+import { useSiteContent } from "../../content/useSiteContent";
 import "../site-public.css";
 
 export function ContatoPage() {
+  const { contact } = useSiteContent();
+
   return (
     <main className="commercial-page">
       <section className="commercial-contact">
         <div className="commercial-contact__info">
-          <span className="commercial-kicker">Contato</span>
+          <span className="commercial-kicker">{contact.hero.eyebrow}</span>
           <h1>
-            Fale
-            <strong> conosco.</strong>
+            {contact.hero.title}
+            <strong>{contact.hero.accent}</strong>
           </h1>
-          <p>Vamos conversar sobre projetos, voluntariado, apoio cultural e parcerias.</p>
+          <p>{contact.info.text}</p>
 
           <div className="commercial-contact-list">
-            <p><strong>E-mail</strong> contato@ciaviva.com</p>
-            <p><strong>Telefone</strong> (11) 99999-9999</p>
-            <p><strong>Localização</strong> Jaraguá do Sul - SC</p>
+            <p><strong>E-mail</strong> {contact.info.email}</p>
+            <p><strong>Telefone</strong> {contact.info.phone}</p>
+            <p><strong>Localização</strong> {contact.info.location}</p>
           </div>
         </div>
 
-        <form className="commercial-form-card">
-          <label>
-            Nome
-            <input placeholder="Seu nome" />
-          </label>
-          <label>
-            E-mail
-            <input placeholder="seuemail@email.com" />
-          </label>
-          <label>
-            Telefone
-            <input placeholder="(00) 00000-0000" />
-          </label>
-          <label>
-            Assunto
-            <input placeholder="Sobre o que deseja falar?" />
-          </label>
-          <label>
-            Mensagem
-            <textarea rows={6} placeholder="Escreva sua mensagem" />
-          </label>
+        <form id="formulario" className="commercial-form-card">
+          {contact.formFields.map((field) => (
+            <label key={field.label}>
+              {field.label}
+              {field.type === "textarea" ? (
+                <textarea rows={6} placeholder={field.placeholder} />
+              ) : (
+                <input type={field.type} placeholder={field.placeholder} />
+              )}
+            </label>
+          ))}
           <button type="button">Enviar mensagem</button>
         </form>
       </section>

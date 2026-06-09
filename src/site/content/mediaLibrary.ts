@@ -1,11 +1,20 @@
+import type { MediaType } from "./siteContent";
+
 export type VivaMediaItem = {
   id: string;
   name: string;
   src: string;
+  type: MediaType;
   createdAt: string;
 };
 
-export const VIVA_MEDIA_STORAGE_KEY = "cia-viva-media-library-v1";
+export const VIVA_MEDIA_STORAGE_KEY = "cia-viva-media-library-v2";
+
+function getMediaType(file: File): MediaType {
+  if (file.type.startsWith("video/")) return "video";
+  if (file.type === "image/gif" || file.name.toLowerCase().endsWith(".gif")) return "gif";
+  return "image";
+}
 
 export function getMediaLibrary(): VivaMediaItem[] {
   if (typeof window === "undefined") return [];
@@ -33,6 +42,7 @@ export function addMediaItem(file: File): Promise<VivaMediaItem> {
         id: crypto.randomUUID(),
         name: file.name,
         src: String(reader.result),
+        type: getMediaType(file),
         createdAt: new Date().toISOString(),
       };
 

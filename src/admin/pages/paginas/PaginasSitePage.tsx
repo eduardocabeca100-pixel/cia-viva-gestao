@@ -1,124 +1,419 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import {
   defaultSiteContent,
   getSiteContent,
   resetSiteContent,
   saveSiteContent,
+  type MediaType,
   type SiteEditableContent,
 } from "../../../site/content/siteContent";
-import { addMediaItem, getMediaLibrary, removeMediaItem, type VivaMediaItem } from "../../../site/content/mediaLibrary";
+import {
+  addMediaItem,
+  getMediaLibrary,
+  removeMediaItem,
+  type VivaMediaItem,
+} from "../../../site/content/mediaLibrary";
 import "./paginas-site.css";
 
-const imageSuggestions = [
-  {
-    label: "Bailarina com luz circular",
-    url: "https://images.unsplash.com/photo-1547153760-18fc86324498?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    label: "Palco teatral",
-    url: "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    label: "Cortina vermelha",
-    url: "https://images.unsplash.com/photo-1503095396549-807759245b35?auto=format&fit=crop&w=1200&q=80",
-  },
-  {
-    label: "Voluntariado",
-    url: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=80",
-  },
+type PathPart = string | number;
+type PageKey = keyof SiteEditableContent;
+
+const pageOptions: Array<{ id: PageKey; label: string }> = [
+  { id: "global", label: "Configurações gerais" },
+  { id: "home", label: "Página Inicial" },
+  { id: "story", label: "Nossa História" },
+  { id: "support", label: "Apoie" },
+  { id: "volunteer", label: "Voluntariado 2026" },
+  { id: "projects", label: "Projetos" },
+  { id: "contact", label: "Contato" },
 ];
 
-type EditorSection = "hero" | "pilares" | "cards";
+const labels: Record<string, string> = {
+  global: "Configurações gerais",
+  home: "Página Inicial",
+  story: "Nossa História",
+  support: "Apoie",
+  volunteer: "Voluntariado 2026",
+  projects: "Projetos",
+  contact: "Contato",
+  hero: "Banner principal",
+  pillars: "Pilares",
+  cards: "Cards",
+  cta: "Chamada final",
+  founder: "Fundador",
+  mission: "Missão",
+  valuesIntro: "Introdução dos valores",
+  values: "Valores",
+  origin: "Origem / mapa",
+  project: "Projeto em destaque",
+  steps: "Passo a passo",
+  donation: "Doação",
+  formFields: "Campos do formulário",
+  intro: "Introdução",
+  team: "Equipe",
+  learning: "Formação",
+  register: "Inscrição",
+  items: "Lista de projetos",
+  info: "Informações",
+  logoTitle: "Logo - título",
+  logoSubtitle: "Logo - subtítulo",
+  ctaLabel: "Botão principal do menu",
+  ctaHref: "Link do botão principal",
+  footerDescription: "Descrição do rodapé",
+  email: "E-mail",
+  phone: "Telefone",
+  location: "Localização",
+  instagram: "Instagram",
+  eyebrow: "Texto pequeno",
+  title: "Título",
+  accent: "Destaque em vermelho",
+  description: "Descrição",
+  text: "Texto",
+  textOne: "Texto 1",
+  textTwo: "Texto 2",
+  deadline: "Prazo / chamada",
+  primaryButton: "Botão principal",
+  secondaryButton: "Botão secundário",
+  button: "Botão",
+  label: "Texto",
+  href: "Link",
+  media: "Imagem / GIF / Vídeo",
+  src: "Arquivo ou URL",
+  alt: "Texto alternativo",
+  type: "Tipo",
+  icon: "Ícone",
+  name: "Nome",
+  role: "Função",
+  initials: "Iniciais",
+  photo: "Foto",
+  placeholder: "Texto de exemplo",
+};
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+function labelFor(key: string) {
+  return labels[key] ?? key;
+}
+
+function getAtPath(source: unknown, path: PathPart[]): unknown {
+  return path.reduce<unknown>((current, key) => {
+    if (current == null) return undefined;
+    return (current as Record<string, unknown>)[String(key)];
+  }, source);
+}
+
+function setAtPath<T>(source: T, path: PathPart[], value: unknown): T {
+  const clone = JSON.parse(JSON.stringify(source));
+  let target: Record<string, unknown> = clone;
+
+  for (let index = 0; index < path.length - 1; index += 1) {
+    target = target[String(path[index])] as Record<string, unknown>;
+  }
+
+  target[String(path[path.length - 1])] = value;
+
+  return clone;
+}
+
+function cloneValue(value: unknown) {
+  return JSON.parse(JSON.stringify(value));
+}
+
+function looksLikeMedia(value: unknown) {
+  return isRecord(value) && "src" in value && "type" in value && "alt" in value;
+}
 
 export function PaginasSitePage() {
   const [content, setContent] = useState<SiteEditableContent>(() => getSiteContent());
-  const [section, setSection] = useState<EditorSection>("hero");
-  const [savedMessage, setSavedMessage] = useState("");
   const [mediaItems, setMediaItems] = useState<VivaMediaItem[]>(() => getMediaLibrary());
+  const [activePage, setActivePage] = useState<PageKey>("home");
+  const [activeSection, setActiveSection] = useState("");
+  const [message, setMessage] = useState("");
 
-  const hero = content.home.hero;
+  const pageValue = content[activePage];
 
-  const activeTitle = useMemo(() => {
-    if (section === "hero") return "Banner principal";
-    if (section === "pilares") return "Pilares da Home";
-    return "Cards de chamada";
-  }, [section]);
+  const sectionKeys = useMemo(() => {
+    if (!isRecord(pageValue)) return [];
+    return Object.keys(pageValue);
+  }, [pageValue]);
 
-  function updateHero(field: keyof SiteEditableContent["home"]["hero"], value: string) {
-    setContent((current) => ({
-      ...current,
-      home: {
-        ...current.home,
-        hero: {
-          ...current.home.hero,
-          [field]: value,
-        },
-      },
-    }));
+  useEffect(() => {
+    if (sectionKeys.length === 0) {
+      setActiveSection("");
+      return;
+    }
+
+    if (!sectionKeys.includes(activeSection)) {
+      setActiveSection(sectionKeys[0]);
+    }
+  }, [activePage, activeSection, sectionKeys]);
+
+  const selectedPath: PathPart[] = activeSection ? [activePage, activeSection] : [activePage];
+  const selectedValue = getAtPath(content, selectedPath);
+
+  function updateValue(path: PathPart[], value: unknown) {
+    setContent((current) => setAtPath(current, path, value));
   }
 
-  function updatePillar(index: number, field: "title" | "text" | "icon", value: string) {
-    setContent((current) => ({
-      ...current,
-      home: {
-        ...current.home,
-        pillars: current.home.pillars.map((pillar, pillarIndex) =>
-          pillarIndex === index ? { ...pillar, [field]: value } : pillar
-        ),
-      },
-    }));
-  }
+  async function handleUpload(files: FileList | null) {
+    if (!files || files.length === 0) return;
 
-  function updateCard(
-    index: number,
-    field: "eyebrow" | "title" | "button" | "image",
-    value: string
-  ) {
-    setContent((current) => ({
-      ...current,
-      home: {
-        ...current.home,
-        spotlightCards: current.home.spotlightCards.map((card, cardIndex) =>
-          cardIndex === index ? { ...card, [field]: value } : card
-        ),
-      },
-    }));
-  }
-
-  function handleSave() {
-    saveSiteContent(content);
-    setSavedMessage("Alterações salvas localmente. Abra a página inicial para visualizar.");
-  }
-
-
-  async function handleUploadMedia(fileList: FileList | null) {
-    if (!fileList || fileList.length === 0) return;
-
-    const files = Array.from(fileList);
-
-    for (const file of files) {
+    for (const file of Array.from(files)) {
       await addMediaItem(file);
     }
 
     setMediaItems(getMediaLibrary());
-    setSavedMessage("Imagem enviada para a biblioteca de mídia.");
+    setMessage("Arquivo enviado para a biblioteca.");
   }
 
-  function handleUseImage(target: "imageLeft" | "imageCenter" | "imageRight", src: string) {
-    updateHero(target, src);
-    setSavedMessage("Imagem aplicada no banner. Clique em salvar alterações.");
-  }
-
-  function handleRemoveMedia(id: string) {
-    removeMediaItem(id);
-    setMediaItems(getMediaLibrary());
-    setSavedMessage("Imagem removida da biblioteca local.");
+  function handleSave() {
+    saveSiteContent(content);
+    setMessage("Alterações salvas. Abra o site público para visualizar.");
   }
 
   function handleReset() {
     resetSiteContent();
     setContent(defaultSiteContent);
-    setSavedMessage("Conteúdo restaurado para o padrão.");
+    setMessage("Conteúdo restaurado para o padrão.");
+  }
+
+  function handleRemoveMedia(id: string) {
+    removeMediaItem(id);
+    setMediaItems(getMediaLibrary());
+    setMessage("Arquivo removido da biblioteca.");
+  }
+
+  function addItem(path: PathPart[]) {
+    const current = getAtPath(content, path);
+
+    if (!Array.isArray(current)) return;
+
+    const newItem = current.length > 0 ? cloneValue(current[current.length - 1]) : {};
+    updateValue(path, [...current, newItem]);
+  }
+
+  function duplicateItem(path: PathPart[], index: number) {
+    const current = getAtPath(content, path);
+
+    if (!Array.isArray(current)) return;
+
+    const next = [...current];
+    next.splice(index + 1, 0, cloneValue(current[index]));
+    updateValue(path, next);
+  }
+
+  function removeItem(path: PathPart[], index: number) {
+    const current = getAtPath(content, path);
+
+    if (!Array.isArray(current)) return;
+
+    updateValue(path, current.filter((_, itemIndex) => itemIndex !== index));
+  }
+
+  function moveItem(path: PathPart[], index: number, direction: -1 | 1) {
+    const current = getAtPath(content, path);
+
+    if (!Array.isArray(current)) return;
+
+    const target = index + direction;
+    if (target < 0 || target >= current.length) return;
+
+    const next = [...current];
+    const [item] = next.splice(index, 1);
+    next.splice(target, 0, item);
+    updateValue(path, next);
+  }
+
+  function renderMediaEditor(value: Record<string, unknown>, path: PathPart[]) {
+    const mediaType = String(value.type ?? "image") as MediaType;
+    const src = String(value.src ?? "");
+    const alt = String(value.alt ?? "");
+
+    return (
+      <div className="site-editor-media-field">
+        <div className="site-editor-media-preview">
+          {src ? (
+            mediaType === "video" ? (
+              <video src={src} controls />
+            ) : (
+              <img src={src} alt={alt} />
+            )
+          ) : (
+            <span>Nenhuma mídia selecionada</span>
+          )}
+        </div>
+
+        <label>
+          Tipo
+          <select
+            value={mediaType}
+            onChange={(event) => updateValue([...path, "type"], event.target.value)}
+          >
+            <option value="image">Imagem</option>
+            <option value="gif">GIF</option>
+            <option value="video">Vídeo</option>
+          </select>
+        </label>
+
+        <label>
+          URL ou arquivo
+          <input
+            value={src}
+            onChange={(event) => updateValue([...path, "src"], event.target.value)}
+            placeholder="Cole a URL ou escolha na biblioteca"
+          />
+        </label>
+
+        <label>
+          Descrição da mídia
+          <input
+            value={alt}
+            onChange={(event) => updateValue([...path, "alt"], event.target.value)}
+            placeholder="Descrição da imagem/vídeo"
+          />
+        </label>
+
+        <label className="site-editor-upload-inline">
+          Subir arquivo para este campo
+          <input
+            type="file"
+            accept="image/*,video/*"
+            onChange={async (event) => {
+              const file = event.target.files?.[0];
+              if (!file) return;
+              const item = await addMediaItem(file);
+              setMediaItems(getMediaLibrary());
+              updateValue(path, { src: item.src, type: item.type, alt: item.name });
+            }}
+          />
+        </label>
+
+        {mediaItems.length > 0 && (
+          <div className="site-editor-media-picker">
+            {mediaItems.map((item) => (
+              <button
+                type="button"
+                key={item.id}
+                onClick={() => updateValue(path, { src: item.src, type: item.type, alt: item.name })}
+              >
+                {item.type === "video" ? <video src={item.src} /> : <img src={item.src} alt={item.name} />}
+                <span>Usar</span>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  function renderPrimitive(value: unknown, path: PathPart[], keyName: string) {
+    if (typeof value === "boolean") {
+      return (
+        <label className="site-editor-checkbox">
+          <input
+            type="checkbox"
+            checked={value}
+            onChange={(event) => updateValue(path, event.target.checked)}
+          />
+          {labelFor(keyName)}
+        </label>
+      );
+    }
+
+    if (typeof value === "number") {
+      return (
+        <label>
+          {labelFor(keyName)}
+          <input
+            type="number"
+            value={value}
+            onChange={(event) => updateValue(path, Number(event.target.value))}
+          />
+        </label>
+      );
+    }
+
+    const stringValue = String(value ?? "");
+    const lowerKey = keyName.toLowerCase();
+    const useTextarea =
+      stringValue.length > 80 ||
+      lowerKey.includes("description") ||
+      lowerKey.includes("text") ||
+      lowerKey.includes("footer");
+
+    return (
+      <label>
+        {labelFor(keyName)}
+        {useTextarea ? (
+          <textarea
+            rows={5}
+            value={stringValue}
+            onChange={(event) => updateValue(path, event.target.value)}
+          />
+        ) : (
+          <input
+            value={stringValue}
+            onChange={(event) => updateValue(path, event.target.value)}
+          />
+        )}
+      </label>
+    );
+  }
+
+  function renderEditor(value: unknown, path: PathPart[], keyName = ""): ReactNode {
+    if (looksLikeMedia(value)) {
+      return renderMediaEditor(value, path);
+    }
+
+    if (Array.isArray(value)) {
+      return (
+        <div className="site-editor-array">
+          <div className="site-editor-array-header">
+            <h3>{labelFor(keyName)}</h3>
+            <button type="button" onClick={() => addItem(path)}>Adicionar item</button>
+          </div>
+
+          {value.map((item, index) => (
+            <article className="site-editor-array-item" key={index}>
+              <div className="site-editor-array-item-header">
+                <strong>{labelFor(keyName)} {index + 1}</strong>
+                <div>
+                  <button type="button" onClick={() => moveItem(path, index, -1)}>Subir</button>
+                  <button type="button" onClick={() => moveItem(path, index, 1)}>Descer</button>
+                  <button type="button" onClick={() => duplicateItem(path, index)}>Duplicar</button>
+                  <button type="button" className="danger" onClick={() => removeItem(path, index)}>Remover</button>
+                </div>
+              </div>
+
+              {renderEditor(item, [...path, index], String(index))}
+            </article>
+          ))}
+        </div>
+      );
+    }
+
+    if (isRecord(value)) {
+      return (
+        <div className="site-editor-object">
+          {Object.entries(value).map(([key, nestedValue]) => (
+            <div className="site-editor-field-group" key={key}>
+              {isRecord(nestedValue) || Array.isArray(nestedValue) ? (
+                <>
+                  <h3>{labelFor(key)}</h3>
+                  {renderEditor(nestedValue, [...path, key], key)}
+                </>
+              ) : (
+                renderPrimitive(nestedValue, [...path, key], key)
+              )}
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    return renderPrimitive(value, path, keyName);
   }
 
   return (
@@ -126,343 +421,87 @@ export function PaginasSitePage() {
       <header className="site-editor-header">
         <div>
           <span>Viva Gestão</span>
-          <h1>Páginas do site</h1>
-          <p>Edite o site público por partes: textos, imagens, botões, cards e seções.</p>
+          <h1>Editor visual do site</h1>
+          <p>Edite cada página por partes: textos, botões, imagens, GIFs, vídeos, cards, equipe e formulários.</p>
         </div>
 
         <div className="site-editor-actions">
-          <a href="/" target="_blank" rel="noreferrer">
-            Visualizar site
-          </a>
-          <button type="button" onClick={handleSave}>
-            Salvar alterações
-          </button>
+          <a href="/" target="_blank" rel="noreferrer">Visualizar site</a>
+          <button type="button" onClick={handleSave}>Salvar alterações</button>
         </div>
       </header>
 
-      {savedMessage && <div className="site-editor-message">{savedMessage}</div>}
+      {message && <div className="site-editor-message">{message}</div>}
 
       <section className="site-editor-layout">
         <aside className="site-editor-sidebar">
           <h2>Páginas</h2>
 
-          <button className="active" type="button">
-            Página Inicial
-          </button>
-          <button type="button" disabled>
-            Nossa História
-          </button>
-          <button type="button" disabled>
-            Apoie
-          </button>
-          <button type="button" disabled>
-            Voluntariado 2026
-          </button>
-          <button type="button" disabled>
-            Projetos
-          </button>
-          <button type="button" disabled>
-            Contato
-          </button>
+          {pageOptions.map((page) => (
+            <button
+              key={page.id}
+              type="button"
+              className={activePage === page.id ? "active" : ""}
+              onClick={() => setActivePage(page.id)}
+            >
+              {page.label}
+            </button>
+          ))}
 
-          <small>
-            Agora começamos pela Home. Depois conectamos as outras abas no mesmo editor.
-          </small>
+          <div className="site-editor-upload-box">
+            <h3>Biblioteca de mídia</h3>
+            <p>Suba fotos, GIFs e vídeos para usar em qualquer parte do site.</p>
+
+            <label className="site-editor-upload-button">
+              Enviar arquivos
+              <input
+                type="file"
+                accept="image/*,video/*"
+                multiple
+                onChange={(event) => handleUpload(event.target.files)}
+              />
+            </label>
+          </div>
+
+          {mediaItems.length > 0 && (
+            <div className="site-editor-mini-library">
+              {mediaItems.map((item) => (
+                <article key={item.id}>
+                  {item.type === "video" ? <video src={item.src} /> : <img src={item.src} alt={item.name} />}
+                  <span>{item.name}</span>
+                  <button type="button" onClick={() => handleRemoveMedia(item.id)}>Remover</button>
+                </article>
+              ))}
+            </div>
+          )}
         </aside>
 
         <section className="site-editor-panel">
           <div className="site-editor-tabs">
-            <button
-              type="button"
-              className={section === "hero" ? "active" : ""}
-              onClick={() => setSection("hero")}
-            >
-              Banner principal
-            </button>
-            <button
-              type="button"
-              className={section === "pilares" ? "active" : ""}
-              onClick={() => setSection("pilares")}
-            >
-              Pilares
-            </button>
-            <button
-              type="button"
-              className={section === "cards" ? "active" : ""}
-              onClick={() => setSection("cards")}
-            >
-              Cards
-            </button>
+            {sectionKeys.map((section) => (
+              <button
+                key={section}
+                type="button"
+                className={activeSection === section ? "active" : ""}
+                onClick={() => setActiveSection(section)}
+              >
+                {labelFor(section)}
+              </button>
+            ))}
           </div>
 
           <div className="site-editor-panel-header">
             <div>
-              <span>Seção</span>
-              <h2>{activeTitle}</h2>
+              <span>{pageOptions.find((page) => page.id === activePage)?.label}</span>
+              <h2>{labelFor(activeSection || String(activePage))}</h2>
             </div>
 
             <button type="button" className="site-editor-reset" onClick={handleReset}>
-              Restaurar padrão
+              Restaurar tudo
             </button>
           </div>
 
-          {section === "hero" && (
-            <div className="site-editor-grid">
-              <div className="site-editor-form">
-                <label>
-                  Texto pequeno acima do título
-                  <input
-                    value={hero.eyebrow}
-                    onChange={(event) => updateHero("eyebrow", event.target.value)}
-                  />
-                </label>
-
-                <label>
-                  Primeira linha do título
-                  <input
-                    value={hero.titleTop}
-                    onChange={(event) => updateHero("titleTop", event.target.value)}
-                  />
-                </label>
-
-                <label>
-                  Palavra em vermelho
-                  <input
-                    value={hero.titleAccent}
-                    onChange={(event) => updateHero("titleAccent", event.target.value)}
-                  />
-                </label>
-
-                <label>
-                  Final do título
-                  <input
-                    value={hero.titleBottom}
-                    onChange={(event) => updateHero("titleBottom", event.target.value)}
-                  />
-                </label>
-
-                <label>
-                  Descrição
-                  <textarea
-                    rows={5}
-                    value={hero.description}
-                    onChange={(event) => updateHero("description", event.target.value)}
-                  />
-                </label>
-
-                <div className="site-editor-two-columns">
-                  <label>
-                    Botão principal
-                    <input
-                      value={hero.primaryButtonText}
-                      onChange={(event) =>
-                        updateHero("primaryButtonText", event.target.value)
-                      }
-                    />
-                  </label>
-
-                  <label>
-                    Botão secundário
-                    <input
-                      value={hero.secondaryButtonText}
-                      onChange={(event) =>
-                        updateHero("secondaryButtonText", event.target.value)
-                      }
-                    />
-                  </label>
-                </div>
-              </div>
-
-              <div className="site-editor-media">
-                <h3>Imagens do banner</h3>
-
-                <label>
-                  Imagem esquerda
-                  <input
-                    value={hero.imageLeft}
-                    onChange={(event) => updateHero("imageLeft", event.target.value)}
-                  />
-                </label>
-
-                <label>
-                  Bailarina / imagem central
-                  <input
-                    value={hero.imageCenter}
-                    onChange={(event) => updateHero("imageCenter", event.target.value)}
-                  />
-                </label>
-
-                <label>
-                  Imagem direita
-                  <input
-                    value={hero.imageRight}
-                    onChange={(event) => updateHero("imageRight", event.target.value)}
-                  />
-                </label>
-
-                <div className="site-editor-preview-row">
-                  {[hero.imageLeft, hero.imageCenter, hero.imageRight].map((image) => (
-                    <img key={image} src={image} alt="" />
-                  ))}
-                </div>
-
-                <div className="site-editor-upload-box">
-                  <h3>Subir fotos do computador</h3>
-                  <p>
-                    Use aqui fotos dos atores, voluntários, banners ou imagens criadas
-                    para a Cia Viva.
-                  </p>
-
-                  <label className="site-editor-upload-button">
-                    Enviar imagens
-                    <input
-                      type="file"
-                      accept="image/*"
-                      multiple
-                      onChange={(event) => handleUploadMedia(event.target.files)}
-                    />
-                  </label>
-                </div>
-
-                {mediaItems.length > 0 && (
-                  <>
-                    <h3>Biblioteca enviada</h3>
-
-                    <div className="site-editor-media-library">
-                      {mediaItems.map((image) => (
-                        <article key={image.id}>
-                          <img src={image.src} alt={image.name} />
-                          <strong>{image.name}</strong>
-
-                          <div>
-                            <button
-                              type="button"
-                              onClick={() => handleUseImage("imageLeft", image.src)}
-                            >
-                              Usar esquerda
-                            </button>
-
-                            <button
-                              type="button"
-                              onClick={() => handleUseImage("imageCenter", image.src)}
-                            >
-                              Usar centro
-                            </button>
-
-                            <button
-                              type="button"
-                              onClick={() => handleUseImage("imageRight", image.src)}
-                            >
-                              Usar direita
-                            </button>
-
-                            <button
-                              type="button"
-                              className="danger"
-                              onClick={() => handleRemoveMedia(image.id)}
-                            >
-                              Remover
-                            </button>
-                          </div>
-                        </article>
-                      ))}
-                    </div>
-                  </>
-                )}
-
-                <h3>Imagens sugeridas</h3>
-
-                <div className="site-editor-suggestions">
-                  {imageSuggestions.map((image) => (
-                    <button
-                      type="button"
-                      key={image.url}
-                      onClick={() => updateHero("imageCenter", image.url)}
-                    >
-                      <img src={image.url} alt="" />
-                      <span>{image.label}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {section === "pilares" && (
-            <div className="site-editor-card-list">
-              {content.home.pillars.map((pillar, index) => (
-                <article key={index} className="site-editor-edit-card">
-                  <label>
-                    Ícone
-                    <input
-                      value={pillar.icon}
-                      onChange={(event) => updatePillar(index, "icon", event.target.value)}
-                    />
-                  </label>
-
-                  <label>
-                    Título
-                    <input
-                      value={pillar.title}
-                      onChange={(event) => updatePillar(index, "title", event.target.value)}
-                    />
-                  </label>
-
-                  <label>
-                    Texto
-                    <textarea
-                      rows={4}
-                      value={pillar.text}
-                      onChange={(event) => updatePillar(index, "text", event.target.value)}
-                    />
-                  </label>
-                </article>
-              ))}
-            </div>
-          )}
-
-          {section === "cards" && (
-            <div className="site-editor-card-list">
-              {content.home.spotlightCards.map((card, index) => (
-                <article key={index} className="site-editor-edit-card">
-                  <label>
-                    Texto vermelho pequeno
-                    <input
-                      value={card.eyebrow}
-                      onChange={(event) => updateCard(index, "eyebrow", event.target.value)}
-                    />
-                  </label>
-
-                  <label>
-                    Título
-                    <textarea
-                      rows={3}
-                      value={card.title}
-                      onChange={(event) => updateCard(index, "title", event.target.value)}
-                    />
-                  </label>
-
-                  <label>
-                    Botão
-                    <input
-                      value={card.button}
-                      onChange={(event) => updateCard(index, "button", event.target.value)}
-                    />
-                  </label>
-
-                  <label>
-                    Imagem
-                    <input
-                      value={card.image}
-                      onChange={(event) => updateCard(index, "image", event.target.value)}
-                    />
-                  </label>
-
-                  <img className="site-editor-card-image" src={card.image} alt="" />
-                </article>
-              ))}
-            </div>
-          )}
+          {renderEditor(selectedValue, selectedPath, activeSection)}
         </section>
       </section>
     </main>

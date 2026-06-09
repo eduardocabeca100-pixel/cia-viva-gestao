@@ -1,63 +1,47 @@
+import { SiteMedia } from "../../components/SiteMedia";
+import { useSiteContent } from "../../content/useSiteContent";
 import "../site-public.css";
 
-const steps = [
-  "Calcule o valor possível para doação",
-  "Escolha o projeto",
-  "Faça a transferência identificada",
-  "Curta o projeto",
-  "Declare o valor no imposto",
-];
-
 export function ApoiePage() {
+  const { support } = useSiteContent();
+
   return (
     <main className="commercial-page">
       <section className="commercial-hero commercial-hero--support">
         <div className="commercial-hero__content">
-          <span className="commercial-kicker">Lei de Incentivo</span>
+          <span className="commercial-kicker">{support.hero.eyebrow}</span>
           <h1>
-            Aqui seu imposto
-            <strong> vira arte.</strong>
+            {support.hero.title}
+            <strong>{support.hero.accent}</strong>
           </h1>
-          <p>
-            Apoiar a cultura é simples, seguro e transforma realidades. Empresas
-            e pessoas físicas podem destinar parte do imposto devido para projetos
-            culturais aprovados.
-          </p>
+          <p>{support.hero.description}</p>
         </div>
 
         <form className="commercial-lead-form">
-          <label>
-            Nome
-            <input placeholder="Seu nome" />
-          </label>
-          <label>
-            Sobrenome
-            <input placeholder="Seu sobrenome" />
-          </label>
-          <label>
-            E-mail
-            <input placeholder="seuemail@email.com" />
-          </label>
-          <label>
-            Contato / WhatsApp
-            <input placeholder="(00) 00000-0000" />
-          </label>
+          <h3>{support.formTitle}</h3>
+          {support.formFields.map((field) => (
+            <label key={field.label}>
+              {field.label}
+              <input type={field.type === "textarea" ? "text" : field.type} placeholder={field.placeholder} />
+            </label>
+          ))}
           <button type="button">Enviar</button>
         </form>
       </section>
 
       <section className="commercial-section commercial-section--white">
         <div className="commercial-section__header center">
-          <span className="commercial-kicker">Nossos projetos</span>
-          <h2>Irreversível</h2>
-          <p>Venha ser um agente transformador e faça a diferença na vida de quem precisa.</p>
+          <span className="commercial-kicker">{support.project.eyebrow}</span>
+          <h2>{support.project.title}</h2>
+          <p>{support.project.text}</p>
         </div>
 
         <div className="commercial-step-grid">
-          {steps.map((step, index) => (
-            <article className="commercial-step-card" key={step}>
-              <strong>{String(index + 1).padStart(2, "0")}</strong>
-              <p>{step}</p>
+          {support.steps.map((step) => (
+            <article className="commercial-step-card" key={step.title}>
+              <strong>{step.icon}</strong>
+              <h3>{step.title}</h3>
+              <p>{step.text}</p>
             </article>
           ))}
         </div>
@@ -65,12 +49,21 @@ export function ApoiePage() {
 
       <section className="commercial-section">
         <div className="commercial-section__header center">
-          <span className="commercial-kicker">Doação segura</span>
-          <h2>Doe é simples e seguro.</h2>
-          <p>
-            Empresas que apuram pelo Lucro Real podem pagar até 4% do imposto devido.
-            Pessoas físicas podem pagar até 6%.
-          </p>
+          <span className="commercial-kicker">{support.donation.eyebrow}</span>
+          <h2>{support.donation.title}</h2>
+          <p>{support.donation.text}</p>
+        </div>
+
+        {support.donation.media.src && (
+          <div className="commercial-wide-media">
+            <SiteMedia media={support.donation.media} />
+          </div>
+        )}
+
+        <div className="commercial-actions commercial-actions--center">
+          <a className="commercial-button commercial-button--red" href={support.donation.button.href}>
+            {support.donation.button.label}
+          </a>
         </div>
       </section>
     </main>
