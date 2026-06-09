@@ -6,6 +6,7 @@ import {
   saveSiteContent,
   type SiteEditableContent,
 } from "../../../site/content/siteContent";
+import { addMediaItem, getMediaLibrary, removeMediaItem, type VivaMediaItem } from "../../../site/content/mediaLibrary";
 import "./paginas-site.css";
 
 const imageSuggestions = [
@@ -33,6 +34,7 @@ export function PaginasSitePage() {
   const [content, setContent] = useState<SiteEditableContent>(() => getSiteContent());
   const [section, setSection] = useState<EditorSection>("hero");
   const [savedMessage, setSavedMessage] = useState("");
+  const [mediaItems, setMediaItems] = useState<VivaMediaItem[]>(() => getMediaLibrary());
 
   const hero = content.home.hero;
 
@@ -86,6 +88,31 @@ export function PaginasSitePage() {
   function handleSave() {
     saveSiteContent(content);
     setSavedMessage("Alterações salvas localmente. Abra a página inicial para visualizar.");
+  }
+
+
+  async function handleUploadMedia(fileList: FileList | null) {
+    if (!fileList || fileList.length === 0) return;
+
+    const files = Array.from(fileList);
+
+    for (const file of files) {
+      await addMediaItem(file);
+    }
+
+    setMediaItems(getMediaLibrary());
+    setSavedMessage("Imagem enviada para a biblioteca de mídia.");
+  }
+
+  function handleUseImage(target: "imageLeft" | "imageCenter" | "imageRight", src: string) {
+    updateHero(target, src);
+    setSavedMessage("Imagem aplicada no banner. Clique em salvar alterações.");
+  }
+
+  function handleRemoveMedia(id: string) {
+    removeMediaItem(id);
+    setMediaItems(getMediaLibrary());
+    setSavedMessage("Imagem removida da biblioteca local.");
   }
 
   function handleReset() {
@@ -278,6 +305,70 @@ export function PaginasSitePage() {
                     <img key={image} src={image} alt="" />
                   ))}
                 </div>
+
+                <div className="site-editor-upload-box">
+                  <h3>Subir fotos do computador</h3>
+                  <p>
+                    Use aqui fotos dos atores, voluntários, banners ou imagens criadas
+                    para a Cia Viva.
+                  </p>
+
+                  <label className="site-editor-upload-button">
+                    Enviar imagens
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={(event) => handleUploadMedia(event.target.files)}
+                    />
+                  </label>
+                </div>
+
+                {mediaItems.length > 0 && (
+                  <>
+                    <h3>Biblioteca enviada</h3>
+
+                    <div className="site-editor-media-library">
+                      {mediaItems.map((image) => (
+                        <article key={image.id}>
+                          <img src={image.src} alt={image.name} />
+                          <strong>{image.name}</strong>
+
+                          <div>
+                            <button
+                              type="button"
+                              onClick={() => handleUseImage("imageLeft", image.src)}
+                            >
+                              Usar esquerda
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => handleUseImage("imageCenter", image.src)}
+                            >
+                              Usar centro
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => handleUseImage("imageRight", image.src)}
+                            >
+                              Usar direita
+                            </button>
+
+                            <button
+                              type="button"
+                              className="danger"
+                              onClick={() => handleRemoveMedia(image.id)}
+                            >
+                              Remover
+                            </button>
+                          </div>
+                        </article>
+                      ))}
+                    </div>
+                  </>
+                )}
 
                 <h3>Imagens sugeridas</h3>
 
