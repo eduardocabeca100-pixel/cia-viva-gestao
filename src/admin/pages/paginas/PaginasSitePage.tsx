@@ -18,25 +18,15 @@ import "./paginas-site.css";
 type PathPart = string | number;
 type PageKey = keyof SiteEditableContent;
 
-const pageOptions: Array<{ id: PageKey; label: string }> = [
-  { id: "global", label: "Configurações gerais" },
-  { id: "home", label: "Página Inicial" },
-  { id: "story", label: "Nossa História" },
-  { id: "support", label: "Apoie" },
-  { id: "volunteer", label: "Voluntariado 2026" },
-  { id: "projects", label: "Projetos" },
-  { id: "contact", label: "Contato" },
+const pageOptions: Array<{ id: PageKey; label: string; path: string }> = [
+  { id: "global", label: "Configurações gerais", path: "/" },
+  { id: "home", label: "Página Inicial", path: "/" },
+  { id: "story", label: "Nossa História", path: "/nossa-historia" },
+  { id: "support", label: "Apoie", path: "/apoie" },
+  { id: "volunteer", label: "Voluntariado 2026", path: "/voluntariado-2026" },
+  { id: "projects", label: "Projetos", path: "/projetos" },
+  { id: "contact", label: "Contato", path: "/contato" },
 ];
-
-const previewPathByPage: Record<PageKey, string> = {
-  global: "/",
-  home: "/",
-  story: "/nossa-historia",
-  support: "/apoie",
-  volunteer: "/voluntariado-2026",
-  projects: "/projetos",
-  contact: "/contato",
-};
 
 const linkOptions = [
   { label: "Página Inicial", value: "/" },
@@ -70,26 +60,6 @@ const fontOptions = [
   "Cinzel",
   "Playfair Display",
   "Cormorant Garamond"
-];
-
-const mediaPositionOptions = [
-  { label: "Imagem à direita", value: "right" },
-  { label: "Imagem à esquerda", value: "left" },
-  { label: "Imagem em cima", value: "top" },
-  { label: "Imagem no fundo", value: "background" },
-];
-
-const animationOptions = [
-  { label: "Sem animação", value: "none" },
-  { label: "Subir suave", value: "fade-up" },
-  { label: "Zoom elegante", value: "zoom-in" },
-  { label: "Entrar pela esquerda", value: "slide-left" },
-  { label: "Letras animadas", value: "letters" },
-];
-
-const textAlignOptions = [
-  { label: "Alinhado à esquerda", value: "left" },
-  { label: "Centralizado", value: "center" },
 ];
 
 const fieldLabels: Record<string, string> = {
@@ -129,7 +99,7 @@ const fieldLabels: Record<string, string> = {
   headingFont: "Fonte dos títulos",
   bodyFont: "Fonte dos textos",
   fontScale: "Tamanho geral das fontes",
-  ctaLabel: "Botão principal do menu",
+  ctaLabel: "Botão principal",
   ctaHref: "Link do botão principal",
   footerDescription: "Descrição do rodapé",
   email: "E-mail",
@@ -150,8 +120,10 @@ const fieldLabels: Record<string, string> = {
   button: "Botão",
   label: "Texto",
   href: "Link",
-  visible: "Mostrar no menu",
+  visible: "Mostrar",
   media: "Imagem / GIF / Vídeo",
+  mediaLeft: "Imagem lateral esquerda",
+  mediaRight: "Imagem lateral direita",
   src: "Arquivo ou URL",
   alt: "Descrição da mídia",
   type: "Tipo",
@@ -202,22 +174,27 @@ function looksLikeMedia(value: unknown) {
   return isRecord(value) && "src" in value && "type" in value && "alt" in value;
 }
 
+function getSectionKeys(pageValue: unknown) {
+  if (!isRecord(pageValue)) return [];
+  return Object.keys(pageValue);
+}
+
 export function PaginasSitePage() {
   const [content, setContent] = useState<SiteEditableContent>(() => getSiteContent());
   const [mediaItems, setMediaItems] = useState<VivaMediaItem[]>(() => getMediaLibrary());
   const [activePage, setActivePage] = useState<PageKey>("home");
   const [activeSection, setActiveSection] = useState("");
+  const [activeTool, setActiveTool] = useState<"pages" | "add" | "media" | "theme" | "links">("pages");
   const [message, setMessage] = useState("");
   const [mediaModalOpen, setMediaModalOpen] = useState(false);
   const [mediaPickerPath, setMediaPickerPath] = useState<PathPart[] | null>(null);
   const [previewVersion, setPreviewVersion] = useState(0);
 
   const pageValue = content[activePage];
-
-  const sectionKeys = useMemo(() => {
-    if (!isRecord(pageValue)) return [];
-    return Object.keys(pageValue);
-  }, [pageValue]);
+  const sectionKeys = useMemo(() => getSectionKeys(pageValue), [pageValue]);
+  const pageInfo = pageOptions.find((page) => page.id === activePage) ?? pageOptions[1];
+  const selectedPath: PathPart[] = activeSection ? [activePage, activeSection] : [activePage];
+  const selectedValue = getAtPath(content, selectedPath);
 
   useEffect(() => {
     if (sectionKeys.length === 0) {
@@ -230,16 +207,12 @@ export function PaginasSitePage() {
     }
   }, [activePage, activeSection, sectionKeys]);
 
-  const selectedPath: PathPart[] = activeSection ? [activePage, activeSection] : [activePage];
-  const selectedValue = getAtPath(content, selectedPath);
-  const previewPath = previewPathByPage[activePage] || "/";
-
   useEffect(() => {
     saveSiteContent(content);
 
     const timer = window.setTimeout(() => {
       setPreviewVersion((current) => current + 1);
-    }, 450);
+    }, 420);
 
     return () => window.clearTimeout(timer);
   }, [content]);
@@ -261,7 +234,8 @@ export function PaginasSitePage() {
 
   function handleSave() {
     saveSiteContent(content);
-    setMessage("Alterações salvas. Abra o site público para visualizar.");
+    setPreviewVersion((current) => current + 1);
+    setMessage("Alterações salvas.");
   }
 
   function handleReset() {
@@ -273,48 +247,7 @@ export function PaginasSitePage() {
   function handleRemoveMedia(id: string) {
     removeMediaItem(id);
     setMediaItems(getMediaLibrary());
-    setMessage("Arquivo removido da biblioteca.");
-  }
-
-  function addItem(path: PathPart[]) {
-    const current = getAtPath(content, path);
-
-    if (!Array.isArray(current)) return;
-
-    const newItem = current.length > 0 ? cloneValue(current[current.length - 1]) : {};
-    updateValue(path, [...current, newItem]);
-  }
-
-  function duplicateItem(path: PathPart[], index: number) {
-    const current = getAtPath(content, path);
-
-    if (!Array.isArray(current)) return;
-
-    const next = [...current];
-    next.splice(index + 1, 0, cloneValue(current[index]));
-    updateValue(path, next);
-  }
-
-  function removeItem(path: PathPart[], index: number) {
-    const current = getAtPath(content, path);
-
-    if (!Array.isArray(current)) return;
-
-    updateValue(path, current.filter((_, itemIndex) => itemIndex !== index));
-  }
-
-  function moveItem(path: PathPart[], index: number, direction: -1 | 1) {
-    const current = getAtPath(content, path);
-
-    if (!Array.isArray(current)) return;
-
-    const target = index + direction;
-    if (target < 0 || target >= current.length) return;
-
-    const next = [...current];
-    const [item] = next.splice(index, 1);
-    next.splice(target, 0, item);
-    updateValue(path, next);
+    setMessage("Arquivo removido.");
   }
 
   function selectMediaForPath(item: VivaMediaItem) {
@@ -328,7 +261,62 @@ export function PaginasSitePage() {
 
     setMediaPickerPath(null);
     setMediaModalOpen(false);
-    setMessage("Mídia aplicada no campo selecionado.");
+    setMessage("Mídia aplicada.");
+  }
+
+  function addItem(path: PathPart[]) {
+    const current = getAtPath(content, path);
+    if (!Array.isArray(current)) return;
+
+    const newItem = current.length > 0 ? cloneValue(current[current.length - 1]) : {};
+    updateValue(path, [...current, newItem]);
+  }
+
+  function duplicateItem(path: PathPart[], index: number) {
+    const current = getAtPath(content, path);
+    if (!Array.isArray(current)) return;
+
+    const next = [...current];
+    next.splice(index + 1, 0, cloneValue(current[index]));
+    updateValue(path, next);
+  }
+
+  function removeItem(path: PathPart[], index: number) {
+    const current = getAtPath(content, path);
+    if (!Array.isArray(current)) return;
+
+    updateValue(path, current.filter((_, itemIndex) => itemIndex !== index));
+  }
+
+  function moveItem(path: PathPart[], index: number, direction: -1 | 1) {
+    const current = getAtPath(content, path);
+    if (!Array.isArray(current)) return;
+
+    const target = index + direction;
+    if (target < 0 || target >= current.length) return;
+
+    const next = [...current];
+    const [item] = next.splice(index, 1);
+    next.splice(target, 0, item);
+    updateValue(path, next);
+  }
+
+  function handleAddMenuPage() {
+    const label = window.prompt("Nome da nova página no menu:");
+    if (!label) return;
+
+    const slug = window.prompt("URL da página. Exemplo: /minha-pagina", `/${label.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`);
+    if (!slug) return;
+
+    const current = Array.isArray(content.global.menuItems) ? content.global.menuItems : [];
+    updateValue(["global", "menuItems"], [
+      ...current,
+      { label, href: slug.startsWith("/") ? slug : `/${slug}`, visible: true },
+    ]);
+
+    setActivePage("global");
+    setActiveSection("menuItems");
+    setMessage("Página adicionada ao menu. A criação da rota real entra na próxima etapa.");
   }
 
   function renderMediaEditor(value: Record<string, unknown>, path: PathPart[]) {
@@ -337,20 +325,16 @@ export function PaginasSitePage() {
     const alt = String(value.alt ?? "");
 
     return (
-      <div className="site-editor-media-field">
-        <div className="site-editor-media-preview">
+      <div className="vix-media-control">
+        <div className="vix-media-preview">
           {src ? (
-            mediaType === "video" ? (
-              <video src={src} controls />
-            ) : (
-              <img src={src} alt={alt} />
-            )
+            mediaType === "video" ? <video src={src} controls /> : <img src={src} alt={alt} />
           ) : (
             <span>Nenhuma mídia selecionada</span>
           )}
         </div>
 
-        <div className="site-editor-media-actions">
+        <div className="vix-action-row">
           <button
             type="button"
             onClick={() => {
@@ -358,11 +342,11 @@ export function PaginasSitePage() {
               setMediaModalOpen(true);
             }}
           >
-            Escolher da biblioteca
+            Escolher mídia
           </button>
 
           <label>
-            Subir arquivo
+            Upload rápido
             <input
               type="file"
               accept="image/*,video/*"
@@ -377,13 +361,10 @@ export function PaginasSitePage() {
           </label>
         </div>
 
-        <div className="site-editor-two-columns">
+        <div className="vix-two">
           <label>
             Tipo
-            <select
-              value={mediaType}
-              onChange={(event) => updateValue([...path, "type"], event.target.value)}
-            >
+            <select value={mediaType} onChange={(event) => updateValue([...path, "type"], event.target.value)}>
               <option value="image">Imagem</option>
               <option value="gif">GIF</option>
               <option value="video">Vídeo</option>
@@ -392,24 +373,13 @@ export function PaginasSitePage() {
 
           <label>
             Descrição
-            <input
-              value={alt}
-              onChange={(event) => updateValue([...path, "alt"], event.target.value)}
-              placeholder="Descrição da imagem/vídeo"
-            />
+            <input value={alt} onChange={(event) => updateValue([...path, "alt"], event.target.value)} />
           </label>
         </div>
 
-        <details className="site-editor-details">
-          <summary>Editar URL manualmente</summary>
-          <label>
-            URL ou base64
-            <input
-              value={src}
-              onChange={(event) => updateValue([...path, "src"], event.target.value)}
-              placeholder="Cole a URL da mídia"
-            />
-          </label>
+        <details className="vix-details">
+          <summary>Editar URL manual</summary>
+          <input value={src} onChange={(event) => updateValue([...path, "src"], event.target.value)} />
         </details>
       </div>
     );
@@ -420,19 +390,15 @@ export function PaginasSitePage() {
 
     if (keyName === "icon") {
       return (
-        <div className="site-editor-field-card">
+        <div className="vix-field">
           <label>
-            {labelFor(keyName)}
-            <input
-              value={stringValue}
-              onChange={(event) => updateValue(path, event.target.value)}
-              placeholder="Escolha ou digite um ícone"
-            />
+            <span>{labelFor(keyName)}</span>
+            <input value={stringValue} onChange={(event) => updateValue(path, event.target.value)} />
           </label>
 
-          <details className="site-editor-details">
+          <details className="vix-details">
             <summary>Escolher ícone</summary>
-            <div className="site-editor-icon-palette">
+            <div className="vix-icon-grid">
               {iconOptions.map((icon) => (
                 <button type="button" key={icon} onClick={() => updateValue(path, icon)}>
                   {icon}
@@ -444,25 +410,21 @@ export function PaginasSitePage() {
       );
     }
 
-    if (keyName === "href" || keyName.toLowerCase().includes("link") || keyName === "ctaHref") {
+    if (keyName === "href" || keyName === "ctaHref" || keyName.toLowerCase().includes("link")) {
       return (
-        <div className="site-editor-field-card">
+        <div className="vix-field">
           <label>
-            {labelFor(keyName)}
-            <input
-              value={stringValue}
-              onChange={(event) => updateValue(path, event.target.value)}
-              placeholder="Escolha um link pronto ou digite outro"
-            />
+            <span>{labelFor(keyName)}</span>
+            <input value={stringValue} onChange={(event) => updateValue(path, event.target.value)} />
           </label>
 
-          <details className="site-editor-details">
+          <details className="vix-details">
             <summary>Escolher link pronto</summary>
-            <div className="site-editor-link-list">
+            <div className="vix-link-grid">
               {linkOptions.map((link) => (
                 <button type="button" key={link.value} onClick={() => updateValue(path, link.value)}>
                   {link.label}
-                  <span>{link.value}</span>
+                  <small>{link.value}</small>
                 </button>
               ))}
             </div>
@@ -473,20 +435,18 @@ export function PaginasSitePage() {
 
     if (keyName === "headingFont" || keyName === "bodyFont") {
       return (
-        <div className="site-editor-field-card">
+        <div className="vix-field">
           <label>
-            {labelFor(keyName)}
+            <span>{labelFor(keyName)}</span>
             <select value={stringValue} onChange={(event) => updateValue(path, event.target.value)}>
               {fontOptions.map((font) => (
-                <option key={font} value={font}>
-                  {font}
-                </option>
+                <option key={font} value={font}>{font}</option>
               ))}
             </select>
           </label>
 
-          <div className="site-editor-font-preview" style={{ fontFamily: `"${stringValue}", system-ui, sans-serif` }}>
-            Arte que inspira forma e transforma
+          <div className="vix-font-preview" style={{ fontFamily: `"${stringValue}", system-ui, sans-serif` }}>
+            Arte que inspira
           </div>
         </div>
       );
@@ -494,32 +454,33 @@ export function PaginasSitePage() {
 
     if (keyName === "fontScale") {
       return (
-        <div className="site-editor-field-card">
+        <div className="vix-field">
           <label>
-            Tamanho geral das fontes
+            <span>Tamanho geral das fontes</span>
             <input
               type="range"
-              min="0.66"
+              min="0.62"
               max="1"
               step="0.02"
-              value={stringValue || "0.78"}
+              value={stringValue || "0.76"}
               onChange={(event) => updateValue(path, event.target.value)}
             />
           </label>
-          <span className="site-editor-range-value">{stringValue || "0.78"}</span>
+          <em>{stringValue || "0.76"}</em>
         </div>
       );
     }
 
     if (keyName === "mediaPosition") {
       return (
-        <div className="site-editor-field-card">
+        <div className="vix-field">
           <label>
-            Posição da imagem / vídeo
+            <span>Posição da imagem</span>
             <select value={stringValue || "right"} onChange={(event) => updateValue(path, event.target.value)}>
-              {mediaPositionOptions.map((option) => (
-                <option key={option.value} value={option.value}>{option.label}</option>
-              ))}
+              <option value="right">Direita</option>
+              <option value="left">Esquerda</option>
+              <option value="top">Topo</option>
+              <option value="background">Fundo</option>
             </select>
           </label>
         </div>
@@ -528,13 +489,15 @@ export function PaginasSitePage() {
 
     if (keyName === "animation") {
       return (
-        <div className="site-editor-field-card">
+        <div className="vix-field">
           <label>
-            Animação
+            <span>Animação</span>
             <select value={stringValue || "fade-up"} onChange={(event) => updateValue(path, event.target.value)}>
-              {animationOptions.map((option) => (
-                <option key={option.value} value={option.value}>{option.label}</option>
-              ))}
+              <option value="none">Sem animação</option>
+              <option value="fade-up">Subir suave</option>
+              <option value="zoom-in">Zoom elegante</option>
+              <option value="slide-left">Entrar pela esquerda</option>
+              <option value="letters">Letras animadas</option>
             </select>
           </label>
         </div>
@@ -543,13 +506,12 @@ export function PaginasSitePage() {
 
     if (keyName === "textAlign") {
       return (
-        <div className="site-editor-field-card">
+        <div className="vix-field">
           <label>
-            Alinhamento do texto
+            <span>Alinhamento</span>
             <select value={stringValue || "left"} onChange={(event) => updateValue(path, event.target.value)}>
-              {textAlignOptions.map((option) => (
-                <option key={option.value} value={option.value}>{option.label}</option>
-              ))}
+              <option value="left">Esquerda</option>
+              <option value="center">Centro</option>
             </select>
           </label>
         </div>
@@ -558,12 +520,8 @@ export function PaginasSitePage() {
 
     if (typeof value === "boolean") {
       return (
-        <label className="site-editor-checkbox site-editor-field-card">
-          <input
-            type="checkbox"
-            checked={value}
-            onChange={(event) => updateValue(path, event.target.checked)}
-          />
+        <label className="vix-check">
+          <input checked={value} type="checkbox" onChange={(event) => updateValue(path, event.target.checked)} />
           {labelFor(keyName)}
         </label>
       );
@@ -571,14 +529,10 @@ export function PaginasSitePage() {
 
     if (typeof value === "number") {
       return (
-        <div className="site-editor-field-card">
+        <div className="vix-field">
           <label>
-            {labelFor(keyName)}
-            <input
-              type="number"
-              value={value}
-              onChange={(event) => updateValue(path, Number(event.target.value))}
-            />
+            <span>{labelFor(keyName)}</span>
+            <input type="number" value={value} onChange={(event) => updateValue(path, Number(event.target.value))} />
           </label>
         </div>
       );
@@ -592,20 +546,13 @@ export function PaginasSitePage() {
       lowerKey.includes("footer");
 
     return (
-      <div className="site-editor-field-card">
+      <div className="vix-field">
         <label>
-          {labelFor(keyName)}
+          <span>{labelFor(keyName)}</span>
           {useTextarea ? (
-            <textarea
-              rows={5}
-              value={stringValue}
-              onChange={(event) => updateValue(path, event.target.value)}
-            />
+            <textarea rows={5} value={stringValue} onChange={(event) => updateValue(path, event.target.value)} />
           ) : (
-            <input
-              value={stringValue}
-              onChange={(event) => updateValue(path, event.target.value)}
-            />
+            <input value={stringValue} onChange={(event) => updateValue(path, event.target.value)} />
           )}
         </label>
       </div>
@@ -619,19 +566,19 @@ export function PaginasSitePage() {
 
     if (Array.isArray(value)) {
       return (
-        <div className="site-editor-array">
-          <div className="site-editor-array-header">
-            <h3>{labelFor(keyName)}</h3>
-            <button type="button" onClick={() => addItem(path)}>Adicionar item</button>
+        <div className="vix-array">
+          <div className="vix-array__header">
+            <strong>{labelFor(keyName)}</strong>
+            <button type="button" onClick={() => addItem(path)}>Adicionar</button>
           </div>
 
           {value.map((item, index) => (
-            <article className="site-editor-array-item" key={index}>
-              <div className="site-editor-array-item-header">
+            <article className="vix-array-item" key={index}>
+              <div className="vix-array-item__top">
                 <strong>{labelFor(keyName)} {index + 1}</strong>
                 <div>
-                  <button type="button" onClick={() => moveItem(path, index, -1)}>Subir</button>
-                  <button type="button" onClick={() => moveItem(path, index, 1)}>Descer</button>
+                  <button type="button" onClick={() => moveItem(path, index, -1)}>↑</button>
+                  <button type="button" onClick={() => moveItem(path, index, 1)}>↓</button>
                   <button type="button" onClick={() => duplicateItem(path, index)}>Duplicar</button>
                   <button type="button" className="danger" onClick={() => removeItem(path, index)}>Remover</button>
                 </div>
@@ -646,9 +593,9 @@ export function PaginasSitePage() {
 
     if (isRecord(value)) {
       return (
-        <div className="site-editor-object">
+        <div className="vix-object">
           {Object.entries(value).map(([key, nestedValue]) => (
-            <div className="site-editor-field-group" key={key}>
+            <section className="vix-group" key={key}>
               {isRecord(nestedValue) || Array.isArray(nestedValue) ? (
                 <>
                   <h3>{labelFor(key)}</h3>
@@ -657,7 +604,7 @@ export function PaginasSitePage() {
               ) : (
                 renderPrimitive(nestedValue, [...path, key], key)
               )}
-            </div>
+            </section>
           ))}
         </div>
       );
@@ -667,135 +614,153 @@ export function PaginasSitePage() {
   }
 
   return (
-    <main className="site-editor-page">
-      <header className="site-editor-header">
-        <div>
-          <span>Viva Gestão</span>
-          <h1>Editor do site</h1>
-          <p>Escolha uma página, selecione uma seção e edite os blocos com calma.</p>
+    <main className="vix-editor">
+      <header className="vix-topbar">
+        <div className="vix-brand">
+          <strong>VIVA</strong>
+          <span>GESTÃO</span>
         </div>
 
-        <div className="site-editor-actions">
-          <button type="button" onClick={() => setMediaModalOpen(true)}>Biblioteca</button>
-          <a href="/" target="_blank" rel="noreferrer">Visualizar site</a>
-          <button type="button" onClick={handleSave}>Salvar</button>
+        <div className="vix-topbar__center">
+          <span>Editor visual</span>
+          <strong>{pageInfo.label}</strong>
+        </div>
+
+        <div className="vix-topbar__actions">
+          <button type="button" onClick={() => setMediaModalOpen(true)}>Mídia</button>
+          <button type="button" onClick={() => setPreviewVersion((current) => current + 1)}>Atualizar</button>
+          <a href={pageInfo.path} target="_blank" rel="noreferrer">Visualizar</a>
+          <button type="button" className="publish" onClick={handleSave}>Salvar</button>
         </div>
       </header>
 
-      {message && <div className="site-editor-message">{message}</div>}
-
-      <section className="site-editor-layout">
-        <aside className="site-editor-sidebar">
-          <h2>Páginas</h2>
-
-          {pageOptions.map((page) => (
-            <button
-              key={page.id}
-              type="button"
-              className={activePage === page.id ? "active" : ""}
-              onClick={() => setActivePage(page.id)}
-            >
-              {page.label}
-            </button>
-          ))}
-
-          <div className="site-editor-pages-box">
-            <h3>Páginas novas</h3>
-            <p>
-              O menu já pode ser editado em Configurações gerais. No próximo passo
-              conectamos criação de página com URL própria.
-            </p>
-            <button type="button" disabled>Adicionar página</button>
-          </div>
+      <section className="vix-workspace">
+        <aside className="vix-rail">
+          <button className={activeTool === "pages" ? "active" : ""} onClick={() => setActiveTool("pages")} title="Páginas">▤</button>
+          <button className={activeTool === "add" ? "active" : ""} onClick={() => setActiveTool("add")} title="Adicionar">＋</button>
+          <button className={activeTool === "media" ? "active" : ""} onClick={() => { setActiveTool("media"); setMediaModalOpen(true); }} title="Mídia">▧</button>
+          <button className={activeTool === "theme" ? "active" : ""} onClick={() => { setActiveTool("theme"); setActivePage("global"); setActiveSection("headingFont"); }} title="Tema">◌</button>
+          <button className={activeTool === "links" ? "active" : ""} onClick={() => setActiveTool("links")} title="Links">↗</button>
         </aside>
 
-        <section className="site-editor-panel">
-          <div className="site-editor-panel-top">
-            <div>
-              <span>{pageOptions.find((page) => page.id === activePage)?.label}</span>
-              <h2>{labelFor(activeSection || String(activePage))}</h2>
-            </div>
-
-            <label className="site-editor-section-select">
-              Seção
-              <select value={activeSection} onChange={(event) => setActiveSection(event.target.value)}>
-                {sectionKeys.map((section) => (
-                  <option key={section} value={section}>{labelFor(section)}</option>
-                ))}
-              </select>
-            </label>
-
-            <button type="button" className="site-editor-reset" onClick={handleReset}>
-              Restaurar tudo
-            </button>
+        <aside className="vix-pages-panel">
+          <div className="vix-panel-head">
+            <span>Páginas</span>
+            <button type="button" onClick={handleAddMenuPage}>＋</button>
           </div>
 
-          <div className="site-editor-clean-panel">
-            {renderEditor(selectedValue, selectedPath, activeSection)}
-          </div>
-        </section>
-        <aside className="site-editor-preview">
-          <div className="site-editor-preview__header">
-            <div>
-              <span>Pré-visualização</span>
-              <strong>{pageOptions.find((page) => page.id === activePage)?.label}</strong>
-            </div>
-
-            <div>
+          <div className="vix-page-list">
+            {pageOptions.map((page) => (
               <button
+                key={page.id}
                 type="button"
-                onClick={() => setPreviewVersion((current) => current + 1)}
+                className={activePage === page.id ? "active" : ""}
+                onClick={() => {
+                  setActivePage(page.id);
+                  setActiveTool("pages");
+                }}
               >
-                Atualizar
+                <span>{page.label}</span>
+                <small>{page.path}</small>
               </button>
-
-              <a href={previewPath} target="_blank" rel="noreferrer">
-                Abrir
-              </a>
-            </div>
+            ))}
           </div>
 
-          <div className="site-editor-preview__screen">
+          {activeTool === "links" && (
+            <div className="vix-mini-box">
+              <strong>Links rápidos</strong>
+              {linkOptions.map((link) => (
+                <button type="button" key={link.value} onClick={() => navigator.clipboard?.writeText(link.value)}>
+                  {link.label}
+                  <small>{link.value}</small>
+                </button>
+              ))}
+            </div>
+          )}
+
+          {activeTool === "add" && (
+            <div className="vix-mini-box">
+              <strong>Adicionar</strong>
+              <button type="button" onClick={handleAddMenuPage}>Adicionar página ao menu</button>
+              <button type="button" onClick={() => setMediaModalOpen(true)}>Adicionar imagem/vídeo</button>
+              <small>A rota dinâmica real entra na próxima etapa.</small>
+            </div>
+          )}
+        </aside>
+
+        <section className="vix-canvas-area">
+          <div className="vix-canvas-toolbar">
+            <div>
+              <span>Página</span>
+              <strong>{pageInfo.label}</strong>
+            </div>
+
+            <select value={activePage} onChange={(event) => setActivePage(event.target.value as PageKey)}>
+              {pageOptions.map((page) => (
+                <option key={page.id} value={page.id}>{page.label}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="vix-canvas">
             <iframe
-              key={`${previewPath}-${previewVersion}`}
-              src={previewPath}
+              key={`${pageInfo.path}-${previewVersion}`}
+              src={pageInfo.path}
               title="Pré-visualização do site"
             />
           </div>
+        </section>
 
-          <p>
-            A prévia atualiza automaticamente enquanto você edita. Para ver maior,
-            clique em abrir.
-          </p>
+        <aside className="vix-inspector">
+          <div className="vix-inspector__head">
+            <span>Editar</span>
+            <strong>{labelFor(activeSection || String(activePage))}</strong>
+          </div>
+
+          <label className="vix-section-select">
+            Seção
+            <select value={activeSection} onChange={(event) => setActiveSection(event.target.value)}>
+              {sectionKeys.map((section) => (
+                <option key={section} value={section}>{labelFor(section)}</option>
+              ))}
+            </select>
+          </label>
+
+          {message && <div className="vix-message">{message}</div>}
+
+          <div className="vix-inspector__scroll">
+            {renderEditor(selectedValue, selectedPath, activeSection)}
+          </div>
+
+          <div className="vix-inspector__bottom">
+            <button type="button" onClick={handleReset}>Restaurar</button>
+            <button type="button" className="publish" onClick={handleSave}>Salvar</button>
+          </div>
         </aside>
       </section>
 
       {mediaModalOpen && (
-        <div className="site-editor-modal-backdrop" onClick={() => setMediaModalOpen(false)}>
-          <section className="site-editor-media-modal" onClick={(event) => event.stopPropagation()}>
+        <div className="vix-modal-backdrop" onClick={() => setMediaModalOpen(false)}>
+          <section className="vix-media-modal" onClick={(event) => event.stopPropagation()}>
             <header>
               <div>
-                <span>Biblioteca de mídia</span>
+                <span>Arquivos do site</span>
                 <h2>Escolha arquivos de mídia</h2>
               </div>
-              <button type="button" onClick={() => setMediaModalOpen(false)}>Fechar</button>
+              <button type="button" onClick={() => setMediaModalOpen(false)}>×</button>
             </header>
 
-            <div className="site-editor-upload-area">
+            <div className="vix-upload-area">
               <label>
-                Arraste ou envie fotos, GIFs e vídeos
-                <input
-                  type="file"
-                  accept="image/*,video/*"
-                  multiple
-                  onChange={(event) => handleUpload(event.target.files)}
-                />
+                <strong>Arraste ou envie imagens, GIFs e vídeos</strong>
+                <span>Use arquivos da Cia Viva em qualquer página do site.</span>
+                <input type="file" accept="image/*,video/*" multiple onChange={(event) => handleUpload(event.target.files)} />
               </label>
             </div>
 
-            <div className="site-editor-modal-grid">
+            <div className="vix-media-grid">
               {mediaItems.length === 0 && (
-                <div className="site-editor-empty-media">
+                <div className="vix-empty-media">
                   Nenhum arquivo enviado ainda.
                 </div>
               )}
@@ -805,9 +770,7 @@ export function PaginasSitePage() {
                   {item.type === "video" ? <video src={item.src} /> : <img src={item.src} alt={item.name} />}
                   <strong>{item.name}</strong>
                   <div>
-                    {mediaPickerPath && (
-                      <button type="button" onClick={() => selectMediaForPath(item)}>Usar</button>
-                    )}
+                    {mediaPickerPath && <button type="button" onClick={() => selectMediaForPath(item)}>Usar</button>}
                     <button type="button" className="danger" onClick={() => handleRemoveMedia(item.id)}>Remover</button>
                   </div>
                 </article>
