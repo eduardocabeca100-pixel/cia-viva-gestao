@@ -28,6 +28,16 @@ const pageOptions: Array<{ id: PageKey; label: string }> = [
   { id: "contact", label: "Contato" },
 ];
 
+const previewPathByPage: Record<PageKey, string> = {
+  global: "/",
+  home: "/",
+  story: "/nossa-historia",
+  support: "/apoie",
+  volunteer: "/voluntariado-2026",
+  projects: "/projetos",
+  contact: "/contato",
+};
+
 const linkOptions = [
   { label: "Página Inicial", value: "/" },
   { label: "Nossa História", value: "/nossa-historia" },
@@ -200,6 +210,7 @@ export function PaginasSitePage() {
   const [message, setMessage] = useState("");
   const [mediaModalOpen, setMediaModalOpen] = useState(false);
   const [mediaPickerPath, setMediaPickerPath] = useState<PathPart[] | null>(null);
+  const [previewVersion, setPreviewVersion] = useState(0);
 
   const pageValue = content[activePage];
 
@@ -221,6 +232,17 @@ export function PaginasSitePage() {
 
   const selectedPath: PathPart[] = activeSection ? [activePage, activeSection] : [activePage];
   const selectedValue = getAtPath(content, selectedPath);
+  const previewPath = previewPathByPage[activePage] || "/";
+
+  useEffect(() => {
+    saveSiteContent(content);
+
+    const timer = window.setTimeout(() => {
+      setPreviewVersion((current) => current + 1);
+    }, 450);
+
+    return () => window.clearTimeout(timer);
+  }, [content]);
 
   function updateValue(path: PathPart[], value: unknown) {
     setContent((current) => setAtPath(current, path, value));
@@ -712,6 +734,40 @@ export function PaginasSitePage() {
             {renderEditor(selectedValue, selectedPath, activeSection)}
           </div>
         </section>
+        <aside className="site-editor-preview">
+          <div className="site-editor-preview__header">
+            <div>
+              <span>Pré-visualização</span>
+              <strong>{pageOptions.find((page) => page.id === activePage)?.label}</strong>
+            </div>
+
+            <div>
+              <button
+                type="button"
+                onClick={() => setPreviewVersion((current) => current + 1)}
+              >
+                Atualizar
+              </button>
+
+              <a href={previewPath} target="_blank" rel="noreferrer">
+                Abrir
+              </a>
+            </div>
+          </div>
+
+          <div className="site-editor-preview__screen">
+            <iframe
+              key={`${previewPath}-${previewVersion}`}
+              src={previewPath}
+              title="Pré-visualização do site"
+            />
+          </div>
+
+          <p>
+            A prévia atualiza automaticamente enquanto você edita. Para ver maior,
+            clique em abrir.
+          </p>
+        </aside>
       </section>
 
       {mediaModalOpen && (

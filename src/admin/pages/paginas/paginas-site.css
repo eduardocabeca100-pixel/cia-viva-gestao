@@ -585,3 +585,114 @@ body:has(.site-editor-page) {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* PRÉ-VISUALIZAÇÃO DO SITE DENTRO DO PAINEL */
+.site-editor-layout {
+  grid-template-columns: 240px minmax(0, 1fr) 390px;
+  align-items: start;
+}
+
+.site-editor-preview {
+  position: sticky;
+  top: 20px;
+  border-radius: 26px;
+  background: #111;
+  color: #fff;
+  padding: 14px;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.16);
+}
+
+.site-editor-preview__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.site-editor-preview__header span {
+  display: block;
+  color: #ff343d;
+  font-size: 10px;
+  font-weight: 950;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.site-editor-preview__header strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 15px;
+}
+
+.site-editor-preview__header div:last-child {
+  display: flex;
+  gap: 7px;
+}
+
+.site-editor-preview__header button,
+.site-editor-preview__header a {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  padding: 0 12px;
+  background: #fff;
+  color: #111;
+  font-size: 11px;
+  font-weight: 950;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.site-editor-preview__header a {
+  background: #e50914;
+  color: #fff;
+}
+
+.site-editor-preview__screen {
+  position: relative;
+  height: 560px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #000;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.site-editor-preview__screen iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #000;
+}
+
+.site-editor-preview p {
+  margin: 12px 2px 0;
+  color: rgba(255,255,255,0.62);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+@media (max-width: 1500px) {
+  .site-editor-layout {
+    grid-template-columns: 240px minmax(0, 1fr);
+  }
+
+  .site-editor-preview {
+    grid-column: 1 / -1;
+    position: static;
+  }
+
+  .site-editor-preview__screen {
+    height: 520px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .site-editor-layout {
+    grid-template-columns: 1fr;
+  }
+}
