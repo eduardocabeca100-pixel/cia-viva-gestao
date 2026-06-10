@@ -1,95 +1,72 @@
-import { useState } from "react";
-import type { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth, getFirebaseStatus, isFirebaseConfigured } from "../../../firebase/firebase";
-import "./login.css";
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
+import "./admin-login.css";
 
 export function AdminLoginPage() {
   const navigate = useNavigate();
-
   const [email, setEmail] = useState("admin@ciaviva.com");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [message, setMessage] = useState("");
 
-  async function handleLogin(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent) {
     event.preventDefault();
-
     setLoading(true);
-    setErrorMessage("");
+    setMessage("");
 
     try {
-      if (!isFirebaseConfigured || !auth) {
-        console.log("Status Firebase:", getFirebaseStatus());
-        setErrorMessage("Firebase ainda não configurado. Preencha o arquivo .env e reinicie o servidor.");
-        return;
-      }
-
-      await signInWithEmailAndPassword(auth, email.trim(), password);
+      const auth = getAuth();
+      await signInWithEmailAndPassword(auth, email, password);
       navigate("/admin/dashboard");
-    } catch (error: any) {
-      console.error("Erro no login Firebase:", error);
-
-      if (error?.code === "auth/invalid-credential") {
-        setErrorMessage("E-mail ou senha incorretos. Confira o usuário criado no Firebase.");
-        return;
-      }
-
-      if (error?.code === "auth/user-not-found") {
-        setErrorMessage("Usuário não encontrado no Firebase.");
-        return;
-      }
-
-      if (error?.code === "auth/wrong-password") {
-        setErrorMessage("Senha incorreta.");
-        return;
-      }
-
-      if (error?.code === "auth/invalid-api-key") {
-        setErrorMessage("Chave do Firebase inválida. Confira o arquivo .env.");
-        return;
-      }
-
-      setErrorMessage(`Erro Firebase: ${error?.code || error?.message || "erro desconhecido"}`);
+    } catch {
+      setMessage("Não foi possível entrar. Confira o e-mail e a senha cadastrados no Firebase.");
     } finally {
       setLoading(false);
     }
   }
 
+  async function handleResetPassword() {
+    if (!email) {
+      setMessage("Digite seu e-mail para receber a recuperação de senha.");
+      return;
+    }
+
+    try {
+      const auth = getAuth();
+      await sendPasswordResetEmail(auth, email);
+      setMessage("Enviamos um e-mail de recuperação de senha.");
+    } catch {
+      setMessage("Não foi possível enviar a recuperação agora.");
+    }
+  }
+
   return (
-    <main className="login-page">
-      <section className="login-visual">
-        <div className="login-orbit"></div>
-
-        <div className="login-stage">
-          <div className="login-dancer"></div>
-          <div className="login-actor"></div>
-          <div className="login-mask"></div>
+    <main className="admin-login-page">
+      <section className="admin-login-visual">
+        <div className="admin-login-visual__logo">
+          <strong>VIVA</strong>
+          <span>CIA DE ARTES</span>
         </div>
 
-        <div className="login-brand-copy">
-          <p>COMPANHIA DE ARTES VIVA</p>
-          <h1>Viva Gestão</h1>
-          <span>
-            Painel privado para editar páginas, imagens, formulários, rodapé,
-            voluntariado e identidade visual do site.
-          </span>
+        <div className="admin-login-visual__art">
+          <div className="admin-login-visual__circle" />
+          <div className="admin-login-visual__figure">✦</div>
         </div>
 
-        <div className="login-dots">
-          <i></i><i></i><i></i><i></i><i></i>
+        <div className="admin-login-visual__text">
+          <span>Painel privado</span>
+          <h1>Arte, gestão e criação em um só lugar.</h1>
+          <p>Controle páginas, mídia, voluntariado, formulários e identidade visual da Cia Viva.</p>
         </div>
       </section>
 
-      <section className="login-card">
-        <p className="login-eyebrow">ACESSO ADMINISTRATIVO</p>
+      <section className="admin-login-card">
+        <span>Viva Gestão</span>
         <h2>Entrar no painel</h2>
-        <p className="login-card-text">
-          Utilize seu login de administrador para acessar o Viva Gestão.
-        </p>
+        <p>Acesse com o usuário cadastrado no Firebase.</p>
 
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleSubmit}>
           <label>
             E-mail
             <input
@@ -97,7 +74,6 @@ export function AdminLoginPage() {
               value={email}
               autoComplete="email"
               onChange={(event) => setEmail(event.target.value)}
-              required
             />
           </label>
 
@@ -107,22 +83,21 @@ export function AdminLoginPage() {
               type="password"
               value={password}
               autoComplete="current-password"
-              onChange={(event) => setPassword(event.target.value)}
               placeholder="Digite sua senha"
-              required
+              onChange={(event) => setPassword(event.target.value)}
             />
           </label>
 
-          {errorMessage && <div className="login-error">{errorMessage}</div>}
+          {message && <div className="admin-login-message">{message}</div>}
 
           <button type="submit" disabled={loading}>
-            {loading ? "Entrando..." : "Entrar no Viva Gestão"}
+            {loading ? "Entrando..." : "Entrar"}
+          </button>
+
+          <button type="button" className="admin-login-forgot" onClick={handleResetPassword}>
+            Esqueci minha senha
           </button>
         </form>
-
-        <small>
-          Nenhuma senha fica salva no código. O acesso é validado pelo Firebase.
-        </small>
       </section>
     </main>
   );

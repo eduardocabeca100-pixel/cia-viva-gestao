@@ -1211,3 +1211,195 @@ body {
     height: 320px !important;
   }
 }
+
+
+/* HOME CINEMATOGRÁFICA REFEITA */
+.viva-cinema-home {
+  position: relative;
+  min-height: calc(92vh - 82px);
+  display: grid;
+  place-items: center;
+  padding: clamp(2.8rem, 5vw, 5.5rem) 1.5rem clamp(3.4rem, 6vw, 6.5rem);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 18% 22%, rgba(229, 9, 20, 0.18), transparent 26rem),
+    radial-gradient(circle at 78% 16%, rgba(255, 255, 255, 0.07), transparent 22rem),
+    linear-gradient(180deg, #050505 0%, #111 54%, #050505 100%);
+}
+
+.viva-cinema-home::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(229,9,20,0.12), transparent 24%, transparent 76%, rgba(255,255,255,0.04)),
+    radial-gradient(circle at 50% 30%, rgba(255,255,255,0.08), transparent 22rem);
+  pointer-events: none;
+}
+
+.viva-cinema-home__glow {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(60px);
+  pointer-events: none;
+}
+
+.viva-cinema-home__glow--red {
+  width: 420px;
+  height: 420px;
+  left: -130px;
+  top: 18%;
+  background: rgba(229,9,20,0.22);
+}
+
+.viva-cinema-home__glow--white {
+  width: 340px;
+  height: 340px;
+  right: 10%;
+  top: 4%;
+  background: rgba(255,255,255,0.08);
+}
+
+.viva-cinema-home__stage {
+  position: relative;
+  z-index: 2;
+  width: min(1180px, 100%);
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.viva-cinema-home__main-media {
+  position: relative;
+  width: min(760px, 100%);
+  min-height: clamp(260px, 38vw, 460px);
+  display: grid;
+  place-items: center;
+  margin-bottom: clamp(1.4rem, 3vw, 2.5rem);
+}
+
+.viva-cinema-home__main-media::after {
+  content: "";
+  position: absolute;
+  inset: 12% 4% 0;
+  border-radius: 42px;
+  background: rgba(0,0,0,0.36);
+  box-shadow: 0 34px 100px rgba(0,0,0,0.48);
+  z-index: -1;
+}
+
+.viva-cinema-home__main-media img,
+.viva-cinema-home__main-media video {
+  width: 100%;
+  max-height: clamp(280px, 42vw, 500px);
+  display: block;
+  object-fit: contain;
+  object-position: center center;
+  border-radius: 34px;
+  filter: saturate(1.06) contrast(1.08);
+  animation: vivaHeroFloat 8s ease-in-out infinite;
+}
+
+.viva-cinema-home__side {
+  position: absolute;
+  z-index: 1;
+  top: 16%;
+  width: min(28vw, 420px);
+  opacity: 0.46;
+  filter: grayscale(1) contrast(1.2);
+  pointer-events: none;
+}
+
+.viva-cinema-home__side img,
+.viva-cinema-home__side video {
+  width: 100%;
+  border-radius: 32px;
+  object-fit: cover;
+}
+
+.viva-cinema-home__side--left {
+  left: 2vw;
+}
+
+.viva-cinema-home__side--right {
+  right: 2vw;
+}
+
+.viva-cinema-home__content {
+  width: min(980px, 100%);
+}
+
+.viva-cinema-home .commercial-kicker {
+  margin-bottom: 0.8rem;
+}
+
+.viva-cinema-home h1 {
+  margin: 0;
+  font-family: var(--viva-heading-font, "Montserrat", system-ui, sans-serif);
+  font-size: calc(clamp(3rem, 6.4vw, 7.2rem) * var(--viva-font-scale, 0.76));
+  line-height: 0.86;
+  letter-spacing: -0.08em;
+  text-transform: uppercase;
+}
+
+.viva-cinema-home h1 strong {
+  display: block;
+  color: var(--viva-red-light);
+}
+
+.viva-cinema-home p {
+  width: min(760px, 100%);
+  margin: 1.2rem auto 0;
+  color: rgba(255,255,255,0.72);
+  font-size: 0.98rem;
+  line-height: 1.65;
+}
+
+.viva-cinema-home--letters .commercial-animated-title span {
+  opacity: 0;
+  transform: translateY(22px);
+  animation: vivaWordIn 680ms cubic-bezier(.2,.9,.2,1) forwards;
+}
+
+.viva-home-pillars {
+  padding-top: clamp(2.8rem, 5vw, 4.6rem) !important;
+}
+
+.viva-home-cards {
+  padding-top: clamp(2.8rem, 5vw, 4.6rem) !important;
+}
+
+@keyframes vivaHeroFloat {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-8px) scale(1.012);
+  }
+}
+
+@media (max-width: 900px) {
+  .viva-cinema-home {
+    min-height: auto;
+  }
+
+  .viva-cinema-home__side {
+    display: none;
+  }
+
+  .viva-cinema-home__main-media {
+    width: min(640px, 100%);
+  }
+}
+
+@media (max-width: 640px) {
+  .viva-cinema-home h1 {
+    font-size: calc(clamp(2.7rem, 13vw, 4.4rem) * var(--viva-font-scale, 0.82));
+  }
+
+  .viva-cinema-home__main-media img,
+  .viva-cinema-home__main-media video {
+    max-height: 340px;
+  }
+}

@@ -13,53 +13,57 @@ function animatedWords(text: string) {
 
 export function HomePage() {
   const { home } = useSiteContent();
-  const mediaPosition = home.hero.mediaPosition || "top";
   const animation = home.hero.animation || "letters";
-  const textAlign = home.hero.textAlign || "center";
 
   return (
     <main className="commercial-page">
-      <section
-        className={`commercial-hero commercial-hero--home commercial-hero--media-${mediaPosition} commercial-hero--anim-${animation} commercial-hero--text-${textAlign}`}
-      >
-        <div className="commercial-hero__visual">
-          <SiteMedia media={home.hero.media} />
-          <div className="commercial-orbit" />
-        </div>
+      <section className={`viva-cinema-home viva-cinema-home--${animation}`}>
+        <div className="viva-cinema-home__glow viva-cinema-home__glow--red" />
+        <div className="viva-cinema-home__glow viva-cinema-home__glow--white" />
 
-        <div className="commercial-hero__content">
-          <span className="commercial-kicker">{home.hero.eyebrow}</span>
+        {home.hero.mediaLeft?.src && (
+          <div className="viva-cinema-home__side viva-cinema-home__side--left">
+            <SiteMedia media={home.hero.mediaLeft} />
+          </div>
+        )}
 
-          <h1 className="commercial-animated-title">
-            {animation === "letters" ? animatedWords(home.hero.title) : home.hero.title}
-            <strong>
-              {animation === "letters" ? animatedWords(home.hero.accent) : home.hero.accent}
-            </strong>
-          </h1>
+        {home.hero.mediaRight?.src && (
+          <div className="viva-cinema-home__side viva-cinema-home__side--right">
+            <SiteMedia media={home.hero.mediaRight} />
+          </div>
+        )}
 
-          <p>{home.hero.description}</p>
+        <div className="viva-cinema-home__stage">
+          <div className="viva-cinema-home__main-media">
+            <SiteMedia media={home.hero.media} />
+          </div>
 
-          <div className="commercial-actions">
-            <Link className="commercial-button commercial-button--red" to={home.hero.primaryButton.href}>
-              {home.hero.primaryButton.label}
-            </Link>
-            <Link className="commercial-button commercial-button--dark" to={home.hero.secondaryButton.href}>
-              {home.hero.secondaryButton.label}
-            </Link>
+          <div className="viva-cinema-home__content">
+            <span className="commercial-kicker">{home.hero.eyebrow}</span>
+
+            <h1 className="commercial-animated-title">
+              {animation === "letters" ? animatedWords(home.hero.title) : home.hero.title}
+              <strong>
+                {animation === "letters" ? animatedWords(home.hero.accent) : home.hero.accent}
+              </strong>
+            </h1>
+
+            <p>{home.hero.description}</p>
+
+            <div className="commercial-actions commercial-actions--center">
+              <Link className="commercial-button commercial-button--red" to={home.hero.primaryButton.href}>
+                {home.hero.primaryButton.label}
+              </Link>
+
+              <Link className="commercial-button commercial-button--dark" to={home.hero.secondaryButton.href}>
+                {home.hero.secondaryButton.label}
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="commercial-section commercial-section--compact">
-        <div className="commercial-section__header center">
-          <span className="commercial-kicker">Cia de Artes Viva</span>
-          <h2>Uma companhia feita para aproximar pessoas da cultura.</h2>
-          <p>
-            Teatro, dança, música, formação artística, voluntariado e projetos
-            culturais em uma experiência institucional moderna, humana e acessível.
-          </p>
-        </div>
-
+      <section className="commercial-section commercial-section--compact viva-home-pillars">
         <div className="commercial-feature-grid">
           {home.pillars.map((pillar) => (
             <article className="commercial-feature-card" key={pillar.title}>
@@ -71,12 +75,7 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="commercial-section">
-        <div className="commercial-section__header">
-          <span className="commercial-kicker">Caminhos da Viva</span>
-          <h2>Escolha como caminhar com a gente.</h2>
-        </div>
-
+      <section className="commercial-section viva-home-cards">
         <div className="commercial-card-grid">
           {home.cards.map((card) => (
             <article className="commercial-image-card" key={card.title}>

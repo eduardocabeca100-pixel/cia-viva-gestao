@@ -1,0 +1,216 @@
+.admin-login-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(380px, 0.65fr);
+  background:
+    radial-gradient(circle at 12% 10%, rgba(229, 9, 20, 0.34), transparent 28rem),
+    radial-gradient(circle at 75% 20%, rgba(255, 255, 255, 0.08), transparent 20rem),
+    #030303;
+  color: #fff;
+  overflow: hidden;
+}
+
+.admin-login-visual {
+  position: relative;
+  min-height: 100vh;
+  padding: clamp(2rem, 5vw, 5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.admin-login-visual::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(115deg, rgba(0,0,0,0.12), rgba(0,0,0,0.82)),
+    radial-gradient(circle at 45% 38%, rgba(255,255,255,0.12), transparent 18rem);
+  pointer-events: none;
+}
+
+.admin-login-visual__logo,
+.admin-login-visual__text,
+.admin-login-visual__art {
+  position: relative;
+  z-index: 2;
+}
+
+.admin-login-visual__logo {
+  display: inline-flex;
+  flex-direction: column;
+  width: fit-content;
+  line-height: 0.9;
+}
+
+.admin-login-visual__logo strong {
+  font-family: Montserrat, system-ui, sans-serif;
+  font-size: 2.2rem;
+  letter-spacing: -0.08em;
+  font-weight: 950;
+}
+
+.admin-login-visual__logo span {
+  margin-top: 0.35rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  font-weight: 950;
+}
+
+.admin-login-visual__art {
+  width: min(560px, 80%);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  align-self: center;
+}
+
+.admin-login-visual__circle {
+  position: absolute;
+  inset: 12%;
+  border: 2px solid rgba(255,255,255,0.82);
+  border-radius: 999px;
+  box-shadow:
+    0 0 70px rgba(255,255,255,0.16),
+    -30px 0 80px rgba(229,9,20,0.32);
+}
+
+.admin-login-visual__figure {
+  width: 58%;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 40% 28%, rgba(255,255,255,0.34), transparent 6rem),
+    linear-gradient(135deg, rgba(229,9,20,0.62), rgba(0,0,0,0.08));
+  color: #fff;
+  font-size: 7rem;
+  filter: drop-shadow(0 30px 80px rgba(229,9,20,0.28));
+}
+
+.admin-login-visual__text {
+  max-width: 740px;
+}
+
+.admin-login-visual__text span,
+.admin-login-card > span {
+  color: #ff343d;
+  font-size: 0.76rem;
+  font-weight: 950;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.admin-login-visual__text h1 {
+  margin: 0.8rem 0 1rem;
+  font-family: Montserrat, system-ui, sans-serif;
+  font-size: clamp(3rem, 6vw, 6.5rem);
+  line-height: 0.86;
+  letter-spacing: -0.08em;
+  text-transform: uppercase;
+}
+
+.admin-login-visual__text p {
+  max-width: 620px;
+  color: rgba(255,255,255,0.68);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.admin-login-card {
+  align-self: center;
+  justify-self: center;
+  width: min(460px, calc(100% - 2rem));
+  padding: clamp(1.6rem, 3vw, 2.4rem);
+  border-radius: 34px;
+  background: #f4f0ec;
+  color: #111;
+  box-shadow: 0 34px 120px rgba(0,0,0,0.42);
+}
+
+.admin-login-card h2 {
+  margin: 0.5rem 0 0.5rem;
+  font-family: Montserrat, system-ui, sans-serif;
+  font-size: 2.4rem;
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+}
+
+.admin-login-card p {
+  margin: 0 0 1.5rem;
+  color: rgba(0,0,0,0.62);
+}
+
+.admin-login-card form {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-login-card label {
+  display: grid;
+  gap: 0.45rem;
+  color: #222;
+  font-size: 0.78rem;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.admin-login-card input {
+  width: 100%;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 16px;
+  padding: 0.95rem 1rem;
+  background: #fff;
+  color: #111;
+  font: inherit;
+  outline: none;
+}
+
+.admin-login-card button {
+  min-height: 3.2rem;
+  border: 0;
+  border-radius: 999px;
+  background: #e50914;
+  color: #fff;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.admin-login-card button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.admin-login-forgot {
+  background: transparent !important;
+  color: #111 !important;
+  min-height: auto !important;
+  padding: 0.35rem !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+.admin-login-message {
+  padding: 0.9rem 1rem;
+  border-radius: 16px;
+  background: #111;
+  color: #fff;
+  line-height: 1.45;
+}
+
+@media (max-width: 950px) {
+  .admin-login-page {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-login-visual {
+    min-height: 52vh;
+  }
+
+  .admin-login-card {
+    margin: 0 auto 2rem;
+  }
+}

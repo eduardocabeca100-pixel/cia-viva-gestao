@@ -18,7 +18,8 @@ const links = [
   { label: "Formulários", path: "/admin/formularios", icon: ClipboardList },
   { label: "Configurações Visuais", path: "/admin/configuracoes-visuais", icon: Palette },
   { label: "Rodapé", path: "/admin/rodape", icon: PanelBottom },
-  { label: "Segurança", path: "/admin/seguranca", icon: Shield },
+  { label: "Logins e acessos", to: "/admin/usuarios" },
+    { label: "Segurança", path: "/admin/seguranca", icon: Shield },
 ];
 
 export function AdminSidebar() {

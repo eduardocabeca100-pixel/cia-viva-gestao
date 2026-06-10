@@ -28,6 +28,8 @@ export type EditableHero = {
   primaryButton: EditableButton;
   secondaryButton: EditableButton;
   media: MediaValue;
+  mediaLeft?: MediaValue;
+  mediaRight?: MediaValue;
   mediaPosition?: MediaPosition;
   animation?: AnimationStyle;
   textAlign?: TextAlignOption;
@@ -204,7 +206,7 @@ export const defaultSiteContent: SiteEditableContent = {
     favicon: emptyMedia,
     headingFont: "Montserrat",
     bodyFont: "Poppins",
-    fontScale: "0.88",
+    fontScale: "0.76",
     ctaLabel: "Apoiar",
     ctaHref: "/apoie",
     footerDescription:
@@ -238,6 +240,8 @@ export const defaultSiteContent: SiteEditableContent = {
         href: "/apoie",
       },
       media: defaultDanceMedia,
+      mediaLeft: emptyMedia,
+      mediaRight: emptyMedia,
       mediaPosition: "top",
       animation: "letters",
       textAlign: "center",
