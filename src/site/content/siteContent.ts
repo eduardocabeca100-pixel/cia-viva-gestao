@@ -14,6 +14,12 @@ export type EditableButton = {
   href: string;
 };
 
+export type EditableMenuItem = {
+  label: string;
+  href: string;
+  visible: boolean;
+};
+
 export type EditableHero = {
   eyebrow: string;
   title: string;
@@ -65,6 +71,7 @@ export type SiteEditableContent = {
     phone: string;
     location: string;
     instagram: string;
+    menuItems?: EditableMenuItem[];
   };
   home: {
     hero: EditableHero;
@@ -206,6 +213,14 @@ export const defaultSiteContent: SiteEditableContent = {
     phone: "(47) 99274-7545",
     location: "Jaraguá do Sul - SC",
     instagram: "Instagram",
+    menuItems: [
+      { label: "Página Inicial", href: "/", visible: true },
+      { label: "Nossa História", href: "/nossa-historia", visible: true },
+      { label: "Apoie", href: "/apoie", visible: true },
+      { label: "Voluntariado 2026", href: "/voluntariado-2026", visible: true },
+      { label: "Projetos", href: "/projetos", visible: true },
+      { label: "Contato", href: "/contato", visible: true },
+    ],
   },
   home: {
     hero: {

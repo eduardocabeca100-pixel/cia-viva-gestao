@@ -18,6 +18,15 @@ import "./paginas-site.css";
 type PathPart = string | number;
 type PageKey = keyof SiteEditableContent;
 
+const pageOptions: Array<{ id: PageKey; label: string }> = [
+  { id: "global", label: "Configurações gerais" },
+  { id: "home", label: "Página Inicial" },
+  { id: "story", label: "Nossa História" },
+  { id: "support", label: "Apoie" },
+  { id: "volunteer", label: "Voluntariado 2026" },
+  { id: "projects", label: "Projetos" },
+  { id: "contact", label: "Contato" },
+];
 
 const linkOptions = [
   { label: "Página Inicial", value: "/" },
@@ -73,17 +82,7 @@ const textAlignOptions = [
   { label: "Centralizado", value: "center" },
 ];
 
-const pageOptions: Array<{ id: PageKey; label: string }> = [
-  { id: "global", label: "Configurações gerais" },
-  { id: "home", label: "Página Inicial" },
-  { id: "story", label: "Nossa História" },
-  { id: "support", label: "Apoie" },
-  { id: "volunteer", label: "Voluntariado 2026" },
-  { id: "projects", label: "Projetos" },
-  { id: "contact", label: "Contato" },
-];
-
-const labels: Record<string, string> = {
+const fieldLabels: Record<string, string> = {
   global: "Configurações gerais",
   home: "Página Inicial",
   story: "Nossa História",
@@ -91,6 +90,7 @@ const labels: Record<string, string> = {
   volunteer: "Voluntariado 2026",
   projects: "Projetos",
   contact: "Contato",
+
   hero: "Banner principal",
   pillars: "Pilares",
   cards: "Cards",
@@ -110,8 +110,15 @@ const labels: Record<string, string> = {
   register: "Inscrição",
   items: "Lista de projetos",
   info: "Informações",
+  menuItems: "Menu do site",
+
   logoTitle: "Logo - título",
   logoSubtitle: "Logo - subtítulo",
+  logoMedia: "Imagem da logo",
+  favicon: "Favicon",
+  headingFont: "Fonte dos títulos",
+  bodyFont: "Fonte dos textos",
+  fontScale: "Tamanho geral das fontes",
   ctaLabel: "Botão principal do menu",
   ctaHref: "Link do botão principal",
   footerDescription: "Descrição do rodapé",
@@ -119,6 +126,7 @@ const labels: Record<string, string> = {
   phone: "Telefone",
   location: "Localização",
   instagram: "Instagram",
+
   eyebrow: "Texto pequeno",
   title: "Título",
   accent: "Destaque em vermelho",
@@ -132,9 +140,10 @@ const labels: Record<string, string> = {
   button: "Botão",
   label: "Texto",
   href: "Link",
+  visible: "Mostrar no menu",
   media: "Imagem / GIF / Vídeo",
   src: "Arquivo ou URL",
-  alt: "Texto alternativo",
+  alt: "Descrição da mídia",
   type: "Tipo",
   icon: "Ícone",
   name: "Nome",
@@ -142,14 +151,17 @@ const labels: Record<string, string> = {
   initials: "Iniciais",
   photo: "Foto",
   placeholder: "Texto de exemplo",
+  mediaPosition: "Posição da imagem",
+  animation: "Animação",
+  textAlign: "Alinhamento",
 };
+
+function labelFor(key: string) {
+  return fieldLabels[key] ?? key;
+}
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
-}
-
-function labelFor(key: string) {
-  return labels[key] ?? key;
 }
 
 function getAtPath(source: unknown, path: PathPart[]): unknown {
@@ -186,6 +198,8 @@ export function PaginasSitePage() {
   const [activePage, setActivePage] = useState<PageKey>("home");
   const [activeSection, setActiveSection] = useState("");
   const [message, setMessage] = useState("");
+  const [mediaModalOpen, setMediaModalOpen] = useState(false);
+  const [mediaPickerPath, setMediaPickerPath] = useState<PathPart[] | null>(null);
 
   const pageValue = content[activePage];
 
@@ -281,6 +295,20 @@ export function PaginasSitePage() {
     updateValue(path, next);
   }
 
+  function selectMediaForPath(item: VivaMediaItem) {
+    if (!mediaPickerPath) return;
+
+    updateValue(mediaPickerPath, {
+      src: item.src,
+      type: item.type,
+      alt: item.name,
+    });
+
+    setMediaPickerPath(null);
+    setMediaModalOpen(false);
+    setMessage("Mídia aplicada no campo selecionado.");
+  }
+
   function renderMediaEditor(value: Record<string, unknown>, path: PathPart[]) {
     const mediaType = String(value.type ?? "image") as MediaType;
     const src = String(value.src ?? "");
@@ -300,65 +328,67 @@ export function PaginasSitePage() {
           )}
         </div>
 
-        <label>
-          Tipo
-          <select
-            value={mediaType}
-            onChange={(event) => updateValue([...path, "type"], event.target.value)}
-          >
-            <option value="image">Imagem</option>
-            <option value="gif">GIF</option>
-            <option value="video">Vídeo</option>
-          </select>
-        </label>
-
-        <label>
-          URL ou arquivo
-          <input
-            value={src}
-            onChange={(event) => updateValue([...path, "src"], event.target.value)}
-            placeholder="Cole a URL ou escolha na biblioteca"
-          />
-        </label>
-
-        <label>
-          Descrição da mídia
-          <input
-            value={alt}
-            onChange={(event) => updateValue([...path, "alt"], event.target.value)}
-            placeholder="Descrição da imagem/vídeo"
-          />
-        </label>
-
-        <label className="site-editor-upload-inline">
-          Subir arquivo para este campo
-          <input
-            type="file"
-            accept="image/*,video/*"
-            onChange={async (event) => {
-              const file = event.target.files?.[0];
-              if (!file) return;
-              const item = await addMediaItem(file);
-              setMediaItems(getMediaLibrary());
-              updateValue(path, { src: item.src, type: item.type, alt: item.name });
+        <div className="site-editor-media-actions">
+          <button
+            type="button"
+            onClick={() => {
+              setMediaPickerPath(path);
+              setMediaModalOpen(true);
             }}
-          />
-        </label>
+          >
+            Escolher da biblioteca
+          </button>
 
-        {mediaItems.length > 0 && (
-          <div className="site-editor-media-picker">
-            {mediaItems.map((item) => (
-              <button
-                type="button"
-                key={item.id}
-                onClick={() => updateValue(path, { src: item.src, type: item.type, alt: item.name })}
-              >
-                {item.type === "video" ? <video src={item.src} /> : <img src={item.src} alt={item.name} />}
-                <span>Usar</span>
-              </button>
-            ))}
-          </div>
-        )}
+          <label>
+            Subir arquivo
+            <input
+              type="file"
+              accept="image/*,video/*"
+              onChange={async (event) => {
+                const file = event.target.files?.[0];
+                if (!file) return;
+                const item = await addMediaItem(file);
+                setMediaItems(getMediaLibrary());
+                updateValue(path, { src: item.src, type: item.type, alt: item.name });
+              }}
+            />
+          </label>
+        </div>
+
+        <div className="site-editor-two-columns">
+          <label>
+            Tipo
+            <select
+              value={mediaType}
+              onChange={(event) => updateValue([...path, "type"], event.target.value)}
+            >
+              <option value="image">Imagem</option>
+              <option value="gif">GIF</option>
+              <option value="video">Vídeo</option>
+            </select>
+          </label>
+
+          <label>
+            Descrição
+            <input
+              value={alt}
+              onChange={(event) => updateValue([...path, "alt"], event.target.value)}
+              placeholder="Descrição da imagem/vídeo"
+            />
+          </label>
+        </div>
+
+        <details className="site-editor-details">
+          <summary>Editar URL manualmente</summary>
+          <label>
+            URL ou base64
+            <input
+              value={src}
+              onChange={(event) => updateValue([...path, "src"], event.target.value)}
+              placeholder="Cole a URL da mídia"
+            />
+          </label>
+        </details>
       </div>
     );
   }
@@ -368,7 +398,7 @@ export function PaginasSitePage() {
 
     if (keyName === "icon") {
       return (
-        <div className="site-editor-special-field">
+        <div className="site-editor-field-card">
           <label>
             {labelFor(keyName)}
             <input
@@ -378,24 +408,23 @@ export function PaginasSitePage() {
             />
           </label>
 
-          <div className="site-editor-icon-palette">
-            {iconOptions.map((icon) => (
-              <button
-                type="button"
-                key={icon}
-                onClick={() => updateValue(path, icon)}
-              >
-                {icon}
-              </button>
-            ))}
-          </div>
+          <details className="site-editor-details">
+            <summary>Escolher ícone</summary>
+            <div className="site-editor-icon-palette">
+              {iconOptions.map((icon) => (
+                <button type="button" key={icon} onClick={() => updateValue(path, icon)}>
+                  {icon}
+                </button>
+              ))}
+            </div>
+          </details>
         </div>
       );
     }
 
-    if (keyName === "href" || keyName.toLowerCase().includes("link")) {
+    if (keyName === "href" || keyName.toLowerCase().includes("link") || keyName === "ctaHref") {
       return (
-        <div className="site-editor-special-field">
+        <div className="site-editor-field-card">
           <label>
             {labelFor(keyName)}
             <input
@@ -405,112 +434,109 @@ export function PaginasSitePage() {
             />
           </label>
 
-          <div className="site-editor-link-list">
-            {linkOptions.map((link) => (
-              <button
-                type="button"
-                key={link.value}
-                onClick={() => updateValue(path, link.value)}
-              >
-                {link.label}
-                <span>{link.value}</span>
-              </button>
-            ))}
-          </div>
+          <details className="site-editor-details">
+            <summary>Escolher link pronto</summary>
+            <div className="site-editor-link-list">
+              {linkOptions.map((link) => (
+                <button type="button" key={link.value} onClick={() => updateValue(path, link.value)}>
+                  {link.label}
+                  <span>{link.value}</span>
+                </button>
+              ))}
+            </div>
+          </details>
         </div>
       );
     }
 
     if (keyName === "headingFont" || keyName === "bodyFont") {
       return (
-        <label>
-          {labelFor(keyName)}
-          <select
-            value={stringValue}
-            onChange={(event) => updateValue(path, event.target.value)}
-          >
-            {fontOptions.map((font) => (
-              <option key={font} value={font}>
-                {font}
-              </option>
-            ))}
-          </select>
+        <div className="site-editor-field-card">
+          <label>
+            {labelFor(keyName)}
+            <select value={stringValue} onChange={(event) => updateValue(path, event.target.value)}>
+              {fontOptions.map((font) => (
+                <option key={font} value={font}>
+                  {font}
+                </option>
+              ))}
+            </select>
+          </label>
 
           <div className="site-editor-font-preview" style={{ fontFamily: `"${stringValue}", system-ui, sans-serif` }}>
             Arte que inspira forma e transforma
           </div>
-        </label>
+        </div>
       );
     }
 
     if (keyName === "fontScale") {
       return (
-        <label>
-          Tamanho geral das fontes
-          <input
-            type="range"
-            min="0.72"
-            max="1.08"
-            step="0.02"
-            value={stringValue || "0.88"}
-            onChange={(event) => updateValue(path, event.target.value)}
-          />
-          <span className="site-editor-range-value">{stringValue || "0.88"}</span>
-        </label>
+        <div className="site-editor-field-card">
+          <label>
+            Tamanho geral das fontes
+            <input
+              type="range"
+              min="0.66"
+              max="1"
+              step="0.02"
+              value={stringValue || "0.78"}
+              onChange={(event) => updateValue(path, event.target.value)}
+            />
+          </label>
+          <span className="site-editor-range-value">{stringValue || "0.78"}</span>
+        </div>
       );
     }
 
     if (keyName === "mediaPosition") {
       return (
-        <label>
-          Posição da imagem / vídeo
-          <select
-            value={stringValue || "right"}
-            onChange={(event) => updateValue(path, event.target.value)}
-          >
-            {mediaPositionOptions.map((option) => (
-              <option key={option.value} value={option.value}>{option.label}</option>
-            ))}
-          </select>
-        </label>
+        <div className="site-editor-field-card">
+          <label>
+            Posição da imagem / vídeo
+            <select value={stringValue || "right"} onChange={(event) => updateValue(path, event.target.value)}>
+              {mediaPositionOptions.map((option) => (
+                <option key={option.value} value={option.value}>{option.label}</option>
+              ))}
+            </select>
+          </label>
+        </div>
       );
     }
 
     if (keyName === "animation") {
       return (
-        <label>
-          Animação
-          <select
-            value={stringValue || "fade-up"}
-            onChange={(event) => updateValue(path, event.target.value)}
-          >
-            {animationOptions.map((option) => (
-              <option key={option.value} value={option.value}>{option.label}</option>
-            ))}
-          </select>
-        </label>
+        <div className="site-editor-field-card">
+          <label>
+            Animação
+            <select value={stringValue || "fade-up"} onChange={(event) => updateValue(path, event.target.value)}>
+              {animationOptions.map((option) => (
+                <option key={option.value} value={option.value}>{option.label}</option>
+              ))}
+            </select>
+          </label>
+        </div>
       );
     }
 
     if (keyName === "textAlign") {
       return (
-        <label>
-          Alinhamento do texto
-          <select
-            value={stringValue || "left"}
-            onChange={(event) => updateValue(path, event.target.value)}
-          >
-            {textAlignOptions.map((option) => (
-              <option key={option.value} value={option.value}>{option.label}</option>
-            ))}
-          </select>
-        </label>
+        <div className="site-editor-field-card">
+          <label>
+            Alinhamento do texto
+            <select value={stringValue || "left"} onChange={(event) => updateValue(path, event.target.value)}>
+              {textAlignOptions.map((option) => (
+                <option key={option.value} value={option.value}>{option.label}</option>
+              ))}
+            </select>
+          </label>
+        </div>
       );
     }
 
     if (typeof value === "boolean") {
       return (
-        <label className="site-editor-checkbox">
+        <label className="site-editor-checkbox site-editor-field-card">
           <input
             type="checkbox"
             checked={value}
@@ -523,14 +549,16 @@ export function PaginasSitePage() {
 
     if (typeof value === "number") {
       return (
-        <label>
-          {labelFor(keyName)}
-          <input
-            type="number"
-            value={value}
-            onChange={(event) => updateValue(path, Number(event.target.value))}
-          />
-        </label>
+        <div className="site-editor-field-card">
+          <label>
+            {labelFor(keyName)}
+            <input
+              type="number"
+              value={value}
+              onChange={(event) => updateValue(path, Number(event.target.value))}
+            />
+          </label>
+        </div>
       );
     }
 
@@ -542,21 +570,23 @@ export function PaginasSitePage() {
       lowerKey.includes("footer");
 
     return (
-      <label>
-        {labelFor(keyName)}
-        {useTextarea ? (
-          <textarea
-            rows={5}
-            value={stringValue}
-            onChange={(event) => updateValue(path, event.target.value)}
-          />
-        ) : (
-          <input
-            value={stringValue}
-            onChange={(event) => updateValue(path, event.target.value)}
-          />
-        )}
-      </label>
+      <div className="site-editor-field-card">
+        <label>
+          {labelFor(keyName)}
+          {useTextarea ? (
+            <textarea
+              rows={5}
+              value={stringValue}
+              onChange={(event) => updateValue(path, event.target.value)}
+            />
+          ) : (
+            <input
+              value={stringValue}
+              onChange={(event) => updateValue(path, event.target.value)}
+            />
+          )}
+        </label>
+      </div>
     );
   }
 
@@ -619,13 +649,14 @@ export function PaginasSitePage() {
       <header className="site-editor-header">
         <div>
           <span>Viva Gestão</span>
-          <h1>Editor visual do site</h1>
-          <p>Edite cada página por partes: textos, botões, imagens, GIFs, vídeos, cards, equipe e formulários.</p>
+          <h1>Editor do site</h1>
+          <p>Escolha uma página, selecione uma seção e edite os blocos com calma.</p>
         </div>
 
         <div className="site-editor-actions">
+          <button type="button" onClick={() => setMediaModalOpen(true)}>Biblioteca</button>
           <a href="/" target="_blank" rel="noreferrer">Visualizar site</a>
-          <button type="button" onClick={handleSave}>Salvar alterações</button>
+          <button type="button" onClick={handleSave}>Salvar</button>
         </div>
       </header>
 
@@ -646,62 +677,89 @@ export function PaginasSitePage() {
             </button>
           ))}
 
-          <div className="site-editor-upload-box">
-            <h3>Biblioteca de mídia</h3>
-            <p>Suba fotos, GIFs e vídeos para usar em qualquer parte do site.</p>
-
-            <label className="site-editor-upload-button">
-              Enviar arquivos
-              <input
-                type="file"
-                accept="image/*,video/*"
-                multiple
-                onChange={(event) => handleUpload(event.target.files)}
-              />
-            </label>
+          <div className="site-editor-pages-box">
+            <h3>Páginas novas</h3>
+            <p>
+              O menu já pode ser editado em Configurações gerais. No próximo passo
+              conectamos criação de página com URL própria.
+            </p>
+            <button type="button" disabled>Adicionar página</button>
           </div>
-
-          {mediaItems.length > 0 && (
-            <div className="site-editor-mini-library">
-              {mediaItems.map((item) => (
-                <article key={item.id}>
-                  {item.type === "video" ? <video src={item.src} /> : <img src={item.src} alt={item.name} />}
-                  <span>{item.name}</span>
-                  <button type="button" onClick={() => handleRemoveMedia(item.id)}>Remover</button>
-                </article>
-              ))}
-            </div>
-          )}
         </aside>
 
         <section className="site-editor-panel">
-          <div className="site-editor-tabs">
-            {sectionKeys.map((section) => (
-              <button
-                key={section}
-                type="button"
-                className={activeSection === section ? "active" : ""}
-                onClick={() => setActiveSection(section)}
-              >
-                {labelFor(section)}
-              </button>
-            ))}
-          </div>
-
-          <div className="site-editor-panel-header">
+          <div className="site-editor-panel-top">
             <div>
               <span>{pageOptions.find((page) => page.id === activePage)?.label}</span>
               <h2>{labelFor(activeSection || String(activePage))}</h2>
             </div>
+
+            <label className="site-editor-section-select">
+              Seção
+              <select value={activeSection} onChange={(event) => setActiveSection(event.target.value)}>
+                {sectionKeys.map((section) => (
+                  <option key={section} value={section}>{labelFor(section)}</option>
+                ))}
+              </select>
+            </label>
 
             <button type="button" className="site-editor-reset" onClick={handleReset}>
               Restaurar tudo
             </button>
           </div>
 
-          {renderEditor(selectedValue, selectedPath, activeSection)}
+          <div className="site-editor-clean-panel">
+            {renderEditor(selectedValue, selectedPath, activeSection)}
+          </div>
         </section>
       </section>
+
+      {mediaModalOpen && (
+        <div className="site-editor-modal-backdrop" onClick={() => setMediaModalOpen(false)}>
+          <section className="site-editor-media-modal" onClick={(event) => event.stopPropagation()}>
+            <header>
+              <div>
+                <span>Biblioteca de mídia</span>
+                <h2>Escolha arquivos de mídia</h2>
+              </div>
+              <button type="button" onClick={() => setMediaModalOpen(false)}>Fechar</button>
+            </header>
+
+            <div className="site-editor-upload-area">
+              <label>
+                Arraste ou envie fotos, GIFs e vídeos
+                <input
+                  type="file"
+                  accept="image/*,video/*"
+                  multiple
+                  onChange={(event) => handleUpload(event.target.files)}
+                />
+              </label>
+            </div>
+
+            <div className="site-editor-modal-grid">
+              {mediaItems.length === 0 && (
+                <div className="site-editor-empty-media">
+                  Nenhum arquivo enviado ainda.
+                </div>
+              )}
+
+              {mediaItems.map((item) => (
+                <article key={item.id}>
+                  {item.type === "video" ? <video src={item.src} /> : <img src={item.src} alt={item.name} />}
+                  <strong>{item.name}</strong>
+                  <div>
+                    {mediaPickerPath && (
+                      <button type="button" onClick={() => selectMediaForPath(item)}>Usar</button>
+                    )}
+                    <button type="button" className="danger" onClick={() => handleRemoveMedia(item.id)}>Remover</button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        </div>
+      )}
     </main>
   );
 }

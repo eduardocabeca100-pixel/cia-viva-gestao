@@ -1120,3 +1120,94 @@ body {
     height: 360px !important;
   }
 }
+
+
+/* REFINAMENTO FINAL SITE + CORREÇÕES DE LEGIBILIDADE */
+:root {
+  --viva-font-scale: 0.76;
+}
+
+.commercial-hero {
+  min-height: calc(72vh - 82px) !important;
+  padding: clamp(36px, 5vw, 74px) 0 !important;
+}
+
+.commercial-hero--home {
+  min-height: calc(88vh - 82px) !important;
+}
+
+.commercial-hero h1,
+.commercial-contact h1 {
+  font-size: calc(clamp(2.75rem, 5.2vw, 5.75rem) * var(--viva-font-scale, 0.76)) !important;
+}
+
+.commercial-section__header h2,
+.commercial-split h2,
+.commercial-origin h2,
+.commercial-cta h2,
+.commercial-register h2 {
+  font-size: calc(clamp(1.8rem, 3.75vw, 4rem) * var(--viva-font-scale, 0.76)) !important;
+}
+
+.commercial-hero__visual img,
+.commercial-hero__visual video {
+  object-position: center center;
+}
+
+.commercial-hero--media-top .commercial-hero__visual {
+  width: min(760px, 100%) !important;
+}
+
+.commercial-hero--media-top .commercial-hero__visual img,
+.commercial-hero--media-top .commercial-hero__visual video {
+  width: min(100%, 760px) !important;
+  height: min(46vh, 440px) !important;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.commercial-portrait-card,
+.commercial-lead-form,
+.commercial-form-card {
+  background: #f3f0eb !important;
+  color: #111 !important;
+}
+
+.commercial-portrait-card h3,
+.commercial-portrait-card p,
+.commercial-lead-form h3,
+.commercial-lead-form label,
+.commercial-form-card label {
+  color: #111 !important;
+}
+
+.commercial-portrait-card p {
+  color: rgba(0,0,0,0.66) !important;
+}
+
+.commercial-map-shape {
+  overflow: hidden;
+}
+
+.commercial-map-shape img,
+.commercial-map-shape video {
+  object-fit: contain !important;
+  background: #f3f0eb;
+}
+
+.commercial-feature-card,
+.commercial-value-card,
+.commercial-step-card,
+.commercial-learning-card,
+.commercial-project-card,
+.commercial-person,
+.commercial-hero-panel {
+  border-radius: 28px !important;
+}
+
+@media (max-width: 720px) {
+  .commercial-hero--media-top .commercial-hero__visual img,
+  .commercial-hero--media-top .commercial-hero__visual video {
+    height: 320px !important;
+  }
+}

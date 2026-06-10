@@ -2,17 +2,18 @@ import { Link, NavLink } from "react-router-dom";
 import { SiteMedia } from "../components/SiteMedia";
 import { useSiteContent } from "../content/useSiteContent";
 
-const navItems = [
-  { label: "Página Inicial", to: "/" },
-  { label: "Nossa História", to: "/nossa-historia" },
-  { label: "Apoie", to: "/apoie" },
-  { label: "Voluntariado 2026", to: "/voluntariado-2026" },
-  { label: "Projetos", to: "/projetos" },
-  { label: "Contato", to: "/contato" },
+const fallbackNavItems = [
+  { label: "Página Inicial", href: "/", visible: true },
+  { label: "Nossa História", href: "/nossa-historia", visible: true },
+  { label: "Apoie", href: "/apoie", visible: true },
+  { label: "Voluntariado 2026", href: "/voluntariado-2026", visible: true },
+  { label: "Projetos", href: "/projetos", visible: true },
+  { label: "Contato", href: "/contato", visible: true },
 ];
 
 export function SiteHeader() {
   const { global } = useSiteContent();
+  const menuItems = global.menuItems?.length ? global.menuItems : fallbackNavItems;
 
   return (
     <header className="viva-site-header">
@@ -29,18 +30,20 @@ export function SiteHeader() {
         </Link>
 
         <nav className="viva-site-nav" aria-label="Menu principal">
-          {navItems.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.to === "/"}
-              className={({ isActive }) =>
-                isActive ? "viva-site-nav__link active" : "viva-site-nav__link"
-              }
-            >
-              {item.label}
-            </NavLink>
-          ))}
+          {menuItems
+            .filter((item) => item.visible !== false)
+            .map((item) => (
+              <NavLink
+                key={`${item.label}-${item.href}`}
+                to={item.href}
+                end={item.href === "/"}
+                className={({ isActive }) =>
+                  isActive ? "viva-site-nav__link active" : "viva-site-nav__link"
+                }
+              >
+                {item.label}
+              </NavLink>
+            ))}
         </nav>
 
         <Link className="viva-site-header__button" to={global.ctaHref}>
