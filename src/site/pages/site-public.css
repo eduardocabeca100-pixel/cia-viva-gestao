@@ -1403,3 +1403,423 @@ body {
     max-height: 340px;
   }
 }
+
+
+/* NOVA DIREÇÃO ARTÍSTICA — CIA VIVA PREMIUM */
+.viva-art-site {
+  min-height: 100vh;
+  background: #050505;
+  color: #fff;
+  overflow: hidden;
+}
+
+.viva-art-hero {
+  position: relative;
+  min-height: calc(100vh - 82px);
+  display: grid;
+  place-items: center;
+  padding: clamp(4rem, 7vw, 7rem) 1.5rem 3rem;
+  background:
+    radial-gradient(circle at 50% 16%, rgba(255,255,255,.08), transparent 22rem),
+    radial-gradient(circle at 20% 40%, rgba(229,9,20,.22), transparent 30rem),
+    linear-gradient(180deg, #050505 0%, #111 48%, #050505 100%);
+}
+
+.viva-art-hero__texture {
+  position: absolute;
+  inset: 0;
+  opacity: .28;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size: 68px 68px;
+  mask-image: radial-gradient(circle at center, black 0%, transparent 72%);
+  pointer-events: none;
+}
+
+.viva-art-hero::before {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 42%;
+  background:
+    linear-gradient(180deg, transparent, rgba(0,0,0,.92)),
+    radial-gradient(circle at 50% 100%, rgba(229,9,20,.16), transparent 32rem);
+  pointer-events: none;
+}
+
+.viva-art-hero__center {
+  position: relative;
+  z-index: 3;
+  width: min(1180px, 100%);
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.viva-art-hero__image {
+  position: relative;
+  width: min(760px, 100%);
+  margin-bottom: clamp(1.8rem, 4vw, 3rem);
+  display: grid;
+  place-items: center;
+}
+
+.viva-art-hero__image::before {
+  content: "";
+  position: absolute;
+  width: min(72vw, 620px);
+  aspect-ratio: 1;
+  border: 2px solid rgba(255,255,255,.82);
+  border-radius: 999px;
+  box-shadow:
+    0 0 80px rgba(255,255,255,.14),
+    -42px 0 90px rgba(229,9,20,.34);
+  animation: vivaRing 12s linear infinite;
+}
+
+.viva-art-hero__image::after {
+  content: "";
+  position: absolute;
+  inset: 18% 5% 0;
+  z-index: -1;
+  border-radius: 42px;
+  background: rgba(0,0,0,.48);
+  box-shadow: 0 40px 110px rgba(0,0,0,.65);
+}
+
+.viva-art-hero__image img,
+.viva-art-hero__image video {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-height: min(52vh, 560px);
+  display: block;
+  object-fit: contain;
+  border-radius: 28px;
+  filter: saturate(1.06) contrast(1.1);
+}
+
+.viva-art-hero__copy {
+  position: relative;
+  z-index: 4;
+  width: min(980px, 100%);
+}
+
+.viva-art-hero__copy span,
+.viva-art-cards span,
+.viva-art-final span {
+  display: block;
+  margin-bottom: .75rem;
+  color: #ff3440;
+  font-size: .76rem;
+  font-weight: 950;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+}
+
+.viva-art-hero__copy h1 {
+  margin: 0;
+  font-family: var(--viva-heading-font, "Montserrat", system-ui, sans-serif);
+  font-size: clamp(3.4rem, 7.4vw, 8.4rem);
+  line-height: .78;
+  letter-spacing: -.09em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.viva-art-hero__copy h1 strong {
+  display: block;
+  color: #ff2d38;
+  text-shadow: 0 0 38px rgba(229,9,20,.22);
+}
+
+.viva-art-hero__copy p {
+  width: min(760px, 100%);
+  margin: 1.25rem auto 0;
+  color: rgba(255,255,255,.72);
+  font-size: clamp(.92rem, 1.2vw, 1.05rem);
+  line-height: 1.7;
+}
+
+.viva-art-hero__actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: .8rem;
+  margin-top: 1.8rem;
+}
+
+.viva-art-hero__actions a,
+.viva-art-cards a,
+.viva-art-final a {
+  min-height: 3.05rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1.35rem;
+  border-radius: 0;
+  border: 1px solid rgba(255,255,255,.32);
+  color: #fff;
+  background: rgba(255,255,255,.035);
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: .72rem;
+  font-weight: 950;
+  letter-spacing: .08em;
+  transition: 180ms ease;
+}
+
+.viva-art-hero__actions a:first-child,
+.viva-art-final a {
+  border-color: #e50914;
+  background: #e50914;
+  box-shadow: 0 18px 48px rgba(229,9,20,.22);
+}
+
+.viva-art-hero__actions a:hover,
+.viva-art-cards a:hover,
+.viva-art-final a:hover {
+  transform: translateY(-2px);
+}
+
+.viva-art-hero__side {
+  position: absolute;
+  z-index: 1;
+  top: 16%;
+  width: min(26vw, 390px);
+  opacity: .42;
+  filter: grayscale(1) contrast(1.2);
+  pointer-events: none;
+}
+
+.viva-art-hero__side img,
+.viva-art-hero__side video {
+  width: 100%;
+  max-height: 520px;
+  object-fit: cover;
+}
+
+.viva-art-hero__side--left {
+  left: 2vw;
+}
+
+.viva-art-hero__side--right {
+  right: 2vw;
+}
+
+.viva-art-scroll {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  bottom: 1.2rem;
+  display: grid;
+  justify-items: center;
+  gap: .45rem;
+  transform: translateX(-50%);
+  color: rgba(255,255,255,.58);
+  text-transform: uppercase;
+  font-size: .66rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+
+.viva-art-scroll i {
+  width: 20px;
+  height: 34px;
+  border: 1px solid rgba(255,255,255,.42);
+  border-radius: 999px;
+  position: relative;
+}
+
+.viva-art-scroll i::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  width: 3px;
+  height: 7px;
+  border-radius: 999px;
+  background: #e50914;
+  transform: translateX(-50%);
+  animation: vivaScroll 1.4s ease infinite;
+}
+
+.viva-art-pillars {
+  position: relative;
+  z-index: 4;
+  width: min(1180px, calc(100% - 2rem));
+  margin: -1px auto 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid rgba(255,255,255,.18);
+  border-bottom: 1px solid rgba(255,255,255,.12);
+}
+
+.viva-art-pillars article {
+  min-height: 160px;
+  padding: clamp(1.3rem, 3vw, 2.2rem);
+  text-align: center;
+  border-right: 1px solid rgba(255,255,255,.12);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015)),
+    #070707;
+}
+
+.viva-art-pillars article:last-child {
+  border-right: 0;
+}
+
+.viva-art-pillars div {
+  color: #e50914;
+  font-size: 2rem;
+  margin-bottom: .5rem;
+}
+
+.viva-art-pillars h2 {
+  margin: 0 0 .45rem;
+  font-family: var(--viva-heading-font, "Montserrat", system-ui, sans-serif);
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  letter-spacing: -.03em;
+}
+
+.viva-art-pillars p {
+  margin: 0 auto;
+  max-width: 260px;
+  color: rgba(255,255,255,.62);
+  font-size: .88rem;
+  line-height: 1.55;
+}
+
+.viva-art-cards {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: clamp(3rem, 6vw, 6rem) 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+}
+
+.viva-art-cards article {
+  position: relative;
+  min-height: 360px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.12);
+  background: #111;
+}
+
+.viva-art-cards img,
+.viva-art-cards video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: .42;
+  object-fit: cover;
+  filter: grayscale(.3) contrast(1.12);
+  transition: 500ms ease;
+}
+
+.viva-art-cards article:hover img,
+.viva-art-cards article:hover video {
+  opacity: .58;
+  transform: scale(1.04);
+}
+
+.viva-art-cards article::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, transparent 0%, rgba(0,0,0,.9) 82%),
+    radial-gradient(circle at 20% 20%, rgba(229,9,20,.28), transparent 16rem);
+}
+
+.viva-art-cards article > div {
+  position: absolute;
+  z-index: 2;
+  left: clamp(1.2rem, 2vw, 1.8rem);
+  right: clamp(1.2rem, 2vw, 1.8rem);
+  bottom: clamp(1.2rem, 2vw, 1.8rem);
+}
+
+.viva-art-cards h2 {
+  margin: 0 0 .75rem;
+  font-family: var(--viva-heading-font, "Montserrat", system-ui, sans-serif);
+  font-size: clamp(1.5rem, 2.2vw, 2.35rem);
+  line-height: .96;
+  letter-spacing: -.06em;
+}
+
+.viva-art-cards p {
+  color: rgba(255,255,255,.7);
+  line-height: 1.55;
+  font-size: .9rem;
+}
+
+.viva-art-final {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: clamp(3rem, 7vw, 7rem) 0 clamp(4rem, 8vw, 8rem);
+  text-align: center;
+}
+
+.viva-art-final h2 {
+  max-width: 900px;
+  margin: 0 auto 1.7rem;
+  font-family: var(--viva-heading-font, "Montserrat", system-ui, sans-serif);
+  font-size: clamp(2.4rem, 5vw, 5.4rem);
+  line-height: .9;
+  letter-spacing: -.08em;
+  text-transform: uppercase;
+}
+
+@keyframes vivaRing {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes vivaScroll {
+  0%, 100% {
+    transform: translate(-50%, 0);
+    opacity: .3;
+  }
+
+  50% {
+    transform: translate(-50%, 10px);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 950px) {
+  .viva-art-hero__side {
+    display: none;
+  }
+
+  .viva-art-pillars,
+  .viva-art-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .viva-art-pillars article {
+    border-right: 0;
+    border-bottom: 1px solid rgba(255,255,255,.1);
+  }
+}
+
+@media (max-width: 640px) {
+  .viva-art-hero {
+    padding-top: 3rem;
+  }
+
+  .viva-art-hero__copy h1 {
+    font-size: clamp(3rem, 16vw, 4.6rem);
+  }
+
+  .viva-art-hero__image img,
+  .viva-art-hero__image video {
+    max-height: 330px;
+  }
+}
