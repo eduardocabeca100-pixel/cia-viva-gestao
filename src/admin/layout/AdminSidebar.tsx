@@ -1,57 +1,82 @@
 import { NavLink } from "react-router-dom";
-import {
-  Gauge,
-  FileText,
-  Images,
-  HeartHandshake,
-  ClipboardList,
-  Palette,
-  PanelBottom,
-  Shield,
-} from "lucide-react";
+import "./admin-sidebar-safe.css";
 
-const links = [
-  { label: "Painel", path: "/admin/dashboard", icon: Gauge },
-  { label: "Páginas do site", path: "/admin/paginas", icon: FileText },
-  { label: "Mídia / Imagens", path: "/admin/midia", icon: Images },
-  { label: "Voluntariado 2026", path: "/admin/voluntariado-2026", icon: HeartHandshake },
-  { label: "Formulários", path: "/admin/formularios", icon: ClipboardList },
-  { label: "Configurações Visuais", path: "/admin/configuracoes-visuais", icon: Palette },
-  { label: "Rodapé", path: "/admin/rodape", icon: PanelBottom },
-  { label: "Logins e acessos", to: "/admin/usuarios" },
-    { label: "Segurança", path: "/admin/seguranca", icon: Shield },
+const adminMenuItems = [
+  {
+    label: "Painel",
+    path: "/admin/dashboard",
+    icon: "◌",
+  },
+  {
+    label: "Páginas do site",
+    path: "/admin/paginas",
+    icon: "▤",
+  },
+  {
+    label: "Mídia / Imagens",
+    path: "/admin/midia",
+    icon: "▧",
+  },
+  {
+    label: "Voluntariado 2026",
+    path: "/admin/voluntariado",
+    icon: "♡",
+  },
+  {
+    label: "Formulários",
+    path: "/admin/formularios",
+    icon: "▣",
+  },
+  {
+    label: "Configurações Visuais",
+    path: "/admin/configuracoes-visuais",
+    icon: "◌",
+  },
+  {
+    label: "Rodapé",
+    path: "/admin/rodape",
+    icon: "▬",
+  },
+  {
+    label: "Logins e acessos",
+    path: "/admin/usuarios",
+    icon: "👤",
+  },
+  {
+    label: "Segurança",
+    path: "/admin/seguranca",
+    icon: "◇",
+  },
 ];
 
 export function AdminSidebar() {
   return (
-    <aside className="admin-sidebar">
-      <div className="admin-brand">
-        <div className="admin-brand-icon"></div>
-
-        <div>
-          <strong>Viva Gestão</strong>
-          <span>Painel de controle</span>
-        </div>
+    <aside className="admin-sidebar-safe">
+      <div className="admin-sidebar-safe__brand">
+        <strong>VIVA</strong>
+        <span>Painel de controle</span>
       </div>
 
-      <nav className="admin-menu">
-        {links.map((item) => {
-          const Icon = item.icon;
-
-          return (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              className={({ isActive }) =>
-                isActive ? "admin-menu-link active" : "admin-menu-link"
-              }
-            >
-              <Icon size={19} strokeWidth={2.2} />
-              <span>{item.label}</span>
-            </NavLink>
-          );
-        })}
+      <nav className="admin-sidebar-safe__nav" aria-label="Menu do painel">
+        {adminMenuItems.map((item) => (
+          <NavLink
+            key={item.path}
+            to={item.path}
+            className={({ isActive }) =>
+              isActive ? "admin-sidebar-safe__link active" : "admin-sidebar-safe__link"
+            }
+          >
+            <span className="admin-sidebar-safe__icon">{item.icon}</span>
+            <span>{item.label}</span>
+          </NavLink>
+        ))}
       </nav>
+
+      <div className="admin-sidebar-safe__footer">
+        <span>admin@ciaviva.com</span>
+      </div>
     </aside>
   );
 }
+
+export default AdminSidebar;
